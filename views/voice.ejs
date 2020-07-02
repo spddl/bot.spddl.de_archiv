@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1, minimal-ui">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="stylesheet" href="/lib/follower/css">
+  <link rel="stylesheet" href="/lib/follower/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.1/animate.min.css">
+  <script src='https://code.responsivevoice.org/responsivevoice.js'></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/async/1.5.0/async.min.js'></script>
+  <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+  <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+  <script src="https://cdn.jsdelivr.net/lodash/4.6.1/lodash.min.js"></script>
+  <script>
+  <% if (local) { %>    var socket = io.connect("/magicconchshell/<%= user %>", {<% } else { %>    var socket = io.connect("https://bot.spddl.de/magicconchshell/<%= user %>", {<% } %>
+      'connect timeout': 5000,
+      'try multiple transports': true,
+      'reconnect': true,
+      'reconnection delay': 500,
+      'reconnection limit': 5000,
+      'max reconnection attempts': 3,
+      'sync disconnect on unload': false,
+      'auto connect': true,
+      'force new connection': true
+    });
+  </script>
+</head>
+
+<body>
+    <header class="site__header island promo">
+      <div class="wrap">
+        <h1 id="message"><span id="animationText" style="display: block" class="site__title mega"></span></h1>
+      </div>
+    </header>
+
+      <script>
+try {
+
+        function testAnim(id, ani) {
+          $(id).removeClass().addClass(ani + ' animated').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function() {
+            $(this).removeClass();
+          });
+        };
+
+        function testAnimend(id, ani) {
+          $(id).removeClass().addClass(ani + ' animated').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function() {});
+        };
+        var Attention = ["bounce", "flash", "pulse", "rubberBand", "shake", "swing", "tada", "wobble", "jello"];
+
+        function htmlEntities(html) {
+          function it() {
+            return html.map(function(n, i, arr) {
+              if (n.length == 1) {
+                return n.replace(/[\u00A0-\u9999<>\&]/gim, function(i) {
+                  return '&#' + i.charCodeAt(0) + ';';
+                });
+              }
+              return n;
+            });
+          }
+          var isArray = Array.isArray(html);
+          if (!isArray) {
+            html = html.split('');
+          }
+          html = it(html);
+          if (!isArray) html = html.join('');
+          return html;
+        }
+
+        function formatEmotes(text, emotes) {
+          var splitText = text.split('');
+          for (var i in emotes) {
+            var e = emotes[i];
+            for (var j in e) {
+              var mote = e[j];
+              if (typeof mote == 'string') {
+                mote = mote.split('-');
+                mote = [parseInt(mote[0]), parseInt(mote[1])];
+                var length = mote[1] - mote[0],
+                  empty = Array.apply(null, new Array(length + 1)).map(function() {
+                    return ''
+                  });
+                splitText = splitText.slice(0, mote[0]).concat(empty).concat(splitText.slice(mote[1] + 1, splitText.length));
+                splitText.splice(mote[0], 1, '<img class="emoticon" src="https://static-cdn.jtvnw.net/emoticons/v1/' + i + '/3.0">');
+              }
+            }
+          }
+          return htmlEntities(splitText).join('')
+        }
+
+        function voice(data, callback) {
+          responsiveVoice.speak(data.text, data.lang, {
+            volume: data.volume,
+            pitch: data.pitch,
+            rate: data.rate,
+            onstart: function() {
+
+              if (data.user) $('#animationText').html(data.user + formatEmotes(' ' + data.text, data.emotes));
+              else $('#animationText').html(formatEmotes(' ' + data.text, data.emotes));
+              testAnim('#message', 'zoomIn')
+              //testAnim('#animationText', 'zoomIn')
+            },
+            onend: function() {
+              callback();
+
+            }
+          });
+        }
+
+        var q = async.queue(function(data, callback) {
+<%#       try {%>
+            voice(data, function() {
+
+<%#/*            setTimeout(function(){
+                testAnimend('#message', Attention[Math.floor(Math.random()*Attention.length)])
+              }, 3000);*/%>
+
+                  setTimeout(function() {
+                    callback()
+
+                  }, 1500);
+
+                setTimeout(function() {
+                  testAnimend('#message', 'zoomOut')
+                  //testAnimend('#animationText', 'zoomOut')
+
+                }, 2000);
+
+            })
+<%#       } catch(err) { socket.emit('clienterror', { err: err });callback() } // Error handle {%>
+        }, 1);
+
+        $(document).ready(function() {
+          if (!responsiveVoice.voiceSupport()){console.log('kein voiceSupport')}
+
+          <% if (titel) { %>
+            $('#animationText').text("<%= titel %>");
+          <% } else {%>
+            $('#animationText').text('hello <%= user %>');
+          <% } %>
+
+          testAnim('#message', 'zoomIn')
+          //testAnim('#animationText', 'zoomIn')
+          setTimeout(function() {
+            testAnimend('#message', 'zoomOut')
+            //testAnimend('#animationText', 'zoomOut')
+          }, 1500);
+
+          socket.on('incomingmsg', function(data) {
+            q.push(data, function(err) {
+              if (err) console.log('err ' + err);
+            });
+          });
+          socket.on('error', function() {
+            data = JSON.parse('{"text": "error","emotes": "", "lang": "UK English Male","volume": 1}');
+            q.push(data, function(err) {
+              if (err) console.log('err ' + err);
+            });
+          });
+          socket.on('disconnected', function() {
+            data = JSON.parse('{"text": "disconnected","emotes": "", "lang": "UK English Male","volume": 1}');
+            q.push(data, function(err) {
+              if (err) console.log('err ' + err);
+            });
+          });
+
+        });
+
+} catch(err) {
+  socket.emit('clienterror', { err: err })
+  location.reload(true)
+} // Error handle
+      </script>
+</body>
+
+</html>

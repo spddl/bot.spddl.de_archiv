@@ -1,0 +1,2534 @@
+{
+  "lastupdated": "2017-12-16T20:19:16.854Z",
+  "blocked": ["#tabsen_cs", "#officialheavy", "#maylini", "#xatutv"],
+  "xall3": {
+    "botsettings": {
+      "advertising": [],
+      "viewerads": false,
+      "randomreply": true,
+      "steamid": "76561197986277430",
+      "uppercase": true,
+      "uppercasepercent": "95",
+      "symbols": true,
+      "symbolspercent": "55",
+      "towords": [],
+      "banwords": [],
+      "weather": true,
+      "youtubetowhisper": true,
+      "wrongcommandmsg": true,
+      "wronglinkmsg": true,
+      "wrongsymbolsmsg": true,
+      "wronguppercasemsg": true,
+      "alloweddomains": ["youtube.com", "soundcloud.com", "youtu.be", "steamcommunity.com", "reddit.com"],
+      "alerts": {
+        "chat": false,
+        "steam": false,
+        "follower": {
+          "voicelanguage": "Deutsch Female"
+        },
+        "subscription": {
+          "voicelanguage": "Deutsch Female"
+        },
+        "magicconchshell": {
+          "modsonly": true,
+          "username": true,
+          "autodetectlanguage": false,
+          "voicelanguage": "Deutsch Female",
+          "voicevolume": 1,
+          "voicepitch": 1,
+          "voicerate": 1
+        }
+      },
+      "giveaway": {
+        "host": false,
+        "mod": true,
+        "subcriber": true,
+        "turbo": true,
+        "viewer": true
+      },
+      "steam": {
+        "account": ["76561197986277430"],
+        "steamgroup": ["103582791435681646"]
+      },
+      "discord": {
+        "magicconchshell": false,
+        "onlinemsg": "",
+        "twitternews": "",
+        "right": []
+      },
+      "mods": [],
+      "eseaid": "",
+      "twittername": "",
+      "lastfmname": "",
+      "check24h": false,
+      "check24hwhisper": false,
+      "automaticannouncements": false,
+      "wrongcommandlevenshtein": 3,
+      "followercheck": false,
+      "ignorecmd": []
+    }
+  },
+  "z3ustv": {
+    "botsettings": {
+      "advertising": [],
+      "viewerads": false,
+      "randomreply": true,
+      "steamid": 76561197989461340,
+      "facebookapi": "117142471785086",
+      "uppercase": true,
+      "uppercasepercent": "95",
+      "symbols": true,
+      "symbolspercent": "55",
+      "towords": [],
+      "banwords": [],
+      "weather": true,
+      "youtubetowhisper": true,
+      "wrongcommandmsg": true,
+      "wronglinkmsg": true,
+      "wrongsymbolsmsg": true,
+      "wronguppercasemsg": true,
+      "alloweddomains": ["youtube.com", "soundcloud.com", "youtu.be", "steamcommunity.com", "reddit.com"],
+      "alerts": {
+        "chat": false,
+        "steam": false,
+        "follower": {
+          "voicelanguage": "Deutsch Female"
+        },
+        "subscription": {
+          "voicelanguage": "Deutsch Female"
+        },
+        "magicconchshell": {
+          "modsonly": true,
+          "username": true,
+          "autodetectlanguage": false,
+          "voicelanguage": "Deutsch Female",
+          "voicevolume": 1,
+          "voicepitch": 1,
+          "voicerate": 1
+        }
+      },
+      "giveaway": {
+        "host": false,
+        "mod": true,
+        "subcriber": true,
+        "turbo": true,
+        "viewer": true
+      },
+      "steam": {
+        "account": [],
+        "steamgroup": []
+      },
+      "discord": {
+        "magicconchshell": false,
+        "onlinemsg": "",
+        "twitternews": "",
+        "right": []
+      },
+      "mods": [],
+      "eseaid": "",
+      "twittername": "",
+      "lastfmname": "",
+      "check24h": false,
+      "check24hwhisper": false,
+      "automaticannouncements": false,
+      "wrongcommandlevenshtein": 3,
+      "followercheck": false,
+      "ignorecmd": []
+    }
+  },
+  "spddl": {
+    "botsettings": {
+      "advertising": [],
+      "viewerads": false,
+      "randomreply": true,
+      "steamid": "76561198027155016",
+      "uppercase": ["sub"],
+      "uppercasepercent": 96,
+      "symbols": ["sub"],
+      "symbolspercent": "55",
+      "towords": [],
+      "banwords": [],
+      "weather": true,
+      "youtubetowhisper": true,
+      "wrongcommandmsg": true,
+      "wronglinkmsg": true,
+      "wrongsymbolsmsg": true,
+      "wronguppercasemsg": true,
+      "alloweddomains": ["youtube.com", "soundcloud.com", "youtu.be", "steamcommunity.com", "reddit.com"],
+      "alerts": {
+        "chat": false,
+        "steam": false,
+        "follower": {
+          "voicelanguage": "Deutsch Female"
+        },
+        "subscription": {
+          "voicelanguage": "Deutsch Female"
+        },
+        "magicconchshell": {
+          "modsonly": false,
+          "username": true,
+          "autodetectlanguage": false,
+          "voicelanguage": "Deutsch Female",
+          "voicevolume": 1,
+          "voicepitch": 1,
+          "voicerate": 1
+        }
+      },
+      "giveaway": {
+        "host": false,
+        "mod": true,
+        "subcriber": true,
+        "turbo": true,
+        "viewer": true,
+        "subscriber": true
+      },
+      "steam": {
+        "account": ["76561198027155016"],
+        "steamgroup": ["103582791434073797"]
+      },
+      "discord": {
+        "magicconchshell": false,
+        "onlinemsg": "138313705816457218",
+        "twitternews": "203251411885096961",
+        "right": []
+      },
+      "mods": [],
+      "eseaid": 983770,
+      "twittername": "",
+      "lastfmname": "",
+      "check24h": false,
+      "check24hwhisper": false,
+      "automaticannouncements": true,
+      "wrongcommandlevenshtein": 3,
+      "followercheck": true,
+      "ignorecmd": [],
+      "status": true,
+      "check24hwhisperinfo": false,
+      "postingdomains": ["sub"]
+    }
+  },
+  "spddl_bot": {
+    "botsettings": {
+      "advertising": [],
+      "facebookapi": "588816384568327",
+      "viewerads": false,
+      "randomreply": false,
+      "uppercase": true,
+      "uppercasepercent": "0.5",
+      "symbols": true,
+      "symbolspercent": "95",
+      "towords": [],
+      "banwords": [],
+      "weather": true,
+      "youtubetowhisper": true,
+      "wrongcommandmsg": true,
+      "wronglinkmsg": true,
+      "wrongsymbolsmsg": true,
+      "wronguppercasemsg": true,
+      "alloweddomains": ["youtube.com", "soundcloud.com", "youtu.be", "steamcommunity.com", "reddit.com"],
+      "alerts": {
+        "chat": false,
+        "steam": false,
+        "follower": {
+          "voicelanguage": "Deutsch Female"
+        },
+        "subscription": {
+          "voicelanguage": "Deutsch Female"
+        },
+        "magicconchshell": {
+          "modsonly": true,
+          "username": true,
+          "autodetectlanguage": true,
+          "voicelanguage": "Deutsch Female",
+          "voicevolume": 1,
+          "voicepitch": 1,
+          "voicerate": 1
+        }
+      },
+      "giveaway": {
+        "host": false,
+        "mod": true,
+        "subcriber": true,
+        "turbo": true,
+        "viewer": true
+      },
+      "steam": {
+        "account": [],
+        "steamgroup": []
+      },
+      "discord": {
+        "magicconchshell": false,
+        "onlinemsg": "",
+        "twitternews": "",
+        "right": []
+      },
+      "mods": [],
+      "eseaid": "",
+      "twittername": "",
+      "lastfmname": "",
+      "check24h": false,
+      "check24hwhisper": false,
+      "automaticannouncements": false,
+      "wrongcommandlevenshtein": 3,
+      "followercheck": false,
+      "ignorecmd": []
+    }
+  },
+  "tahsinofficial": {
+    "botsettings": {
+      "advertising": [{
+        "id": 0,
+        "time": "0,30 * * * *",
+        "text": "https://www.facebook.com/tahsiNcs"
+      }, {
+        "id": 1,
+        "time": "15,45 * * * *",
+        "text": "http://steamcommunity.com/groups/tahsinofficial"
+      }],
+      "viewerads": false,
+      "randomreply": false,
+      "facebookapi": "588816384568327",
+      "uppercase": true,
+      "uppercasepercent": "95",
+      "symbols": true,
+      "symbolspercent": "55",
+      "towords": ["csgopolygon"],
+      "banwords": ["why don't you put a bannerino for kappamine? lol (http://t.co/PAo1mBVNJU in case you don't know what it is lol)"],
+      "weather": true,
+      "youtubetowhisper": true,
+      "wrongcommandmsg": true,
+      "wronglinkmsg": true,
+      "wrongsymbolsmsg": true,
+      "wronguppercasemsg": true,
+      "alloweddomains": ["youtube.com", "soundcloud.com", "youtu.be", "steamcommunity.com", "reddit.com", "99damage.de", "esl.eu", "hltv.org", "gamerclubgermany.de", "eslgaming.com"],
+      "alerts": {
+        "chat": false,
+        "steam": false,
+        "follower": {
+          "voicelanguage": "Deutsch Female"
+        },
+        "subscription": {
+          "voicelanguage": "Deutsch Female"
+        },
+        "magicconchshell": {
+          "modsonly": true,
+          "username": true,
+          "autodetectlanguage": false,
+          "voicelanguage": "Deutsch Female",
+          "voicevolume": 1,
+          "voicepitch": 1,
+          "voicerate": 1
+        }
+      },
+      "giveaway": {
+        "host": false,
+        "mod": true,
+        "subcriber": true,
+        "turbo": true,
+        "viewer": true
+      },
+      "mods": ["ladydeaths", "toni_sosa"],
+      "steam": {
+        "account": ["76561198034826115"],
+        "steamgroup": ["103582791439102295"]
+      },
+      "discord": {
+        "magicconchshell": false,
+        "onlinemsg": "",
+        "twitternews": "",
+        "right": []
+      },
+      "eseaid": "",
+      "twittername": "",
+      "lastfmname": "",
+      "check24h": false,
+      "check24hwhisper": false,
+      "automaticannouncements": true,
+      "wrongcommandlevenshtein": 3,
+      "followercheck": false,
+      "ignorecmd": []
+    }
+  },
+  "stv_nash": {
+    "botsettings": {
+      "advertising": [],
+      "viewerads": false,
+      "randomreply": false,
+      "uppercase": true,
+      "uppercasepercent": "95",
+      "symbols": true,
+      "symbolspercent": "55",
+      "towords": [],
+      "banwords": [],
+      "weather": true,
+      "youtubetowhisper": true,
+      "wrongcommandmsg": true,
+      "wronglinkmsg": false,
+      "wrongsymbolsmsg": true,
+      "wronguppercasemsg": true,
+      "alloweddomains": ["youtube.com", "soundcloud.com", "youtu.be", "steamcommunity.com", "reddit.com", "steamcommunity.com"],
+      "alerts": {
+        "chat": false,
+        "steam": false,
+        "follower": {
+          "voicelanguage": "Deutsch Female"
+        },
+        "subscription": {
+          "voicelanguage": "Deutsch Female"
+        },
+        "magicconchshell": {
+          "modsonly": false,
+          "username": false,
+          "autodetectlanguage": false,
+          "voicelanguage": "Deutsch Female",
+          "voicevolume": 1,
+          "voicepitch": 1,
+          "voicerate": 1
+        }
+      },
+      "giveaway": {
+        "host": false,
+        "mod": true,
+        "subcriber": true,
+        "turbo": true,
+        "viewer": true
+      },
+      "mods": ["deazyy", "nashb0t"],
+      "steam": {
+        "account": ["76561197979480702"],
+        "steamgroup": ["103582791441104202"]
+      },
+      "discord": {
+        "magicconchshell": false,
+        "onlinemsg": "",
+        "twitternews": "",
+        "right": []
+      },
+      "steamid": 76561197979480700,
+      "eseaid": "",
+      "twittername": "",
+      "lastfmname": "stv_nasH",
+      "check24h": false,
+      "check24hwhisper": false,
+      "automaticannouncements": false,
+      "wrongcommandlevenshtein": 3,
+      "followercheck": false,
+      "ignorecmd": ["!bart"]
+    }
+  },
+  "denis10_": {
+    "botsettings": {
+      "advertising": [],
+      "viewerads": false,
+      "randomreply": true,
+      "uppercase": true,
+      "uppercasepercent": "95",
+      "symbols": true,
+      "symbolspercent": "55",
+      "towords": [],
+      "banwords": [],
+      "weather": true,
+      "youtubetowhisper": true,
+      "wrongcommandmsg": true,
+      "wronglinkmsg": true,
+      "wrongsymbolsmsg": true,
+      "wronguppercasemsg": true,
+      "alloweddomains": ["youtube.com", "soundcloud.com", "youtu.be", "steamcommunity.com", "reddit.com", "oddshot.tv"],
+      "alerts": {
+        "chat": false,
+        "steam": false,
+        "follower": {
+          "voicelanguage": "Deutsch Female"
+        },
+        "subscription": {
+          "voicelanguage": "Deutsch Female"
+        },
+        "magicconchshell": {
+          "modsonly": true,
+          "username": true,
+          "autodetectlanguage": false,
+          "voicelanguage": "Deutsch Female",
+          "voicevolume": 1,
+          "voicepitch": 1,
+          "voicerate": 1
+        }
+      },
+      "giveaway": {
+        "host": false,
+        "mod": true,
+        "subcriber": true,
+        "turbo": true,
+        "viewer": true
+      },
+      "mods": ["random_username_in_coming"],
+      "steam": {
+        "account": [],
+        "steamgroup": []
+      },
+      "discord": {
+        "magicconchshell": false,
+        "onlinemsg": "",
+        "twitternews": "",
+        "right": []
+      },
+      "eseaid": "",
+      "twittername": "",
+      "lastfmname": "",
+      "check24h": false,
+      "check24hwhisper": false,
+      "automaticannouncements": false,
+      "wrongcommandlevenshtein": 3,
+      "followercheck": false,
+      "ignorecmd": []
+    }
+  },
+  "navidkapio": {
+    "botsettings": {
+      "advertising": [],
+      "viewerads": false,
+      "randomreply": false,
+      "uppercase": false,
+      "uppercasepercent": "95",
+      "symbols": false,
+      "symbolspercent": "55",
+      "towords": ["csgodouble", "CSGO2x", "csgobattle.com", "fir0w.matchmak1ng.com"],
+      "banwords": [],
+      "weather": false,
+      "youtubetowhisper": true,
+      "wrongcommandmsg": false,
+      "wronglinkmsg": true,
+      "wrongsymbolsmsg": true,
+      "wronguppercasemsg": true,
+      "alloweddomains": [],
+      "alerts": {
+        "chat": false,
+        "steam": false,
+        "follower": {
+          "voicelanguage": "Deutsch Female"
+        },
+        "subscription": {
+          "voicelanguage": "Deutsch Female"
+        },
+        "magicconchshell": {
+          "modsonly": true,
+          "username": true,
+          "autodetectlanguage": false,
+          "voicelanguage": "Deutsch Female",
+          "voicevolume": 1,
+          "voicepitch": 1,
+          "voicerate": 1
+        }
+      },
+      "giveaway": {
+        "host": false,
+        "mod": true,
+        "subcriber": true,
+        "turbo": true,
+        "viewer": true
+      },
+      "mods": ["Niru_", "kUNSTFEHL9R"],
+      "steam": {
+        "account": ["76561197960768127", "76561197983113322"],
+        "steamgroup": ["103582791440697069"]
+      },
+      "discord": {
+        "magicconchshell": false,
+        "onlinemsg": "124300975065399296",
+        "twitternews": "",
+        "right": []
+      },
+      "eseaid": "87200",
+      "twittername": "",
+      "lastfmname": "",
+      "check24h": false,
+      "check24hwhisper": false,
+      "automaticannouncements": true,
+      "wrongcommandlevenshtein": 3,
+      "followercheck": true,
+      "ignorecmd": []
+    }
+  },
+  "ladydeaths": {
+    "botsettings": {
+      "advertising": [],
+      "viewerads": false,
+      "randomreply": true,
+      "uppercase": ["sub", "tur", "vie"],
+      "uppercasepercent": 90,
+      "symbols": [],
+      "symbolspercent": 82,
+      "towords": ["cunt", "fotze", "missgeburt", "nazi", "skelator", "crack", "meth", "Haurein", "Resident Evil"],
+      "banwords": ["milf"],
+      "weather": true,
+      "youtubetowhisper": true,
+      "wrongcommandmsg": true,
+      "wronglinkmsg": true,
+      "wrongsymbolsmsg": true,
+      "wronguppercasemsg": true,
+      "alloweddomains": ["youtube.com", "soundcloud.com", "youtu.be", "steamcommunity.com", "reddit.com"],
+      "alerts": {
+        "chat": false,
+        "steam": false,
+        "follower": {
+          "voicelanguage": "Deutsch Female"
+        },
+        "subscription": {
+          "voicelanguage": "Deutsch Female"
+        },
+        "magicconchshell": {
+          "modsonly": true,
+          "username": true,
+          "autodetectlanguage": true,
+          "voicelanguage": "Dutch Female",
+          "voicevolume": 0.35,
+          "voicepitch": 1,
+          "voicerate": 1,
+          "blockTypicalSpamBool": true
+        }
+      },
+      "giveaway": {
+        "host": true,
+        "mod": true,
+        "subcriber": true,
+        "turbo": true,
+        "viewer": true,
+        "keyword": "! jo Bro glhf",
+        "subscriber": true
+      },
+      "mods": ["missjuju__", "Krautsalat294", "ThisRageisreal", "thisrageisreal", "g0ttfried", "xxxsorajiaxxx"],
+      "steam": {
+        "account": ["76561198167027309"],
+        "steamgroup": ["103582791439880090"]
+      },
+      "discord": {
+        "magicconchshell": false,
+        "onlinemsg": "",
+        "twitternews": "",
+        "right": []
+      },
+      "eseaid": "",
+      "twittername": "",
+      "lastfmname": "",
+      "check24h": false,
+      "check24hwhisper": false,
+      "automaticannouncements": true,
+      "wrongcommandlevenshtein": 3,
+      "followercheck": true,
+      "ignorecmd": [],
+      "status": true,
+      "permit": true,
+      "esea": true,
+      "lastesea": true,
+      "market": true,
+      "game": true,
+      "song": true,
+      "mm": true,
+      "uptime": true,
+      "title": true,
+      "postingdomains": ["sub", "tur", "vie"],
+      "check24hwhisperinfo": true,
+      "giveawaytoggle": true
+    }
+  },
+  "jbreelocher": {
+    "botsettings": {
+      "advertising": [{
+        "id": 0,
+        "time": "0 */2 * * *",
+        "text": "!cfg, !crosshair, !facebook, !gui, !homepage, !hud, !playlist, !resolution, !steamgroup, !steamprofile, !steamskin, !teamspeak, !viewmodel, !water, !youtube"
+      }, {
+        "id": 1,
+        "time": "0,20,40 * * * *",
+        "text": "Follow us on Facebook to keep up to date with everything related to Team jbree and yanni www.fb.com/teamjbree!"
+      }, {
+        "id": 2,
+        "time": "10,30,50 * * * *",
+        "text": "Subscribe on Youtube to get notified about the latest videos from Team jbree https://www.youtube.com/channel/UChR1VQr_TU_-MIquTuW9ksw"
+      }],
+      "viewerads": true,
+      "randomreply": true,
+      "steamid": "76561197960336750",
+      "facebookapi": "665428110204902",
+      "uppercase": true,
+      "uppercasepercent": "95",
+      "symbols": true,
+      "symbolspercent": "55",
+      "towords": [],
+      "banwords": [],
+      "weather": true,
+      "youtubetowhisper": true,
+      "wrongcommandmsg": true,
+      "wronglinkmsg": true,
+      "wrongsymbolsmsg": true,
+      "wronguppercasemsg": true,
+      "alloweddomains": ["youtube.com", "soundcloud.com", "youtu.be", "steamcommunity.com", "reddit.com"],
+      "alerts": {
+        "chat": false,
+        "steam": false,
+        "follower": {
+          "voicelanguage": "Deutsch Female"
+        },
+        "subscription": {
+          "voicelanguage": "Deutsch Female"
+        },
+        "magicconchshell": {
+          "modsonly": true,
+          "username": true,
+          "autodetectlanguage": false,
+          "voicelanguage": "Deutsch Female",
+          "voicevolume": 1,
+          "voicepitch": 1,
+          "voicerate": 1
+        }
+      },
+      "giveaway": {
+        "host": false,
+        "mod": true,
+        "subcriber": true,
+        "turbo": true,
+        "viewer": true
+      },
+      "steam": {
+        "account": ["76561197960336750"],
+        "steamgroup": []
+      },
+      "discord": {
+        "magicconchshell": false,
+        "onlinemsg": "",
+        "twitternews": "",
+        "right": []
+      },
+      "mods": [],
+      "eseaid": "",
+      "twittername": "",
+      "lastfmname": "",
+      "check24h": false,
+      "check24hwhisper": false,
+      "automaticannouncements": false,
+      "wrongcommandlevenshtein": 3,
+      "followercheck": false,
+      "ignorecmd": []
+    }
+  },
+  "p0larityy": {
+    "botsettings": {
+      "advertising": [],
+      "viewerads": true,
+      "randomreply": true,
+      "uppercase": true,
+      "uppercasepercent": "95",
+      "symbols": true,
+      "symbolspercent": "55",
+      "towords": [],
+      "banwords": [],
+      "weather": true,
+      "youtubetowhisper": true,
+      "wrongcommandmsg": true,
+      "wronglinkmsg": true,
+      "wrongsymbolsmsg": true,
+      "wronguppercasemsg": true,
+      "alloweddomains": ["youtube.com", "soundcloud.com", "youtu.be", "steamcommunity.com", "reddit.com"],
+      "alerts": {
+        "chat": false,
+        "steam": false,
+        "follower": {
+          "voicelanguage": "Deutsch Female"
+        },
+        "subscription": {
+          "voicelanguage": "Deutsch Female"
+        },
+        "magicconchshell": {
+          "modsonly": true,
+          "username": true,
+          "autodetectlanguage": false,
+          "voicelanguage": "Deutsch Female",
+          "voicevolume": 1,
+          "voicepitch": 1,
+          "voicerate": 1
+        }
+      },
+      "giveaway": {
+        "host": false,
+        "mod": true,
+        "subcriber": true,
+        "turbo": true,
+        "viewer": true
+      },
+      "steam": {
+        "account": [],
+        "steamgroup": []
+      },
+      "discord": {
+        "magicconchshell": false,
+        "onlinemsg": "",
+        "twitternews": "",
+        "right": []
+      },
+      "mods": [],
+      "eseaid": "",
+      "twittername": "",
+      "lastfmname": "",
+      "check24h": false,
+      "check24hwhisper": false,
+      "automaticannouncements": false,
+      "wrongcommandlevenshtein": 3,
+      "followercheck": false,
+      "ignorecmd": []
+    }
+  },
+  "xatutv": {
+    "botsettings": {
+      "advertising": [],
+      "viewerads": false,
+      "randomreply": true,
+      "uppercase": true,
+      "uppercasepercent": "95",
+      "symbols": true,
+      "symbolspercent": "55",
+      "towords": [],
+      "banwords": [],
+      "weather": true,
+      "youtubetowhisper": true,
+      "wrongcommandmsg": true,
+      "wronglinkmsg": true,
+      "wrongsymbolsmsg": true,
+      "wronguppercasemsg": true,
+      "alloweddomains": ["youtube.com", "soundcloud.com", "youtu.be", "steamcommunity.com", "reddit.com"],
+      "alerts": {
+        "chat": false,
+        "steam": false,
+        "follower": {
+          "voicelanguage": "Deutsch Female"
+        },
+        "subscription": {
+          "voicelanguage": "Deutsch Female"
+        },
+        "magicconchshell": {
+          "modsonly": true,
+          "username": true,
+          "autodetectlanguage": false,
+          "voicelanguage": "Deutsch Female",
+          "voicevolume": 1,
+          "voicepitch": 1,
+          "voicerate": 1
+        }
+      },
+      "giveaway": {
+        "host": false,
+        "mod": true,
+        "subcriber": true,
+        "turbo": true,
+        "viewer": true
+      },
+      "steam": {
+        "account": [],
+        "steamgroup": []
+      },
+      "discord": {
+        "magicconchshell": false,
+        "onlinemsg": "",
+        "twitternews": "",
+        "right": []
+      },
+      "mods": [],
+      "eseaid": "",
+      "twittername": "",
+      "lastfmname": "",
+      "check24h": false,
+      "check24hwhisper": false,
+      "automaticannouncements": false,
+      "wrongcommandlevenshtein": 3,
+      "followercheck": false,
+      "ignorecmd": []
+    }
+  },
+  "gobbtv": {
+    "botsettings": {
+      "advertising": [],
+      "viewerads": false,
+      "randomreply": false,
+      "facebookapi": "150144321731329",
+      "uppercase": ["vie"],
+      "uppercasepercent": "95",
+      "symbols": ["vie"],
+      "symbolspercent": "55",
+      "towords": [],
+      "banwords": [],
+      "weather": true,
+      "youtubetowhisper": false,
+      "wrongcommandmsg": false,
+      "wronglinkmsg": true,
+      "wrongsymbolsmsg": true,
+      "wronguppercasemsg": true,
+      "alloweddomains": ["youtube.com", "soundcloud.com", "youtu.be", "steamcommunity.com", "reddit.com", "clips.twitch.tv"],
+      "alerts": {
+        "chat": false,
+        "steam": false,
+        "follower": {
+          "voicelanguage": "Deutsch Female"
+        },
+        "subscription": {
+          "voicelanguage": "Deutsch Female"
+        },
+        "magicconchshell": {
+          "modsonly": true,
+          "username": true,
+          "autodetectlanguage": false,
+          "voicelanguage": "Deutsch Female",
+          "voicevolume": 1,
+          "voicepitch": 1,
+          "voicerate": 1
+        }
+      },
+      "giveaway": {
+        "host": false,
+        "mod": true,
+        "subcriber": true,
+        "turbo": true,
+        "viewer": true
+      },
+      "mods": ["fnr_", "Niru_", "kunstfehl9r"],
+      "steam": {
+        "account": ["76561198122771826", "76561197961427893"],
+        "steamgroup": []
+      },
+      "discord": {
+        "magicconchshell": false,
+        "onlinemsg": "124300975065399296",
+        "twitternews": "",
+        "right": []
+      },
+      "eseaid": "128165",
+      "twittername": "@gobelante",
+      "lastfmname": "",
+      "check24h": false,
+      "check24hwhisper": false,
+      "automaticannouncements": false,
+      "wrongcommandlevenshtein": 3,
+      "followercheck": true,
+      "ignorecmd": [],
+      "postingdomains": ["sub"]
+    }
+  },
+  "know1111ng": {
+    "botsettings": {
+      "advertising": [],
+      "viewerads": false,
+      "randomreply": true,
+      "uppercase": true,
+      "uppercasepercent": "95",
+      "symbols": true,
+      "symbolspercent": "55",
+      "towords": [],
+      "banwords": [],
+      "weather": true,
+      "wrongcommandmsg": true,
+      "wronglinkmsg": true,
+      "wrongsymbolsmsg": true,
+      "wronguppercasemsg": true,
+      "alloweddomains": ["youtube.com", "soundcloud.com", "youtu.be", "steamcommunity.com", "reddit.com"],
+      "alerts": {
+        "chat": false,
+        "steam": false,
+        "follower": {
+          "voicelanguage": "Deutsch Female"
+        },
+        "subscription": {
+          "voicelanguage": "Deutsch Female"
+        },
+        "magicconchshell": {
+          "modsonly": true,
+          "username": true,
+          "autodetectlanguage": false,
+          "voicelanguage": "Deutsch Female",
+          "voicevolume": 1,
+          "voicepitch": 1,
+          "voicerate": 1
+        }
+      },
+      "giveaway": {
+        "host": false,
+        "mod": true,
+        "subcriber": true,
+        "turbo": true,
+        "viewer": true
+      },
+      "steam": {
+        "account": [],
+        "steamgroup": []
+      },
+      "discord": {
+        "magicconchshell": false,
+        "onlinemsg": "",
+        "twitternews": "",
+        "right": []
+      },
+      "mods": [],
+      "eseaid": "",
+      "twittername": "",
+      "lastfmname": "",
+      "check24h": false,
+      "check24hwhisper": false,
+      "automaticannouncements": false,
+      "wrongcommandlevenshtein": 3,
+      "followercheck": false,
+      "ignorecmd": []
+    }
+  },
+  "trotakis": {
+    "botsettings": {
+      "advertising": [],
+      "viewerads": false,
+      "randomreply": false,
+      "uppercase": true,
+      "uppercasepercent": "95",
+      "symbols": true,
+      "symbolspercent": "55",
+      "towords": [],
+      "banwords": [],
+      "weather": true,
+      "youtubetowhisper": true,
+      "wrongcommandmsg": true,
+      "wronglinkmsg": true,
+      "wrongsymbolsmsg": true,
+      "wronguppercasemsg": true,
+      "alloweddomains": ["youtube.com", "soundcloud.com", "youtu.be", "steamcommunity.com", "reddit.com"],
+      "alerts": {
+        "chat": false,
+        "steam": false,
+        "follower": {
+          "voicelanguage": "Deutsch Female"
+        },
+        "subscription": {
+          "voicelanguage": "Deutsch Female"
+        },
+        "magicconchshell": {
+          "modsonly": true,
+          "username": true,
+          "autodetectlanguage": false,
+          "voicelanguage": "Deutsch Female",
+          "voicevolume": 1,
+          "voicepitch": 1,
+          "voicerate": 1
+        }
+      },
+      "giveaway": {
+        "host": false,
+        "mod": true,
+        "subcriber": true,
+        "turbo": true,
+        "viewer": true
+      },
+      "steam": {
+        "account": [],
+        "steamgroup": []
+      },
+      "discord": {
+        "magicconchshell": false,
+        "onlinemsg": "",
+        "twitternews": "",
+        "right": []
+      },
+      "mods": [],
+      "eseaid": "",
+      "twittername": "",
+      "lastfmname": "",
+      "check24h": false,
+      "check24hwhisper": false,
+      "automaticannouncements": false,
+      "wrongcommandlevenshtein": 3,
+      "followercheck": false,
+      "ignorecmd": []
+    }
+  },
+  "fr3ddytv": {
+    "botsettings": {
+      "advertising": [],
+      "viewerads": false,
+      "randomreply": true,
+      "uppercase": ["sub", "tur", "vie"],
+      "steamid": "76561197988881866",
+      "facebookapi": "181124231975751",
+      "uppercasepercent": 0,
+      "symbols": ["sub", "tur", "vie"],
+      "symbolspercent": 0,
+      "towords": [],
+      "banwords": ["bus baun", "just got championship riven skin from here its legit guys xD!!", "l.ly/image_190915", "http://bit.ly/1j3zjsk", "http://andromedo.ga", "Bus bauen", "busbau", "jarina90"],
+      "weather": true,
+      "youtubetowhisper": true,
+      "wrongcommandmsg": true,
+      "wronglinkmsg": true,
+      "wrongsymbolsmsg": true,
+      "wronguppercasemsg": true,
+      "alloweddomains": ["youtube.com", "soundcloud.com", "youtu.be", "steamcommunity.com", "reddit.com", "clips.twitch.tv", "directupload.net"],
+      "alerts": {
+        "chat": false,
+        "steam": true,
+        "follower": {
+          "voicelanguage": "Deutsch Female"
+        },
+        "subscription": {
+          "voicelanguage": "Deutsch Female"
+        },
+        "magicconchshell": {
+          "modsonly": false,
+          "username": false,
+          "autodetectlanguage": true,
+          "voicelanguage": "Deutsch Female",
+          "voicevolume": 1,
+          "voicepitch": 1,
+          "voicerate": 1
+        }
+      },
+      "giveaway": {
+        "host": true,
+        "mod": true,
+        "subcriber": true,
+        "turbo": true,
+        "viewer": true
+      },
+      "mods": ["drmagix", "jennykitty99", "freddy_smm_bot"],
+      "steam": {
+        "account": ["76561197988881866", "76561198162886391"],
+        "steamgroup": ["103582791439074835"]
+      },
+      "discord": {
+        "magicconchshell": true,
+        "onlinemsg": "172535189598240768",
+        "twitternews": "172729775142469632",
+        "right": ["172720052812906496", "173856250612809728"]
+      },
+      "eseaid": "",
+      "twittername": "Freddy27live",
+      "lastfmname": "Freddy_OD",
+      "check24h": false,
+      "check24hwhisper": true,
+      "automaticannouncements": true,
+      "wrongcommandlevenshtein": 3,
+      "followercheck": true,
+      "ignorecmd": ["!list", "!submit", "!submitted", "!muscheln", "!bet", "!heist", "!points", "!songrequest", "!vote", "!add", "!currentsong", "!veto", "!info", "!skip", "!current", "!skiplevel", "!next", "!open", "!close", "!remove", "!stats", "!replace", "!rand", "!queue", "!rage", "!warpworld", "!queue-name", "!challenge"],
+      "giveawaytoggle": false,
+      "song": true,
+      "game": true,
+      "mm": true,
+      "uptime": true,
+      "postingdomains": []
+    }
+  },
+  "mikemikeybultez": {
+    "botsettings": {
+      "advertising": [],
+      "viewerads": false,
+      "randomreply": false,
+      "uppercase": true,
+      "uppercasepercent": "95",
+      "symbols": true,
+      "symbolspercent": "55",
+      "towords": [],
+      "banwords": [],
+      "weather": true,
+      "youtubetowhisper": true,
+      "wrongcommandmsg": false,
+      "wronglinkmsg": false,
+      "wrongsymbolsmsg": true,
+      "wronguppercasemsg": true,
+      "alloweddomains": [],
+      "alerts": {
+        "chat": false,
+        "steam": false,
+        "follower": {
+          "voicelanguage": "Deutsch Female"
+        },
+        "subscription": {
+          "voicelanguage": "Deutsch Female"
+        },
+        "magicconchshell": {
+          "modsonly": true,
+          "username": true,
+          "autodetectlanguage": false,
+          "voicelanguage": "Deutsch Female",
+          "voicevolume": 1,
+          "voicepitch": 1,
+          "voicerate": 1
+        }
+      },
+      "giveaway": {
+        "host": false,
+        "mod": true,
+        "subcriber": true,
+        "turbo": true,
+        "viewer": true
+      },
+      "mods": ["mikemikeybultez_bot"],
+      "steam": {
+        "account": [],
+        "steamgroup": []
+      },
+      "discord": {
+        "magicconchshell": false,
+        "onlinemsg": "",
+        "twitternews": "",
+        "right": []
+      },
+      "eseaid": "",
+      "twittername": "",
+      "lastfmname": "",
+      "check24h": false,
+      "check24hwhisper": false,
+      "automaticannouncements": false,
+      "wrongcommandlevenshtein": 3,
+      "followercheck": false,
+      "ignorecmd": []
+    }
+  },
+  "botttich": {
+    "botsettings": {
+      "advertising": [],
+      "viewerads": false,
+      "randomreply": true,
+      "steamid": "76561198027155016",
+      "facebookapi": "117142471785086",
+      "uppercase": true,
+      "uppercasepercent": "95",
+      "symbols": true,
+      "symbolspercent": "55",
+      "towords": [],
+      "banwords": [],
+      "weather": true,
+      "youtubetowhisper": true,
+      "wrongcommandmsg": true,
+      "wronglinkmsg": true,
+      "wrongsymbolsmsg": true,
+      "wronguppercasemsg": true,
+      "alloweddomains": [],
+      "alerts": {
+        "chat": false,
+        "steam": false,
+        "follower": {
+          "voicelanguage": "Deutsch Female"
+        },
+        "subscription": {
+          "voicelanguage": "Deutsch Female"
+        },
+        "magicconchshell": {
+          "modsonly": true,
+          "username": true,
+          "autodetectlanguage": false,
+          "voicelanguage": "Deutsch Female",
+          "voicevolume": 1,
+          "voicepitch": 1,
+          "voicerate": 1
+        }
+      },
+      "giveaway": {
+        "host": false,
+        "mod": true,
+        "subcriber": true,
+        "turbo": true,
+        "viewer": true
+      },
+      "steam": {
+        "account": [],
+        "steamgroup": []
+      },
+      "discord": {
+        "magicconchshell": false,
+        "onlinemsg": "",
+        "twitternews": "",
+        "right": []
+      },
+      "mods": [],
+      "eseaid": "",
+      "twittername": "",
+      "lastfmname": "",
+      "check24h": false,
+      "check24hwhisper": false,
+      "automaticannouncements": false,
+      "wrongcommandlevenshtein": 3,
+      "followercheck": false,
+      "ignorecmd": []
+    }
+  },
+  "collycs": {
+    "botsettings": {
+      "advertising": [],
+      "viewerads": false,
+      "randomreply": false,
+      "uppercase": true,
+      "uppercasepercent": "95",
+      "symbols": true,
+      "symbolspercent": "55",
+      "towords": [],
+      "banwords": [],
+      "weather": true,
+      "youtubetowhisper": true,
+      "wrongcommandmsg": false,
+      "wronglinkmsg": false,
+      "wrongsymbolsmsg": true,
+      "wronguppercasemsg": true,
+      "alloweddomains": ["youtube.com", "youtu.be"],
+      "alerts": {
+        "chat": false,
+        "steam": false,
+        "follower": {
+          "voicelanguage": "Deutsch Female"
+        },
+        "subscription": {
+          "voicelanguage": "Deutsch Female"
+        },
+        "magicconchshell": {
+          "modsonly": true,
+          "username": true,
+          "autodetectlanguage": false,
+          "voicelanguage": "Deutsch Female",
+          "voicevolume": 1,
+          "voicepitch": 1,
+          "voicerate": 1
+        }
+      },
+      "giveaway": {
+        "host": false,
+        "mod": true,
+        "subcriber": true,
+        "turbo": true,
+        "viewer": true
+      },
+      "mods": ["morlas86"],
+      "steam": {
+        "account": ["76561198009689451"],
+        "steamgroup": ["103582791441368848"]
+      },
+      "discord": {
+        "magicconchshell": false,
+        "onlinemsg": "",
+        "twitternews": "",
+        "right": []
+      },
+      "eseaid": 893854,
+      "twittername": "",
+      "lastfmname": "",
+      "check24h": false,
+      "check24hwhisper": false,
+      "automaticannouncements": false,
+      "wrongcommandlevenshtein": 3,
+      "followercheck": true,
+      "ignorecmd": []
+    }
+  },
+  "spddl_gaming": {
+    "botsettings": {
+      "advertising": [],
+      "viewerads": false,
+      "randomreply": true,
+      "steamid": "76561198027155016",
+      "uppercase": true,
+      "uppercasepercent": "95",
+      "symbols": true,
+      "symbolspercent": "55",
+      "towords": [],
+      "banwords": [],
+      "weather": true,
+      "youtubetowhisper": true,
+      "wrongcommandmsg": true,
+      "wronglinkmsg": true,
+      "wrongsymbolsmsg": true,
+      "wronguppercasemsg": true,
+      "alloweddomains": ["youtube.com", "soundcloud.com", "youtu.be", "steamcommunity.com", "reddit.com"],
+      "alerts": {
+        "chat": true,
+        "steam": false,
+        "follower": {
+          "voicelanguage": "Deutsch Female"
+        },
+        "subscription": {
+          "voicelanguage": "Deutsch Female"
+        },
+        "magicconchshell": {
+          "modsonly": true,
+          "username": true,
+          "autodetectlanguage": false,
+          "voicelanguage": "Deutsch Female",
+          "voicevolume": 1,
+          "voicepitch": 1,
+          "voicerate": 1
+        }
+      },
+      "giveaway": {
+        "host": false,
+        "mod": true,
+        "subcriber": true,
+        "turbo": true,
+        "viewer": true
+      },
+      "steam": {
+        "account": [],
+        "steamgroup": []
+      },
+      "discord": {
+        "magicconchshell": false,
+        "onlinemsg": "138313705816457218",
+        "twitternews": "",
+        "right": []
+      },
+      "mods": [],
+      "eseaid": "",
+      "twittername": "",
+      "lastfmname": "",
+      "check24h": false,
+      "check24hwhisper": false,
+      "automaticannouncements": false,
+      "wrongcommandlevenshtein": 3,
+      "followercheck": true,
+      "ignorecmd": []
+    }
+  },
+  "kunstfehl9r": {
+    "botsettings": {
+      "advertising": [],
+      "viewerads": false,
+      "randomreply": true,
+      "uppercase": true,
+      "uppercasepercent": "95",
+      "symbols": true,
+      "symbolspercent": "55",
+      "towords": [],
+      "banwords": [],
+      "weather": false,
+      "youtubetowhisper": true,
+      "wrongcommandmsg": true,
+      "wronglinkmsg": true,
+      "wrongsymbolsmsg": true,
+      "wronguppercasemsg": true,
+      "alloweddomains": ["youtube.com", "soundcloud.com", "youtu.be", "steamcommunity.com", "reddit.com"],
+      "alerts": {
+        "chat": false,
+        "steam": false,
+        "follower": {
+          "voicelanguage": "Deutsch Female"
+        },
+        "subscription": {
+          "voicelanguage": "Deutsch Female"
+        },
+        "magicconchshell": {
+          "modsonly": true,
+          "username": true,
+          "autodetectlanguage": false,
+          "voicelanguage": "Deutsch Female",
+          "voicevolume": 1,
+          "voicepitch": 1,
+          "voicerate": 1
+        }
+      },
+      "giveaway": {
+        "host": false,
+        "mod": true,
+        "subcriber": true,
+        "turbo": true,
+        "viewer": true
+      },
+      "steam": {
+        "account": ["76561197979154698"],
+        "steamgroup": []
+      },
+      "discord": {
+        "magicconchshell": false,
+        "onlinemsg": "",
+        "twitternews": "",
+        "right": []
+      },
+      "mods": ["Niru_"],
+      "eseaid": "",
+      "twittername": "",
+      "lastfmname": "",
+      "check24h": false,
+      "check24hwhisper": false,
+      "automaticannouncements": false,
+      "wrongcommandlevenshtein": "9",
+      "followercheck": true,
+      "ignorecmd": [],
+      "giveawaytoggle": false
+    }
+  },
+  "rahyy": {
+    "botsettings": {
+      "advertising": [],
+      "viewerads": false,
+      "randomreply": true,
+      "uppercase": true,
+      "uppercasepercent": "95",
+      "symbols": true,
+      "symbolspercent": "55",
+      "towords": [],
+      "banwords": [],
+      "weather": true,
+      "youtubetowhisper": true,
+      "wrongcommandmsg": true,
+      "wronglinkmsg": true,
+      "wrongsymbolsmsg": true,
+      "wronguppercasemsg": true,
+      "alloweddomains": ["youtube.com", "soundcloud.com", "youtu.be", "steamcommunity.com", "reddit.com"],
+      "alerts": {
+        "chat": false,
+        "steam": false,
+        "follower": {
+          "voicelanguage": "Deutsch Female"
+        },
+        "subscription": {
+          "voicelanguage": "Deutsch Female"
+        },
+        "magicconchshell": {
+          "modsonly": true,
+          "username": true,
+          "autodetectlanguage": false,
+          "voicelanguage": "Deutsch Female",
+          "voicevolume": 1,
+          "voicepitch": 1,
+          "voicerate": 1
+        }
+      },
+      "giveaway": {
+        "host": false,
+        "mod": true,
+        "subcriber": true,
+        "turbo": true,
+        "viewer": true
+      },
+      "steam": {
+        "account": [],
+        "steamgroup": []
+      },
+      "discord": {
+        "magicconchshell": false,
+        "onlinemsg": "",
+        "twitternews": "",
+        "right": []
+      },
+      "mods": ["drmagix"],
+      "eseaid": "",
+      "twittername": "",
+      "lastfmname": "",
+      "check24h": false,
+      "check24hwhisper": false,
+      "automaticannouncements": false,
+      "wrongcommandlevenshtein": 3,
+      "followercheck": true,
+      "ignorecmd": []
+    }
+  },
+  "tabsen_cs": {
+    "botsettings": {
+      "advertising": [],
+      "viewerads": false,
+      "randomreply": false,
+      "uppercase": false,
+      "uppercasepercent": "95",
+      "symbols": false,
+      "symbolspercent": "55",
+      "towords": [],
+      "banwords": [],
+      "weather": false,
+      "youtubetowhisper": true,
+      "wrongcommandmsg": false,
+      "wronglinkmsg": false,
+      "wrongsymbolsmsg": false,
+      "wronguppercasemsg": false,
+      "alloweddomains": ["youtube.com", "soundcloud.com", "youtu.be", "steamcommunity.com", "reddit.com"],
+      "alerts": {
+        "chat": false,
+        "steam": false,
+        "follower": {
+          "voicelanguage": "Deutsch Female"
+        },
+        "subscription": {
+          "voicelanguage": "Deutsch Female"
+        },
+        "magicconchshell": {
+          "modsonly": true,
+          "username": true,
+          "autodetectlanguage": false,
+          "voicelanguage": "Deutsch Female",
+          "voicevolume": 1,
+          "voicepitch": 1,
+          "voicerate": 1
+        }
+      },
+      "giveaway": {
+        "host": false,
+        "mod": true,
+        "subcriber": true,
+        "turbo": true,
+        "viewer": true
+      },
+      "steam": {
+        "account": [],
+        "steamgroup": []
+      },
+      "discord": {
+        "magicconchshell": false,
+        "onlinemsg": "",
+        "twitternews": "",
+        "right": []
+      },
+      "mods": [],
+      "eseaid": "",
+      "twittername": "",
+      "lastfmname": "",
+      "check24h": false,
+      "check24hwhisper": false,
+      "automaticannouncements": false,
+      "wrongcommandlevenshtein": 3,
+      "followercheck": false,
+      "ignorecmd": []
+    }
+  },
+  "matthias_mase_meyer": {
+    "botsettings": {
+      "advertising": [],
+      "viewerads": false,
+      "randomreply": true,
+      "uppercase": false,
+      "uppercasepercent": "95",
+      "symbols": false,
+      "symbolspercent": "55",
+      "towords": [],
+      "banwords": [],
+      "weather": true,
+      "youtubetowhisper": false,
+      "wrongcommandmsg": false,
+      "wronglinkmsg": false,
+      "wrongsymbolsmsg": false,
+      "wronguppercasemsg": false,
+      "alloweddomains": ["youtube.com", "soundcloud.com", "youtu.be", "steamcommunity.com", "reddit.com", "overwatcher.eu"],
+      "alerts": {
+        "chat": false,
+        "steam": false,
+        "follower": {
+          "voicelanguage": "Deutsch Female"
+        },
+        "subscription": {
+          "voicelanguage": "Deutsch Female"
+        },
+        "magicconchshell": {
+          "modsonly": true,
+          "username": true,
+          "autodetectlanguage": false,
+          "voicelanguage": "Deutsch Female",
+          "voicevolume": 1,
+          "voicepitch": 1,
+          "voicerate": 1
+        }
+      },
+      "giveaway": {
+        "host": false,
+        "mod": true,
+        "subcriber": true,
+        "turbo": true,
+        "viewer": true
+      },
+      "steam": {
+        "account": [],
+        "steamgroup": ["103582791432697683", "103582791432923367"]
+      },
+      "discord": {
+        "magicconchshell": false,
+        "onlinemsg": "",
+        "twitternews": "",
+        "right": []
+      },
+      "mods": ["WellfexX"],
+      "eseaid": "",
+      "twittername": "",
+      "lastfmname": "",
+      "overwatchtag": "Mase#2357",
+      "check24h": false,
+      "check24hwhisper": false,
+      "automaticannouncements": true,
+      "wrongcommandlevenshtein": "1",
+      "followercheck": true,
+      "ignorecmd": ["!gold"],
+      "song": false,
+      "mm": false,
+      "knife": false,
+      "market": false,
+      "lastesea": false,
+      "esea": false
+    }
+  },
+  "n1k96": {
+    "botsettings": {
+      "advertising": [],
+      "viewerads": false,
+      "randomreply": true,
+      "uppercase": false,
+      "uppercasepercent": 97,
+      "symbols": true,
+      "symbolspercent": 30,
+      "towords": [],
+      "banwords": [],
+      "weather": true,
+      "youtubetowhisper": true,
+      "wrongcommandmsg": false,
+      "wronglinkmsg": false,
+      "wrongsymbolsmsg": false,
+      "wronguppercasemsg": false,
+      "alloweddomains": ["youtube.com", "soundcloud.com", "youtu.be", "steamcommunity.com", "reddit.com"],
+      "alerts": {
+        "chat": false,
+        "steam": false,
+        "follower": {
+          "voicelanguage": "Deutsch Female"
+        },
+        "subscription": {
+          "voicelanguage": "Deutsch Female"
+        },
+        "magicconchshell": {
+          "modsonly": false,
+          "username": true,
+          "autodetectlanguage": true,
+          "voicelanguage": "Deutsch Female",
+          "voicevolume": 1,
+          "voicepitch": 1,
+          "voicerate": 1
+        }
+      },
+      "giveaway": {
+        "host": true,
+        "mod": true,
+        "subcriber": true,
+        "turbo": true,
+        "viewer": true
+      },
+      "steam": {
+        "account": ["76561197987492394"],
+        "steamgroup": ["103582791439279250"]
+      },
+      "discord": {
+        "magicconchshell": false,
+        "onlinemsg": "",
+        "twitternews": "",
+        "right": []
+      },
+      "mods": [],
+      "eseaid": 609703,
+      "twittername": "",
+      "lastfmname": "",
+      "check24h": false,
+      "check24hwhisper": false,
+      "automaticannouncements": false,
+      "wrongcommandlevenshtein": 3,
+      "followercheck": true,
+      "ignorecmd": [],
+      "giveawaytoggle": true,
+      "song": true,
+      "mm": true,
+      "uptime": true,
+      "title": true,
+      "game": true,
+      "market": true,
+      "lastesea": true,
+      "esea": true,
+      "permit": true,
+      "status": true
+    }
+  },
+  "nbe1_megatron": {
+    "botsettings": {
+      "advertising": [],
+      "viewerads": false,
+      "randomreply": false,
+      "uppercase": false,
+      "uppercasepercent": "95",
+      "symbols": false,
+      "symbolspercent": 100,
+      "towords": ["nigger", "niga", "niggah", "hurensohn", "huen"],
+      "banwords": ["nigger", "niga", "niggah", "hurenson", "huen"],
+      "weather": false,
+      "youtubetowhisper": false,
+      "wrongcommandmsg": true,
+      "wronglinkmsg": true,
+      "wrongsymbolsmsg": true,
+      "wronguppercasemsg": true,
+      "alloweddomains": ["youtube.com", "soundcloud.com", "youtu.be", "steamcommunity.com", "reddit.com"],
+      "alerts": {
+        "chat": false,
+        "steam": false,
+        "follower": {
+          "voicelanguage": "Deutsch Female"
+        },
+        "subscription": {
+          "voicelanguage": "Deutsch Female"
+        },
+        "magicconchshell": {
+          "modsonly": false,
+          "username": false,
+          "autodetectlanguage": false,
+          "voicelanguage": "Deutsch Female",
+          "voicevolume": 1,
+          "voicepitch": 1,
+          "voicerate": 1
+        }
+      },
+      "giveaway": {
+        "host": false,
+        "mod": true,
+        "subcriber": true,
+        "turbo": true,
+        "viewer": true
+      },
+      "steam": {
+        "account": [],
+        "steamgroup": []
+      },
+      "discord": {
+        "magicconchshell": false,
+        "onlinemsg": "",
+        "twitternews": "",
+        "right": []
+      },
+      "mods": [],
+      "eseaid": 983770,
+      "twittername": "",
+      "lastfmname": "",
+      "check24h": true,
+      "check24hwhisper": true,
+      "automaticannouncements": false,
+      "wrongcommandlevenshtein": 3,
+      "followercheck": false,
+      "ignorecmd": ["!songrequest", "!sr", "!welcome", "!vginfo", "!vg", "!aufgehts", "!battlelog", "!songlist", "!top", "!follow", "!volume", "!nextsong", "!config", "!crosshair", "!faceit", "!followsong", "!group", "!instagram", "!izi", "!krass", "!multi", "!mystats", "!origin", "!quote1", "!rank", "!res", "!ripskins", "!rules", "!schelle", "!sense", "!song", "!stats", "!steam", "!trade", "!twitter", "!uplay", "!uptime", "!youtube", "!currentsong"]
+    }
+  },
+  "toni_sosa": {
+    "botsettings": {
+      "advertising": [],
+      "alloweddomains": ["youtube.com", "soundcloud.com", "youtu.be", "steamcommunity.com", "reddit.com", "esea.net"],
+      "alerts": {
+        "chat": false,
+        "steam": false,
+        "follower": {
+          "voicelanguage": "Deutsch Female"
+        },
+        "subscription": {
+          "voicelanguage": "Deutsch Female"
+        },
+        "magicconchshell": {
+          "modsonly": false,
+          "username": false,
+          "autodetectlanguage": false,
+          "voicelanguage": "Deutsch Female",
+          "voicevolume": 1,
+          "voicepitch": 1,
+          "voicerate": 1
+        }
+      },
+      "giveaway": {},
+      "steam": {
+        "steamgroup": ["103582791441178688"]
+      },
+      "discord": {},
+      "uppercasepercent": "95",
+      "symbolspercent": "55",
+      "mods": ["tahsiNofficial", "LuXtAsTIC", "luxtastic"],
+      "towords": [],
+      "banwords": [],
+      "ignorecmd": [],
+      "wrongcommandlevenshtein": "3",
+      "automaticannouncements": true,
+      "eseaid": "541094",
+      "uppercase": ["vie"],
+      "symbols": ["vie"],
+      "postingdomains": ["vie"]
+    }
+  },
+  "kirby": {
+    "botsettings": {
+      "advertising": [],
+      "addtoggle": true,
+      "alloweddomains": ["youtube.com", "soundcloud.com", "youtu.be", "steamcommunity.com", "reddit.com", "esea.net"],
+      "alerts": {
+        "chat": false,
+        "steam": false,
+        "whisper": true,
+        "follower": {
+          "voicelanguage": "Deutsch Female",
+          "text": "{NAME} verfolgt dich.",
+          "whispertext": "{NAME} folgt dir!",
+          "steamtext": "Neuer Follower: {NAME}"
+        },
+        "subscription": {
+          "voicelanguage": "Deutsch Female",
+          "sub1": "kirbyyLove New Subscription [{SUBNICK}] kirbyyLove",
+          "sub2": "!add 100 {SUBNICK}",
+          "resub": "kirbyyLove Subscription {MONTHS} months [{SUBNICK}] kirbyyLove",
+          "subtext": "kirbyyLove we are currently having {SUBCOUNTER} subscribers kirbyyLove"
+        },
+        "magicconchshell": {
+          "modsonly": false,
+          "username": false,
+          "autodetectlanguage": false,
+          "voicelanguage": "Deutsch Female",
+          "voicevolume": 1,
+          "voicepitch": 1,
+          "voicerate": 1,
+          "blockRepeatedWordInSentenceBool": false
+        }
+      },
+      "giveaway": {},
+      "steam": {
+        "account": ["76561197970964266"],
+        "steamgroup": ["103582791435239386"]
+      },
+      "discord": {
+        "twitternews": "316596093595156481",
+        "onlinemsg": "316283561730637829",
+        "online": "@everyone Kirby ist LIVE - http://twitch.tv/Kirby",
+        "offline": ""
+      },
+      "uppercasepercent": "95",
+      "symbolspercent": "55",
+      "mods": ["klein_walke", "caribur", "Dardrahan", "s4myd3lux3", "CyaWF"],
+      "towords": [],
+      "banwords": [],
+      "ignorecmd": ["!add", "!vip", "!points", "!checkme", "!brackets", "!krabbe", "!volume", "!check", "!commercial", "!bankheist", "!remove", "!give", "!addcmd", "!top", "!ticket", "!tickets", "delcmd", "requestsong"],
+      "wrongcommandlevenshtein": "0",
+      "wrongcommandmsg": false,
+      "automaticannouncements": true,
+      "weather": true,
+      "eseaid": "515319",
+      "tipeeestream": "0",
+      "followercheck": true,
+      "uppercase": ["sub"],
+      "symbols": ["sub"],
+      "postingdomains": ["sub"],
+      "steamid": "76561197970964266",
+      "twittername": "NPKirbyy",
+      "subs": true,
+      "subage": true
+    }
+  },
+  "officialheavy": {
+    "botsettings": {
+      "advertising": [],
+      "alloweddomains": ["youtube.com", "soundcloud.com", "youtu.be", "steamcommunity.com", "reddit.com"],
+      "alerts": {
+        "follower": {},
+        "subscription": {},
+        "magicconchshell": {}
+      },
+      "giveaway": {},
+      "steam": {},
+      "discord": {},
+      "uppercasepercent": "95",
+      "symbolspercent": "55",
+      "mods": [],
+      "towords": [],
+      "banwords": [],
+      "ignorecmd": []
+    }
+  },
+  "chrisjcsgo": {
+    "botsettings": {
+      "advertising": [],
+      "viewerads": false,
+      "randomreply": false,
+      "uppercase": ["sub", "vie"],
+      "steamid": "",
+      "facebookapi": "",
+      "uppercasepercent": 50,
+      "symbols": ["sub"],
+      "symbolspercent": 50,
+      "towords": ["DOLOM", " Csgopólygon_com"],
+      "banwords": [],
+      "weather": true,
+      "youtubetowhisper": false,
+      "wrongcommandmsg": false,
+      "wronglinkmsg": true,
+      "wrongsymbolsmsg": true,
+      "wronguppercasemsg": true,
+      "alloweddomains": ["youtube.com", "soundcloud.com", "youtu.be", "steamcommunity.com", "reddit.com"],
+      "alerts": {
+        "chat": false,
+        "steam": false,
+        "follower": {
+          "voicelanguage": "Deutsch Female"
+        },
+        "subscription": {
+          "voicelanguage": "Deutsch Female"
+        },
+        "magicconchshell": {
+          "modsonly": false,
+          "username": false,
+          "autodetectlanguage": true,
+          "voicelanguage": "Deutsch Female",
+          "voicevolume": 1,
+          "voicepitch": 1,
+          "voicerate": 1
+        }
+      },
+      "giveaway": {
+        "host": false,
+        "mod": true,
+        "subcriber": true,
+        "turbo": true,
+        "viewer": true
+      },
+      "mods": ["Sw3gLeTs"],
+      "steam": {
+        "account": [],
+        "steamgroup": ["103582791455955489"]
+      },
+      "discord": {},
+      "eseaid": "524905",
+      "twittername": "chrisJcsgo",
+      "lastfmname": "",
+      "check24h": false,
+      "check24hwhisper": false,
+      "automaticannouncements": true,
+      "wrongcommandlevenshtein": 3,
+      "followercheck": true,
+      "ignorecmd": [],
+      "giveawaytoggle": false,
+      "song": true,
+      "game": true,
+      "mm": false,
+      "uptime": true,
+      "postingdomains": ["sub"]
+    }
+  },
+  "voovpingu": {
+    "botsettings": {
+      "advertising": [],
+      "alloweddomains": ["youtube.com", "soundcloud.com", "youtu.be", "steamcommunity.com", "reddit.com"],
+      "alerts": {
+        "chat": false,
+        "steam": false,
+        "follower": {
+          "voicelanguage": "Deutsch Female"
+        },
+        "subscription": {
+          "voicelanguage": "Deutsch Female"
+        },
+        "magicconchshell": {
+          "modsonly": true,
+          "username": true,
+          "autodetectlanguage": false,
+          "voicelanguage": "Deutsch Female",
+          "voicevolume": 1,
+          "voicepitch": 1,
+          "voicerate": 1
+        }
+      },
+      "giveaway": {
+        "mod": true,
+        "subcriber": true,
+        "turbo": true,
+        "viewer": true
+      },
+      "steam": {
+        "account": ["76561197990989119"],
+        "steamgroup": ["103582791455959072"]
+      },
+      "discord": {},
+      "uppercasepercent": "95",
+      "symbolspercent": "55",
+      "mods": ["kUNSTFEHL9R", "Niru_"],
+      "towords": ["biba"],
+      "banwords": ["skinup.gg", "csgobounty.com"],
+      "ignorecmd": ["!songrequest", "!sr", "!give", "!ticket", "!reiseinheit", "!bankheist", "!requestsong", "!delcom"],
+      "wrongcommandlevenshtein": "0",
+      "followercheck": true,
+      "weather": true,
+      "youtubetowhisper": true,
+      "eseaid": "540765",
+      "automaticannouncements": true,
+      "wrongcommandmsg": false
+    }
+  },
+  "dominikkk1337": {
+    "botsettings": {
+      "advertising": [],
+      "alloweddomains": ["youtube.com", "soundcloud.com", "youtu.be", "steamcommunity.com", "reddit.com"],
+      "alerts": {
+        "chat": false,
+        "steam": false,
+        "follower": {
+          "voicelanguage": "Deutsch Female"
+        },
+        "subscription": {
+          "voicelanguage": "Deutsch Female"
+        },
+        "magicconchshell": {
+          "modsonly": true,
+          "username": true,
+          "autodetectlanguage": false,
+          "voicelanguage": "Deutsch Female",
+          "voicevolume": 1,
+          "voicepitch": 1,
+          "voicerate": 1
+        }
+      },
+      "giveaway": {
+        "mod": true,
+        "subcriber": true,
+        "turbo": true,
+        "viewer": true
+      },
+      "steam": {
+        "account": [],
+        "steamgroup": []
+      },
+      "discord": {},
+      "uppercasepercent": "95",
+      "symbolspercent": "55",
+      "mods": ["DanielArgos"],
+      "towords": [],
+      "banwords": [],
+      "ignorecmd": [],
+      "wrongcommandlevenshtein": 3,
+      "followercheck": false,
+      "weather": true,
+      "youtubetowhisper": true,
+      "eseaid": "",
+      "automaticannouncements": false,
+      "permit": true,
+      "mm": false,
+      "market": false,
+      "esea": false,
+      "lastesea": false
+    }
+  },
+  "hyde069": {
+    "botsettings": {
+      "advertising": [],
+      "alloweddomains": ["youtube.com", "soundcloud.com", "youtu.be", "steamcommunity.com", "reddit.com"],
+      "alerts": {
+        "chat": true,
+        "steam": false,
+        "follower": {
+          "voicelanguage": "Deutsch Female"
+        },
+        "subscription": {
+          "voicelanguage": "Deutsch Female"
+        },
+        "magicconchshell": {
+          "modsonly": true,
+          "username": true,
+          "autodetectlanguage": false,
+          "voicelanguage": "Deutsch Female",
+          "voicevolume": 1,
+          "voicepitch": 1,
+          "voicerate": 1
+        }
+      },
+      "giveaway": {
+        "mod": true,
+        "subcriber": true,
+        "turbo": true,
+        "viewer": true,
+        "host": true
+      },
+      "steam": {
+        "account": ["76561197961661419"],
+        "steamgroup": []
+      },
+      "discord": {},
+      "uppercasepercent": "95",
+      "symbolspercent": "55",
+      "mods": [],
+      "towords": [],
+      "banwords": [],
+      "ignorecmd": [],
+      "wrongcommandlevenshtein": 3,
+      "followercheck": true,
+      "weather": true,
+      "youtubetowhisper": false,
+      "eseaid": "1475967",
+      "automaticannouncements": false,
+      "permit": true,
+      "mm": true,
+      "market": true,
+      "esea": true,
+      "lastesea": true,
+      "randomreply": true,
+      "steamid": "76561197961661419",
+      "symbols": [],
+      "status": true,
+      "giveawaytoggle": true,
+      "wrongcommandmsg": true,
+      "wronglinkmsg": true,
+      "wrongsymbolsmsg": true,
+      "wronguppercasemsg": true
+    }
+  },
+  "maylini": {
+    "botsettings": {
+      "advertising": [],
+      "alloweddomains": ["youtube.com", "soundcloud.com", "youtu.be", "steamcommunity.com", "reddit.com"],
+      "alerts": {
+        "chat": false,
+        "steam": false,
+        "follower": {
+          "voicelanguage": "Deutsch Female"
+        },
+        "subscription": {
+          "voicelanguage": "Deutsch Female"
+        },
+        "magicconchshell": {
+          "modsonly": true,
+          "username": true,
+          "autodetectlanguage": false,
+          "voicelanguage": "Deutsch Female",
+          "voicevolume": 0.35,
+          "voicepitch": 1.2,
+          "voicerate": 0.85
+        }
+      },
+      "giveaway": {
+        "mod": true,
+        "subcriber": true,
+        "turbo": true,
+        "viewer": true,
+        "host": false
+      },
+      "steam": {
+        "account": [],
+        "steamgroup": []
+      },
+      "discord": {},
+      "uppercasepercent": "95",
+      "symbolspercent": "55",
+      "mods": [],
+      "towords": ["ev0lve", "Jerr0w"],
+      "banwords": [],
+      "ignorecmd": [],
+      "wrongcommandlevenshtein": 3,
+      "followercheck": true,
+      "weather": true,
+      "youtubetowhisper": false,
+      "eseaid": "",
+      "automaticannouncements": false,
+      "permit": true,
+      "mm": true,
+      "market": true,
+      "esea": true,
+      "lastesea": true,
+      "randomreply": false,
+      "steamid": "",
+      "symbols": [],
+      "status": true,
+      "giveawaytoggle": true,
+      "wrongcommandmsg": false,
+      "wronglinkmsg": true,
+      "wrongsymbolsmsg": true,
+      "wronguppercasemsg": true,
+      "knife": true
+    }
+  },
+  "turb0000": {
+    "botsettings": {
+      "advertising": [],
+      "alloweddomains": ["youtube.com", "soundcloud.com", "youtu.be", "steamcommunity.com", "reddit.com"],
+      "alerts": {
+        "chat": false,
+        "steam": false,
+        "follower": {
+          "voicelanguage": "Deutsch Female"
+        },
+        "subscription": {
+          "voicelanguage": "Deutsch Female"
+        },
+        "magicconchshell": {
+          "modsonly": true,
+          "username": true,
+          "autodetectlanguage": false,
+          "voicelanguage": "Deutsch Female",
+          "voicevolume": 0.35,
+          "voicepitch": 1.2,
+          "voicerate": 0.85
+        }
+      },
+      "giveaway": {
+        "mod": true,
+        "subcriber": true,
+        "turbo": true,
+        "viewer": true,
+        "host": false
+      },
+      "steam": {
+        "account": [],
+        "steamgroup": []
+      },
+      "discord": {},
+      "uppercasepercent": "95",
+      "symbolspercent": "55",
+      "mods": [],
+      "towords": [],
+      "banwords": [],
+      "ignorecmd": [],
+      "wrongcommandlevenshtein": 3,
+      "followercheck": true,
+      "weather": false,
+      "youtubetowhisper": true,
+      "eseaid": "",
+      "automaticannouncements": false,
+      "permit": true,
+      "mm": true,
+      "market": true,
+      "esea": true,
+      "lastesea": true,
+      "randomreply": false,
+      "steamid": "",
+      "symbols": [],
+      "status": true,
+      "giveawaytoggle": true,
+      "wrongcommandmsg": false,
+      "wronglinkmsg": true,
+      "wrongsymbolsmsg": true,
+      "wronguppercasemsg": true,
+      "knife": true
+    }
+  },
+  "klein_walke": {
+    "botsettings": {
+      "advertising": [{
+        "text": "Commands: !cfg -  !cmd - !donate - !esea - !facebook - !faceit - !group - !steam - !steamgroup - !trade - !youtube",
+        "time": "0,30 * * * *",
+        "id": 0
+      }, {
+        "text": "Meine Steamgruppe / My steamgroup: http://steamcommunity.com/groups/klein_walke",
+        "time": "10,40 * * * *",
+        "id": 1
+      }],
+      "addtoggle": true,
+      "alloweddomains": ["youtube.com", "soundcloud.com", "youtu.be", "steamcommunity.com", "reddit.com", "esea.net", "play.esea.net"],
+      "alerts": {
+        "follower": {},
+        "subscription": {},
+        "magicconchshell": {
+          "modsonly": false,
+          "username": false,
+          "autodetectlanguage": false,
+          "voicelanguage": "Deutsch Female",
+          "voicevolume": 1,
+          "voicepitch": 1,
+          "voicerate": 1
+        },
+        "chat": false
+      },
+      "giveaway": {
+        "giveawaysuspend": ["spddl_bot"],
+        "keyword": "KeyWord",
+        "host": true,
+        "mod": true,
+        "subcriber": true,
+        "turbo": true,
+        "viewer": true,
+        "subscriber": true
+      },
+      "steam": {
+        "account": ["76561198034223647"],
+        "steamgroup": ["103582791458562543"]
+      },
+      "discord": {},
+      "uppercasepercent": 100,
+      "symbolspercent": "55",
+      "mods": ["klein_walke"],
+      "towords": [],
+      "banwords": [],
+      "ignorecmd": [],
+      "check24h": true,
+      "check24hwhisper": true,
+      "wrongcommandlevenshtein": 3,
+      "randomreply": false,
+      "weather": true,
+      "uppercase": ["vie"],
+      "symbols": ["vie"],
+      "followercheck": true,
+      "steamid": "76561198034223647",
+      "eseaid": "645157",
+      "youtubetowhisper": true,
+      "game": true,
+      "giveawaytoggle": true,
+      "esea": true,
+      "automaticannouncements": true,
+      "twittername": "klein_walke"
+    }
+  },
+  "mrsilvertee": {
+    "botsettings": {
+      "advertising": [],
+      "addtoggle": false,
+      "alloweddomains": ["youtube.com", "soundcloud.com", "youtu.be", "steamcommunity.com", "reddit.com", "esea.net"],
+      "alerts": {
+        "chat": false,
+        "steam": false,
+        "follower": {
+          "voicelanguage": "Deutsch Female"
+        },
+        "subscription": {
+          "voicelanguage": "Deutsch Female"
+        },
+        "magicconchshell": {
+          "modsonly": true,
+          "username": true,
+          "autodetectlanguage": true,
+          "voicelanguage": "Deutsch Female",
+          "voicevolume": 1,
+          "voicepitch": 1,
+          "voicerate": 1,
+          "blockRepeatedWordInSentenceBool": false,
+          "blockExclusiveUpperCaseBool": true,
+          "blockTypicalSpamBool": false,
+          "blockVeryLongMessagesBool": true
+        }
+      },
+      "giveaway": {},
+      "steam": {
+        "account": ["76561198051996642"],
+        "steamgroup": []
+      },
+      "discord": {},
+      "uppercasepercent": 80,
+      "symbolspercent": "55",
+      "mods": [],
+      "towords": [],
+      "banwords": [],
+      "ignorecmd": [],
+      "wrongcommandlevenshtein": "0",
+      "wrongcommandmsg": false,
+      "automaticannouncements": false,
+      "weather": true,
+      "eseaid": "",
+      "followercheck": true,
+      "uppercase": ["sub", "tur"],
+      "symbols": ["sub", "tur"],
+      "postingdomains": ["sub", "tur"],
+      "steamid": "76561198051996642",
+      "youtubetowhisper": true,
+      "knife": true,
+      "twittername": "Mr_Silver_Tee",
+      "randomreply": true,
+      "mm": true,
+      "song": true
+    }
+  },
+  "eis_dragon": {
+    "botsettings": {
+      "advertising": [],
+      "addtoggle": false,
+      "alloweddomains": ["youtube.com", "soundcloud.com", "youtu.be", "steamcommunity.com", "reddit.com", "esea.net"],
+      "alerts": {
+        "chat": false,
+        "steam": false,
+        "follower": {
+          "voicelanguage": "Deutsch Female"
+        },
+        "subscription": {
+          "voicelanguage": "Deutsch Female"
+        },
+        "magicconchshell": {
+          "modsonly": true,
+          "username": true,
+          "autodetectlanguage": true,
+          "voicelanguage": "Deutsch Female",
+          "voicevolume": 1,
+          "voicepitch": 1,
+          "voicerate": 1,
+          "blockRepeatedWordInSentenceBool": false,
+          "blockExclusiveUpperCaseBool": true,
+          "blockTypicalSpamBool": false,
+          "blockVeryLongMessagesBool": true
+        }
+      },
+      "giveaway": {},
+      "steam": {
+        "account": [],
+        "steamgroup": []
+      },
+      "discord": {},
+      "uppercasepercent": "95",
+      "symbolspercent": "55",
+      "mods": ["mrsilvertee"],
+      "towords": [],
+      "banwords": [],
+      "ignorecmd": [],
+      "wrongcommandlevenshtein": "3",
+      "wrongcommandmsg": false,
+      "automaticannouncements": false,
+      "weather": true,
+      "eseaid": "",
+      "followercheck": true,
+      "uppercase": [],
+      "symbols": [],
+      "postingdomains": ["sub"],
+      "steamid": "",
+      "youtubetowhisper": true,
+      "knife": true,
+      "twittername": "",
+      "randomreply": false
+    }
+  },
+  "demo": {
+    "botsettings": {
+      "advertising": [{
+        "id": 0,
+        "time": "0,30 * * * *",
+        "text": "https://www.facebook.com"
+      }, {
+        "id": 1,
+        "time": "15,45 * * * *",
+        "text": "http://steamcommunity.com/groups"
+      }],
+      "addtoggle": false,
+      "alloweddomains": ["youtube.com", "soundcloud.com", "youtu.be", "steamcommunity.com", "reddit.com", "esea.net"],
+      "alerts": {
+        "chat": false,
+        "steam": false,
+        "follower": {
+          "voicelanguage": "Deutsch Female"
+        },
+        "subscription": {
+          "voicelanguage": "Deutsch Female"
+        },
+        "magicconchshell": {
+          "modsonly": true,
+          "username": true,
+          "autodetectlanguage": true,
+          "voicelanguage": "Deutsch Female",
+          "voicevolume": 1,
+          "voicepitch": 1,
+          "voicerate": 1,
+          "blockRepeatedWordInSentenceBool": false,
+          "blockExclusiveUpperCaseBool": true,
+          "blockTypicalSpamBool": false,
+          "blockVeryLongMessagesBool": true
+        }
+      },
+      "giveaway": {},
+      "steam": {
+        "account": [],
+        "steamgroup": []
+      },
+      "discord": {},
+      "uppercasepercent": "95",
+      "symbolspercent": "55",
+      "mods": [],
+      "towords": [],
+      "banwords": [],
+      "ignorecmd": [],
+      "wrongcommandlevenshtein": "0",
+      "wrongcommandmsg": false,
+      "automaticannouncements": false,
+      "weather": true,
+      "eseaid": "",
+      "followercheck": true,
+      "uppercase": [],
+      "symbols": [],
+      "postingdomains": ["sub"],
+      "steamid": "",
+      "youtubetowhisper": true,
+      "knife": true,
+      "twittername": "",
+      "randomreply": false
+    }
+  }
+}

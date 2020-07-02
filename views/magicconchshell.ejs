@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1, minimal-ui">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="stylesheet" href="/lib/follower/css">
+  <link rel="stylesheet" href="/lib/follower/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.1/animate.min.css">
+  <script src='https://code.responsivevoice.org/responsivevoice.js'></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/async/1.5.0/async.min.js'></script>
+  <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+  <!-- <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script> -->
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://cdn.jsdelivr.net/lodash/4.6.1/lodash.min.js"></script>
+  <script>
+  <% if (local) { %>
+    var socket = io.connect("/magicconchshell/<%= user %>")
+    <% } else { %>
+    var socket = io.connect("https://bot.spddl.de/magicconchshell/<%= user %>")
+    <% } %>
+  /*, {    'connect timeout': 5000,
+      'try multiple transports': true,
+      'reconnect': true,
+      'reconnection delay': 500,
+      'reconnection limit': 5000,
+      'max reconnection attempts': 3,
+      'sync disconnect on unload': false,
+      'auto connect': true,
+      'force new connection': true
+    });*/
+  </script>
+</head>
+
+<body>
+    <% if (debugg) { %><h1>DEBUG</h1><% } %>
+    <header class="site__header island promo">
+      <div class="wrap">
+        <h1 id="message"><span id="animationText" style="display: block" class="site__title mega"></span></h1>
+        <h2><span id="answer" class="beta subhead"></span></h2>
+      </div>
+    </header>
+
+    <audio preload="auto">
+      <audio id="eng_Idontthinkso" title="I don't think so"><source src="/lib/magicconchshell/eng/I don't think so.mp3"></audio>
+      <audio id="eng_Maybe" title="Maybe someday"><source src="/lib/magicconchshell/eng/Maybe someday.mp3"></audio>
+      <audio id="eng_Neither" title="Neither"><source src="/lib/magicconchshell/eng/Neither.mp3"></audio>
+      <audio id="eng_Patrick" title="No This Is Patrick"><source src="/lib/magicconchshell/eng/No This Is Patrick.mp3"></audio>
+      <audio id="eng_No" title="No"><source src="/lib/magicconchshell/eng/No.mp3"></audio>
+      <audio id="eng_Nothing" title="Nothing"><source src="/lib/magicconchshell/eng/Nothing.mp3"></audio>
+      <audio id="eng_Try" title="Try asking again"><source src="/lib/magicconchshell/eng/Try asking again.mp3"></audio>
+      <audio id="eng_Yes" title="Yes"><source src="/lib/magicconchshell/eng/Yes.mp3"></audio>
+
+      <audio id="ger_I_dont_think_so" title="Ich glaub eher nicht"><source src="/lib/magicconchshell/ger/I don't think so.mp3"></audio>
+      <audio id="ger_Maybe_someday" title="Eines Tages vielleicht"><source src="/lib/magicconchshell/ger/Maybe someday.mp3"></audio>
+      <audio id="ger_Neither" title="Keins von beiden"><source src="/lib/magicconchshell/ger/Neither.mp3"></audio>
+      <audio id="ger_No1" title="Nein"><source src="/lib/magicconchshell/ger/No1.mp3"></audio>
+      <audio id="ger_No2" title="Nein"><source src="/lib/magicconchshell/ger/No2.mp3"></audio>
+      <audio id="ger_No3" title="Nein"><source src="/lib/magicconchshell/ger/No3.mp3"></audio>
+      <audio id="ger_No4" title="Nein"><source src="/lib/magicconchshell/ger/No4.mp3"></audio>
+      <audio id="ger_Nothing1" title="gar nichts"><source src="/lib/magicconchshell/ger/Nothing1.mp3"></audio>
+      <audio id="ger_Nothing2" title="gar nichts"><source src="/lib/magicconchshell/ger/Nothing2.mp3"></audio>
+      <audio id="ger_Try_asking_again" title="Frag doch einfach noch mal"><source src="/lib/magicconchshell/ger/Try asking again.mp3"></audio>
+      <audio id="ger_Yes" title="Ja"><source src="/lib/magicconchshell/ger/Yes.mp3"></audio>
+    </audio>
+      <script>
+try {
+
+        function testAnim(id, ani) {
+          $(id).removeClass().addClass(ani + ' animated').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function() {
+            $(this).removeClass();
+          });
+        };
+
+        function testAnimend(id, ani) {
+          $(id).removeClass().addClass(ani + ' animated').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function() {});
+        };
+        var Attention = ["bounce", "flash", "pulse", "rubberBand", "shake", "swing", "tada", "wobble", "jello"];
+
+        function htmlEntities(html) {
+          <% if (debugg) { %>console.log('htmlEntities');<% } %>
+
+          function it() {
+            return html.map(function(n, i, arr) {
+              if (n.length == 1) {
+                return n.replace(/[\u00A0-\u9999<>\&]/gim, function(i) {
+                  return '&#' + i.charCodeAt(0) + ';';
+                });
+              }
+              return n;
+            });
+          }
+          var isArray = Array.isArray(html);
+          if (!isArray) {
+            html = html.split('');
+          }
+          html = it(html);
+          if (!isArray) html = html.join('');
+          return html;
+        }
+
+        function formatEmotes(text, emotes) {
+          <% if (debugg) { %>console.log('formatEmotes');<% } %>
+          var splitText = text.split('');
+          for (var i in emotes) {
+            var e = emotes[i];
+            for (var j in e) {
+              var mote = e[j];
+              if (typeof mote == 'string') {
+                mote = mote.split('-');
+                mote = [parseInt(mote[0]), parseInt(mote[1])];
+                var length = mote[1] - mote[0],
+                  empty = Array.apply(null, new Array(length + 1)).map(function() {
+                    return ''
+                  });
+                splitText = splitText.slice(0, mote[0]).concat(empty).concat(splitText.slice(mote[1] + 1, splitText.length));
+                splitText.splice(mote[0], 1, '<img class="emoticon" src="https://static-cdn.jtvnw.net/emoticons/v1/' + i + '/3.0">');
+              }
+            }
+          }
+          return htmlEntities(splitText).join('')
+        }
+
+        function voice(data, callback) {
+          <% if (debugg) { %>console.log(data.text + ', ' + data.lang + ', ' + data.volume + ', ' + data.pitch + ', ' + data.rate);<% } %>
+          responsiveVoice.speak(data.text, data.lang, {
+            volume: data.volume,
+            pitch: data.pitch,
+            rate: data.rate,
+            onstart: function() {
+
+              <% if (debugg) { %>console.log('StartCallback');<% } %>
+              $('#answer').text('');
+              //$('#animationText').text(data.text);
+
+              data.username ? $('#animationText').html(data.user + formatEmotes(' ' + data.text, data.emotes)) : $('#animationText').html(formatEmotes(' ' + data.text, data.emotes));
+              testAnim('#message', 'zoomIn')
+              //testAnim('#animationText', 'zoomIn')
+            },
+            onend: function() {
+              <% if (debugg) { %>console.log('EndCallback');<% } %>
+              callback();
+
+            }
+          });
+        }
+
+        var q = async.queue(function(data, callback) {
+<%#       try {%>
+            voice(data, function() {
+              <% if (debugg) { %>console.log('voice: callback');<% } %>
+
+<%#/*            setTimeout(function(){
+                testAnimend('#message', Attention[Math.floor(Math.random()*Attention.length)])
+              }, 3000);*/%>
+
+              if (data.lang == 'Deutsch Female') {
+                var antwort =_.head(_.shuffle(["ger_I_dont_think_so", "ger_Maybe_someday", "ger_Neither", "ger_No1", "ger_No2", "ger_No3", "ger_No4", "ger_Nothing1", "ger_Nothing2", "ger_Try_asking_again", "ger_Yes"]))
+                <%#//var antworten = ["ger_I_dont_think_so", "ger_Maybe_someday", "ger_Neither", "ger_No1", "ger_No2", "ger_No3", "ger_No4", "ger_Nothing1", "ger_Nothing2", "ger_Try_asking_again", "ger_Yes"]%>
+              } else {
+                var antwort =_.head(_.shuffle(["eng_Idontthinkso", "eng_Maybe", "eng_Neither", "eng_Patrick", "eng_No", "eng_Nothing", "eng_Try", "eng_Yes"]))
+                <%#//var antworten = ["eng_Idontthinkso", "eng_Maybe", "eng_Neither", "eng_Patrick", "eng_No", "eng_Nothing", "eng_Try", "eng_Yes"]%>
+              }
+              <%#//var antwort = antworten[Math.floor(Math.random() * antworten.length)];%>
+
+              document.getElementById(antwort).play();
+              <% if (debugg) { %>console.log('play');<% } %>
+
+              <% if (debugg) { %>console.log(antwort);<% } %>
+              $('#answer').text(document.getElementById(antwort).title);
+              testAnim('#answer', 'fadeIn')
+              <% if (debugg) { %>console.log('testAnimend #answer fadeIn');<% } %>
+
+              $('#' + antwort).one("ended", function() {
+                <% if (debugg) { %>console.log('ended');<% } %>
+
+                setTimeout(function() {
+                  testAnimend('#answer', 'fadeOut')
+                  <% if (debugg) { %>console.log('testAnimend #answer fadeOut');<% } %>
+
+                  setTimeout(function() {
+                    callback()
+                    <% if (debugg) { %>console.log('Callback für die Queue');<% } %>
+                  }, 1500);
+
+                }, 2500);
+
+                setTimeout(function() {
+                  testAnimend('#message', 'zoomOut')
+                  //testAnimend('#animationText', 'zoomOut')
+                  <% if (debugg) { %>console.log('testAnimend #message zoomOut');<% } %>
+                }, 2000);
+              });
+            })
+<%#       } catch(err) { socket.emit('clienterror', { err: err });callback() } // Error handle {%>
+        }, 1);
+
+        $(document).ready(function() {
+          if (!responsiveVoice.voiceSupport()){console.log('kein voiceSupport')}
+
+          <% if (titel) { %>
+            $('#animationText').text("<%= titel %>");
+          <% } else {%>
+            $('#animationText').text('hello <%= user %>');
+            $('#answer').text('hello <%= user %>');
+            <% if (debugg) { %>console.log('hello <%= user %>');<% } %>
+          <% } %>
+
+          testAnim('#message', 'zoomIn')
+          //testAnim('#animationText', 'zoomIn')
+          testAnim('#answer', 'fadeIn')
+          setTimeout(function() {
+            testAnimend('#message', 'zoomOut')
+            //testAnimend('#animationText', 'zoomOut')
+            testAnimend('#answer', 'fadeOut')
+          }, 1500);
+
+          socket.on('incomingmsg', function(data) {
+            if (data.rejected) {return;} // AntiKappa
+
+            <% if (debugg) { %>console.log('incomingmsg ' + answer[1] + ' > ' + data.text + ' > ' + data.emotes + ' > ' + data.lang + ' > ' + data.volume);<% } %>
+            q.push(data, function(err) {
+              if (err) console.log('err ' + err);
+            });
+          });
+          socket.on('error', function() {
+            data = JSON.parse('{"text": "error","emotes": "", "lang": "UK English Male","volume": 1}');
+            q.push(data, function(err) {
+              if (err) console.log('err ' + err);
+            });
+          });
+          socket.on('disconnected', function() {
+            data = JSON.parse('{"text": "disconnected","emotes": "", "lang": "UK English Male","volume": 1}');
+            q.push(data, function(err) {
+              if (err) console.log('err ' + err);
+            });
+          });
+
+
+
+
+          <% if (debugg) { %>
+          setInterval(function() {
+            console.log('length: ' + q.length() + ', running: ' + q.running() + ', isPlaying: ' + responsiveVoice.isPlaying()+', currently used heap memory: '+window.performance.memory.totalJSHeapSize+', total heap memory: '+window.performance.memory.usedJSHeapSize+', memory left:'+(window.performance.memory.totalJSHeapSize-window.performance.memory.usedJSHeapSize));
+            console.dir(q.workersList())
+          }, 3000);
+          <% } %>
+        });
+
+} catch(err) {
+  socket.emit('clienterror', { err: err })
+  location.reload(true)
+} // Error handle
+      </script>
+</body>
+
+</html>

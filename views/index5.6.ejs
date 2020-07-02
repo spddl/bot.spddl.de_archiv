@@ -1,0 +1,1546 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="JSONedit">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+  <meta name="theme-color" content="#000">
+  <title>bot.spddl.de</title>
+  <%#<!-- CSS  -->%>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
+  <% if (rights) { %>
+  <link href="css/materialize-tags.min.css" rel="stylesheet">
+  <link href="css/nouislider.css" rel="stylesheet">
+  <% } %>
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+  <style>.pointer { cursor: pointer; } .material-icons { font-size: auto; } .icon-block { padding: 0 15px; } .icon-block .material-icons { font-size: inherit; }</style>
+</head>
+<body>
+  <nav class="blue-grey darken-4" role="navigation">
+    <div class="nav-wrapper container"><a id="logo-container" href="" class="brand-logo hide-on-small-only grey-text text-lighten-4">bot.spddl.de</a>
+
+<% if (rights) { %>
+      <a href="#" class="brand-logo center hide-on-med-and-up">hi <%= user.username || userparam %></a>
+      <ul class="right hide-on-med-and-down">
+        <li><span class="white-text">hi <%= user.username || userparam %></span></li>
+        <li><a href="/logout" class="waves-effect waves-light btn">Logout</a></li>
+      </ul>
+
+      <ul id="nav-mobile" class="side-nav section table-of-contents">
+        <li><a href="#spam">Spam unterbinden</a></li>
+        <li><a href="#funktionen">Allg. Funktionen</a></li>
+        <li><a href="#alerts">Alerts</a></li>
+        <li><a href="#giveaway">Giveaway</a></li>
+        <li><a href="#infomationen">Infomationen</a></li>
+        <li><a href="#commands">Commands</a></li>
+        <hr>
+        <li><a href="/logout" class="waves-effect waves-light btn">Logout</a></li>
+      </ul>
+      <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+<% } %>
+
+<% if (rights === null) { %>
+  <ul class="right hide-on-med-and-down">
+    <li><a href="/logout" class="waves-effect waves-light btn">Logout</a></li>
+  </ul>
+<% } %>
+
+    </div>
+  </nav>
+
+  <% if (blocked) { %>
+    <div id="modalblocked" class="modal">
+      <div class="modal-content">
+        <h4>Geblockt</h4>
+        <p>Der spddl_bot reagiert derzeit nicht auf den Chat da er Mod-Rechte braucht um seine Arbeit zu vollrichten.<br>
+        wenn du dem Bot Mod-Rechte gibst kann es 1-2min dauern bis es Twitch auch dem Bot mitteilt.</p>
+      </div>
+        <div class="modal-footer">
+        <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Verstanden</a>
+      </div>
+    </div>
+  <% } %>
+
+<%#<!-- TODO: Links hinzufügen -->%>
+<% if (!rights) { %>
+  <div class="section no-pad-bot" id="index-banner">
+    <div class="container">
+      <br><br>
+      <h1 class="header center blue-grey-text text-darken-3">bot.spddl.de</h1>
+      <div class="row center">
+        <h5 class="header col s12 light">Wenn du einen Zugang besitzt bitte einloggen.</h5>
+      </div>
+      <div class="row center">
+        <a href="/auth/twitchtv" id="download-button" class="btn-large waves-effect waves-light deep-purple"><i class="fa fa-twitch"></i> Twitch login</a>
+      </div>
+      <br><br>
+
+      <div class="row center">
+
+        <div class="input-field col s12">
+          <select id="select1">
+            <option value="" disabled selected></option>
+          </select>
+          <label>Wähle deinen Streamer</label>
+        </div>
+        <br><br><br><br>
+        <div class="section">
+          <table id="records_table" class="highlight striped" style="display: none;">
+            <thead>
+              <tr>
+                <th data-field="id">Command</th>
+                <th data-field="name">Wert</th>
+              </tr>
+            </thead>
+          </table>
+        </div>
+
+      </div>
+      <br>
+    </div>
+  </div>
+<br>
+<div class="container">
+  <div class="section">
+
+    <%#<!--   Icon Section   -->%>
+    <div class="row">
+      <div class="col s12 m4">
+        <div class="icon-block">
+          <h2 class="center light-blue-text"><i class="material-icons">flash_on</i></h2>
+          <h5 class="center">4Free</h5>
+
+          <p class="light">Dieser Bot ist so aufgebaut das er nur kostenfreie Dienste benutzt und dadurch immer verfügbar bleibt.</p>
+        </div>
+      </div>
+
+
+
+      <div class="col s12 m4">
+        <div class="icon-block">
+          <h2 class="center light-blue-text"><i class="material-icons">group</i></h2>
+          <h5 class="center">Nur Exklusiv</h5>
+          <!--<p class="light">Das hier ist ein Spass Projekt um mich in neuen Herrausforderungen zu stellen und zu meistern. Dabei bleibt es das Ziel den Bot immer kostenlos mit den höchsten Service zur Verfügung zu stellen.</p>-->
+          <p class="light">Diese Möglichkeit steht nur Leuten zu die ich ausgewählt habe. Es ist derzeit nicht geplant das aufzuheben, da man dann eine Server-Farm aufbauen müsste, um die Twitch Limitierungen zu umgehen :P</p>
+        </div>
+      </div>
+
+      <div class="col s12 m4">
+        <div class="icon-block">
+          <h2 class="center light-blue-text"><i class="material-icons">settings</i></h2>
+          <h5 class="center">Umfang</h5>
+          <p class="light">Es werden immer neue innovative Funktionen eingebaut, die mir zu getragen werden und mir selber auffallen, um Sie dann für allen zugänglich zu machen die den Bot benutzen.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <br><br>
+</div>
+<% } else { %>
+<br>
+<div class="container" ng-controller="ViewCtrl">
+
+  <div class="row">
+     <div class="col s12 m12">
+       <div class="card-panel hoverable">
+         <span class="white-text">
+           <!-- Modal Trigger -->
+           <a class="waves-effect waves-light btn" href="#BotTextCommands">Bot Text Commands</a>
+           <a href="/log" target="_blank" role="button" class="waves-effect waves-light btn center">Log</a>
+           <!-- <a href="/follower/<%= userparam || user.username %>" target="_blank" role="button" class="modal-trigger waves-effect waves-light btn center">FollowerAlert</a>
+           <a href="/subscription/<%= userparam || user.username %>" target="_blank" role="button" class="modal-trigger waves-effect waves-light btn center">SubscriptionsAlert</a> -->
+           <a href="/magicconchshell/<%= userparam || user.username %>" target="_blank" role="button" class="waves-effect waves-light btn center">Magic Conch Shell</a>
+           <a href="/giveaway" target="_blank" role="button" class="waves-effect waves-light btn center">Giveaway</a><br>
+           <a href="http://www.twinge.tv/<%= userparam || user.username %>/streams/" target="_blank" role="button" class="waves-effect waves-light btn center light-blue darken-4">Statistik der letzten Streams (externer Link)</a>
+         </span>
+       </div>
+     </div>
+   </div>
+
+  <!-- Modal Structure -->
+  <div id="BotTextCommands" class="modal modal-fixed-footer">
+    <div class="modal-content">
+      <h4>Bot Text Commands</h4>
+      <p><u>Twitch Chat Commands:</u><br>
+     /timeout [username] [time in seconds] -Times out the specified user for x number of seconds<br>
+     /timeout [username] – times out the selected user for ten minutes<br>
+     /timeout [username] 1 – purges the chat of the user. (Actually it times out the user for one second.)<br>
+     /ban [username] - Bans the specified username<br>
+     /mods – Calls up list of channel moderators<br>
+     /slow – Turns slow mode on. I would prefer to be the only one using this command.<br>
+     /slowoff – Turns slow mode off.<br>
+     /clear – Clears the chat. We try to use this command sparingly and opt for the "purge" command.<br><br>
+
+     Der Bot besitzt konstante Befehle und Channel bezogene die gelöscht und hinzugefügt werden können<br><br>
+
+     <span id="steam"></span> kann dem <a href="http://steamcommunity.com/id/bot_spddl">SteamBot</a> geschrieben werden<br>
+     <span id="twitch"></span> kann im TwitchChat geschrieben werden und aus anderen Channeln geflüsstert werden egal von wo, BotSettings werden immer für euren Channel geändert<br><br>
+     <b>Konstante Befehle:</b><br>
+     <!-- !status > zeigt wie lange der Bot schon Online ist und wie viele viewer der Bot gezählt hat<br> -->
+     <span id="steam"></span> <span id="twitch"></span> <code>!status</code> > zeigt wie lange der Bot schon Online ist<br>
+     <span id="steam"></span> <span id="twitch"></span> <code>!allow/!permit [user]</code> > erlaubt einen Viewer für 2min einen Link zu posten<br>
+     <%#<!-- !help > zeigt und erklärt nochmal diese Befehle<br> -->
+     <!-- !admin > Zeigt die Admins vom Bot<br> -->%>
+     <span id="steam"></span> <span id="twitch"></span> <code>!violators</code> > Zeigt die User die vom Bot schon verwarnt wurden<br>
+     <%#<!-- !setviewers > setzt die Viewer anzahl für den Bot<br> -->%>
+     <span id="steam"></span> <span id="twitch"></span> <code>!lastupdated</code> > gibt das Datum und die Uhrzeit von der letzten Änderung der Datenbank aus<br>
+     <span id="steam"></span> <span id="twitch"></span> <code>!twitch</code> > Schreibt die Überschrift das aktuelle Spiel und die Followers aus der TwitchAPI in den Chat<br>
+     <span id="steam"></span> <span id="twitch"></span> <code>!uptime</code> > Schreibt wielange der Stream schon Online ist<br>
+     <span id="steam"></span> <span id="twitch"></span> <code>!titel</code> > ändert den Titel vom Twitch Channel<br>
+     <span id="steam"></span> <span id="twitch"></span> <code>!game</code> > ändert das Spiel vom Twitch Channel<br>
+     <span id="steam"></span> <span id="twitch"></span> <code>!market</code> [Weapon Name],[Skin Name],(Quality(e.g. FactoryNew)) > gibt den Preis aus dem SteamMarket zurück<br>
+     <span id="steam"></span> <span id="twitch"></span> <code>!mm</code> > zeigt den Matchmaking Status von CSGO<br>
+     <span id="steam"></span> <span id="twitch"></span> <code>!weather [Stadt]</code> > wirft den Ort und die Temperatur zurück (1,200 API calls per minute) (zum ein/ausschalten muss ein Admin nur !weather schreiben)<br>
+     <%#<!-- !facebooknews > Postet den letzten Facebook Status falls eine Facebook ID in der DB hinterlegt ist<br> -->
+     <!-- <span id="steam"></span> <span id="twitch"></span> <code>!giveaway [Zeit]</code> > Loggt jeden User mit der in den Chat schreibt ausgenommen Admins &amp; Caster und wählt danach einen Zufällig aus<br> -->%>
+     <span id="steam"></span> <span id="twitch"></span> <code>!steamprofil</code> > Schreibt den Steam Status, Name und falls vorhanden das aktuelle Spiel in den Chat sofern die SteamID in der DB hinterlegt ist<br>
+     <span id="steam"></span> <span id="twitch"></span> <code>!start (Headline)</code> > Wenn der <a href="http://steamcommunity.com/id/bot_spddl">SteamBot</a> die <abbr title="Std. ist Officer">erforderlichen Rechte</abbr> hat kann er mit der [Headline] eine Steam Gruppen Ankündigung schreiben<br>
+     <span id="steam"></span> <code>!viewer</code> > gibt die aktuelle Viewer Anzahl aus der TwitchAPI zurück<br>
+     <span id="steam"></span> <code>!follower/!lastfollower [Zahl]</code> > gibt die letzten Follower aus der TwitchAPI zurück<br><br>
+
+     <b>BotSettings:</b><br>
+     <%#<!-- !ads > Aktiviert(90min) oder Deaktiviert die Werbung für diesen Channel<br> -->%>
+     <span id="steam"></span> <span id="twitch"></span> <code>!ads</code> > Aktive Werbung zurückgeben (CRON#TEXT)<br>
+     <span id="steam"></span> <span id="twitch"></span> <code>!ads [ID]</code> gibt einmalig diese Werbung zurück<br>
+     <span id="steam"></span> <span id="twitch"></span> <code>!ads [ID] [TEXT]</code> > lässt sich der Text verändern die Zeit bleibt gleich<br>
+     <span id="steam"></span> <span id="twitch"></span> <code>!ads [ID] [CRON#TEXT]</code> > <a href="http://crontab.org/">CronJob</a> neu setzen<br>
+     <span id="steam"></span> <span id="twitch"></span> <code>!adsnew [CRON#TEXT]</code> > neuen <a href="http://crontab.org/">CronJob</a> setzen<br>
+     <span id="steam"></span> <span id="twitch"></span> <code>!adsdel [ID]</code> > löscht diese Werbung<br>
+     <span id="steam"></span> <span id="twitch"></span> <code>!randomreply</code> > Regelt ob der spddl_bot auf "bot" reagieren darf<br>
+     <%#<!-- !add > Fügt einen neuen !Befehl dem Bot hinzu: "!add facebook www.facebook.com"<br> -->%>
+     <span id="steam"></span> <span id="twitch"></span> <code>!add</code> > wird nicht mehr benötigt neu: "!command Text"<br>
+     <span id="steam"></span> <span id="twitch"></span> <code>!del [command]</code> > löscht einen verfügbaren Befehl: "!del facebook"<br>
+     <span id="steam"></span> <span id="twitch"></span> <code>!addmod [name]</code> > Fügt einen weiteren Admin(Mod) hinzu dieser besitzt die selben Rechte wie der Host<br>
+     <span id="steam"></span> <span id="twitch"></span> <code>!delmod [name]</code> > löscht einen bestimmten Admin(Mod)<br>
+     <span id="steam"></span> <span id="twitch"></span> <code>!adddomain [domain]</code> > setzt Domains auf die Whitelist damit viewer Links posten können "!adddomain spotify.com"<br>
+     <span id="steam"></span> <span id="twitch"></span> <code>!deldomain [domain]</code> > entfernt eine Domain von der Whitelist "!deldomain spotify.com"<br>
+     <span id="steam"></span> <span id="twitch"></span> <code>!add<abbr title="timeout">to</abbr>words [text]</code> > TimeOutet User die diese Text-Phrasen benutzen kommentarlos (z.b. für SpamBots, oder dämliche Witze)<br>
+     <span id="steam"></span> <span id="twitch"></span> <code>!del<abbr title="timeout">to</abbr>words [text]</code> > entfernt diese beschränkung wieder<br>
+     <span id="steam"></span> <span id="twitch"></span> <code>!addbanwords [text]</code> > Bant User die diese Text-Phrasen benutzen permanent<br>
+     <span id="steam"></span> <span id="twitch"></span> <code>!delbanwords [text]</code> > entfernt diese beschränkung wieder<br>
+     <span id="steam"></span> <span id="twitch"></span> <code>!song</code> > gibt den Song zurück sofern der LastFM Name angegeben ist und <a href="http://www.last.fm/group/Does+It+Scrobble">gescrobbelt</a> wird<br>
+     <span id="steam"></span> <span id="twitch"></span> <code>!capslock [%]</code> > zum Umschalten und anpassung der Timeout empfindlichkeit gegen Capslock<br>
+     <span id="steam"></span> <span id="twitch"></span> <code>!symbols [%]</code> > zum Umschalten und anpassung der Timeout empfindlichkeit gegen Sonderzeichen<br>
+     <span id="steam"></span> <span id="twitch"></span> <code>!youtubetowhisper</code> > wenn Youtube Links bei euch erlaubt sind und jmd einen Postet werdet ihr vom Bot angeflüstert mit den Titel des Youtube-Links<br>
+     <span id="steam"></span> <span id="twitch"></span> <code>!steamnotification</code> > wenn ihr <a href="http://steamcommunity.com/id/bot_spddl">bot.spddl.de</a> geaddet habt kann dieser euch anscheiben wenn es einen Follower gibt<br>
+     <span id="steam"></span> <span id="twitch"></span> <code>!chatnotification</code> > Benachrichtigt euch im TwitchChat wenn es einen neuen Follower gibt<br>
+     <span id="steam"></span> <span id="twitch"></span> <code>!wrongcommandmsg</code> > Benachrichtigung über falschen Command<br>
+     <span id="steam"></span> <span id="twitch"></span> <code>!wronglinkmsg</code> > Benachrichtigung für einen falschen Link<br>
+     <span id="steam"></span> <span id="twitch"></span> <code>!wrongsymbolsmsg</code> > Benachrichtigung über zuviele Symbole Timeout<br>
+     <span id="steam"></span> <span id="twitch"></span> <code>!wronguppercasemsg</code> > Benachrichtigung über Capslock Timeout<br>
+     <span id="steam"></span> <span id="twitch"></span> <code>!magicconchshellmodsonly</code> > Berechtigt auch Viewer ohne Rechte Fragen an die Magische Miesmuschel zu stellen<br>
+     <span id="steam"></span> <span id="twitch"></span> <code>!followercheck</code> > gibt jeden Viewer mit "!follow" die Möglichkeit zu erfahren wie lange er schon dem Channel folgt<br>
+     <span id="steam"></span> <span id="twitch"></span> <code>!addignorecmd</code> > nun ist es möglich die Befehle anderer Bots zu ignorieren "!addignorecmd !bart"<br>
+     <span id="steam"></span> <span id="twitch"></span> <code>!delignorecmd</code> > und diese wieder zu löschen<br>
+     <span id="steam"></span> <span id="twitch"></span> <code>!addcounter</code> > erstellt einen Counter der die Aufrufe mitzählt, die stelle ## wird später mit der Zahl ausgetauscht: "!addcounter wow hat nun schon ## mal WOW gesagt!!"<br>
+     <span id="steam"></span> <span id="twitch"></span> <code>!delcounter</code> > und diese wieder löscht "!delcounter wow"<br><br>
+     </p>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Close</a>
+    </div>
+  </div>
+
+
+
+  <% if(local) { %>
+ <!-- Card Basic --> <!-- https://help.twitch.tv/customer/en/portal/articles/659095-chat-moderation-commands -->
+        <div class="col s12 m6">
+          <div class="card hoverable">
+            <div class="card-content">
+              <span class="card-title">Twitch Roomstates</span>
+              <br>
+
+              <div class="row">
+
+                <div class="col s12 m6">
+                  <div class="collection-item">r9k
+                    <div class="switch secondary-content">
+                      <label>
+                        Off
+                        <input type="checkbox" ng-model="<%= userparam || user.username %>.roomstate.r9k">
+                        <span class="lever"></span>
+                        On
+                      </label>
+                    </div><br>
+                    <label>This command disallows users from posting non-unique messages to the channel.</label>
+                  </div>
+                </div>
+
+                <div class="col s12 m6">
+                  <div class="collection-item">subs-only
+                    <div class="switch secondary-content">
+                      <label>
+                        Off
+                        <input type="checkbox" ng-model="<%= userparam || user.username %>.roomstate['subs-only']">
+                        <span class="lever"></span>
+                        On
+                      </label>
+                    </div><br>
+                    <label>This command disallows users from posting non-unique messages to the channel.</label>
+                  </div>
+                </div>
+
+                <div class="input-field s12 m6">
+                  <select>
+                    <option value="" selected>nothing</option>
+                    <option value="1">Option 1</option>
+                    <option value="2">Option 2</option>
+                    <option value="3">Option 3</option>
+                  </select>
+                  <label>broadcaster-lang</label>
+                </div>
+
+                <div class="input-field col s12 m6">
+                  <input placeholder="broadcaster-lang" ng-change="update('<%= userparam || user.username %>.roomstate['broadcaster-lang']')" ng-model="<%= userparam || user.username %>.roomstate['broadcaster-lang']" id="lang" type="text">
+                  <label class="active" for="lang">broadcaster-lang</label>
+                </div>
+
+                <div class="input-field col s12 m6">
+                  <input placeholder="slow" ng-change="update('<%= userparam || user.username %>.roomstate.slow')" ng-model="<%= userparam || user.username %>.roomstate.slow" id="slow" type="text">
+                  <label class="active" for="slow">slow</label>
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+        </div>
+  <!-- Card Basic End -->
+<% } %>
+
+<%#<!-- Card 1 -->%>
+    <div class="row">
+
+      <div class="col s12 m6">
+        <div id="spam" class="card hoverable">
+          <div class="card-image waves-effect waves-block waves-light">
+            <img src="https://snap-photos.s3.amazonaws.com/img-thumbs/960w/M07SV6AMBD.jpg">
+            <span class="card-title">Spam unterbinden</span>
+          </div>
+          <div class="card-content">
+            <span class="card-title activator grey-text text-darken-4">Spam unterbinden<i class="material-icons right">more_vert</i></span>
+          </div>
+
+          <div class="card-reveal">
+            <span class="card-title grey-text text-darken-4">Spam unterbinden<i class="material-icons right">close</i></span>
+            <%#<!--<p>Hierbei geht es ungewollte Nachrichten zu</p>-->%>
+
+            <h5>CAPSLOCK</h5>
+            <label>Ab 5 Zeichen</label>
+            <div class="card-action">
+              <div class="collection-item">Spam schutz gegen Clapslock (Großbuchstaben):<br><label>ab wieviel Prozent gibt es ein 20sek TimeOut</label>
+                <div class="switch secondary-content">
+                  <!--<label>
+                    <input type="checkbox" ng-change="update('<%= userparam || user.username %>.botsettings.uppercase')" ng-model="<%= userparam || user.username %>.botsettings.uppercase">
+                    <span class="lever"></span>
+                  </label>-->
+                </div><br>
+                <p class="range-field">
+                  <div id="uppercasepercent"></div> <!-- ng-disabled="!<%= userparam || user.username %>.botsettings.uppercase" -->
+                </p>
+              </div>
+            </div>
+            <div style="padding:20px">
+              <div class="input-field">
+                <select multiple ng-model="<%= userparam || user.username %>.botsettings.uppercase">
+                  <option value="" disabled selected>WELCHE GRUPPEN DÜRFEN ÜBER DIESES LIMIT IN CAPSLOCK SCHREIBEN?</option>
+                  <option value="sub">Subscriber</option>
+                  <option value="tur">Turbo</option>
+                  <option value="vie">Viewer (deaktiviert diese Funktion)</option>
+                </select>
+                <label>WELCHE GRUPPEN DÜRFEN ÜBER DIESES LIMIT IN CAPSLOCK SCHREIBEN?</label>
+              </div>
+            </div>
+
+            <h5>Symbole 深圳中心</h5>
+            <label>Ab 5 Zeichen</label>
+            <div class="card-action">
+              <div class="collection-item">Spam schutz gegen Symbole:<br><label>ab wieviel Prozent gibt es ein 20sek TimeOut</label>
+                <div class="switch secondary-content">
+                  <!--<label>
+                    <input type="checkbox" ng-change="update('<%= userparam || user.username %>.botsettings.symbols')" ng-model="<%= userparam || user.username %>.botsettings.symbols">
+                    <span class="lever"></span>
+                  </label>-->
+                </div><br>
+                <p class="range-field">
+                  <div id="symbolspercent" ng-disabled="!<%= userparam || user.username %>.botsettings.symbols"></div>
+                </p>
+              </div>
+            </div>
+
+            <div style="padding:20px">
+              <div class="input-field">
+                <select multiple ng-model="<%= userparam || user.username %>.botsettings.symbols">
+                  <option value="" disabled selected>Welche Gruppen dürfen über dieses Limit Symbole Posten?</option>
+                  <option value="sub">Subscriber</option>
+                  <option value="tur">Turbo</option>
+                  <option value="vie">Viewer (deaktiviert diese Funktion)</option>
+                </select>
+                <label>Welche Gruppen dürfen über dieses Limit Symbole Posten?</label>
+              </div>
+            </div>
+
+            <h5>Neue Twitch Accounts</h5>
+            <div class="card-action">
+              <table>
+                <tbody>
+                  <tr>
+                    <td>
+                      <div class="collection-item">Gibt jeden Account einen Timeout der junger als 24Stunden ist:
+                        <br><label>Für die Zeit bis der Twitch Account 24H alt ist.</label>
+                        <div class="switch secondary-content">
+                          <label>
+                            <input type="checkbox" ng-change="update('<%= userparam || user.username %>.botsettings.check24h')" ng-model="<%= userparam || user.username %>.botsettings.check24h">
+                            <span class="lever"></span>
+                          </label>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="collection-item">wird jeden Timeout der jünger als 24H ist, den Host anflüstern.
+                         <div class="switch secondary-content">
+                           <label>
+                             <input type="checkbox" ng-disabled="!<%= userparam || user.username %>.botsettings.check24h" ng-change="update('<%= userparam || user.username %>.botsettings.check24hwhisper')" ng-model="<%= userparam || user.username %>.botsettings.check24hwhisper">
+                             <span class="lever"></span>
+                           </label>
+                         </div>
+                       </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="collection-item">wird nur den Host per Wishper informieren wer keine 24h alt ist.
+                        <div class="switch secondary-content">
+                          <label>
+                            <input type="checkbox" ng-disabled="<%= userparam || user.username %>.botsettings.check24h" ng-change="update('<%= userparam || user.username %>.botsettings.check24hwhisperinfo')" ng-model="<%= userparam || user.username %>.botsettings.check24hwhisperinfo">
+                            <span class="lever"></span>
+                          </label>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h5>Wer darf Links Posten?</h5>
+            <br>
+            <div class="input-field">
+              <select multiple ng-model="<%= userparam || user.username %>.botsettings.postingdomains">
+                <option value="" disabled selected>Welche Gruppen dürfen Links Posten?</option>
+                <option value="sub">Subscriber</option>
+                <option value="tur">Turbo</option>
+                <option value="vie">Viewer (Jeder darf Links Posten)</option>
+              </select>
+              <label>Welche Gruppen dürfen Links Posten?</label>
+            </div>
+
+            <div class="row">
+              <div class="card-action" style="border-top:0">
+                <div class="collection-item">Domains die nicht getimeoutet werden<br><label>egal von wem</label>
+                  <div class="switch secondary-content">
+                    <label>
+                      <input type="text" id="alloweddomains" ng-model="<%= userparam || user.username %>.botsettings.alloweddomains" data-role="materialtags" />
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <h5>Spam Wörter</h5>
+            <div class="row">
+              <div class="card-action">
+                <div class="collection-item">W&ouml;rter die automatisch getimeoutet werden
+                  <div class="switch secondary-content">
+                    <label>
+                      <!-- <input type='text' id='towords' data-role='materialtags' /> -->
+                      <input type='text' id='towords' ng-model='<%= userparam || user.username %>.botsettings.towords' ng-trim='false' data-role='materialtags' />
+                    </label>
+                  </div><br>
+                  <label>für 20 Sekunden</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="card-action">
+                <div class="collection-item">W&ouml;rter die automatisch gebannt werden
+                  <div class="switch secondary-content">
+                    <label>
+                      <input type="text" id="banwords" ng-trim="false" ng-model="<%= userparam || user.username %>.botsettings.banwords" data-role="materialtags" />
+                    </label>
+                  </div><br>
+                  <label>wie lange so ein Ban halt geht</label>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+<%#<!-- Card 1 End -->%>
+
+<%#<!-- Card 2 -->%>
+      <div id="function" class="col s12 m6">
+        <div class="card hoverable">
+          <div class="card-content">
+            <span class="card-title">Funktionen</span>
+            <p>Allg. Funktionen</p>
+            <br>
+
+            <div class="card-action">
+              <div class="collection-item">Bot ?
+                <div class="switch secondary-content">
+                  <label>
+                    <input type="checkbox" ng-change="update('<%= userparam || user.username %>.botsettings.randomreply')" ng-model="<%= userparam || user.username %>.botsettings.randomreply">
+                    <span class="lever"></span>
+                  </label>
+                </div><br>
+                <label>Der Bot reagiert mit Zufallstexten</label>
+              </div>
+            </div>
+            <div class="card-action">
+              <div class="collection-item">Wetter Abfrage
+                <div class="switch secondary-content">
+                  <label>
+                    <input type="checkbox" ng-change="update('<%= userparam || user.username %>.botsettings.weather')" ng-model="<%= userparam || user.username %>.botsettings.weather">
+                    <span class="lever"></span>
+                  </label>
+                </div><br>
+                <label>!weather city (!weather berlin)</label>
+              </div>
+            </div>
+            <div class="card-action">
+              <div class="collection-item">Youtube Track per whisper
+                <div class="switch secondary-content">
+                  <label>
+                    <input type="checkbox" ng-change="update('<%= userparam || user.username %>.botsettings.youtubetowhisper')" ng-model="<%= userparam || user.username %>.botsettings.youtubetowhisper">
+                    <span class="lever"></span>
+                  </label>
+                </div><br>
+                <label>Dem Caster wird der Youtube Titel geflüstert</label>
+              </div>
+            </div>
+
+            <div class="card-action">
+              <div class="collection-item">Der Bot versteht die Befehle auch wenn sie falsch geschrieben sind<br>
+                <div class="switch secondary-content">
+                  <label>
+                    <input type="number" ng-change="update('<%= userparam || user.username %>.botsettings.wrongcommandlevenshtein')" ng-model="<%= userparam || user.username %>.botsettings.wrongcommandlevenshtein" min="0" max="9" class="black-text"> <!-- TODO:  -->
+                  </label>
+                </div><label>Das bezieht sich aber nur auf die selber festgelegten Commands.<br>Levenshtein-Distanz <a href="https://de.wikipedia.org/wiki/Levenshtein-Distanz">wikipedia</a></label>
+              </div>
+            </div>
+            <div class="card-action">
+              <div class="collection-item">followercheck
+                <div class="switch secondary-content">
+                  <label>
+                    <input type="checkbox" ng-change="update('<%= userparam || user.username %>.botsettings.followercheck')" ng-model="<%= userparam || user.username %>.botsettings.followercheck">
+                    <span class="lever"></span>
+                  </label>
+                </div><br>
+                <label>!follow gibt zurück wielange der Viewer schon Follower ist</label>
+              </div>
+            </div>
+              <div class="card-action">
+                <div class="collection-item">Commands die vom Bot ignoriert werden
+                  <div class="switch secondary-content">
+                    <label>
+                      <input type="text" id="ignorecmd" ng-model="<%= userparam || user.username %>.botsettings.ignorecmd" data-role="materialtags" />
+                    </label>
+                  </div><br>
+                  <label>(wichtig mit "!" angeben)</label>
+                </div>
+              </div>
+              <div class="card-action">
+                <div class="collection-item">Twitch User die Rechte haben über den Bot
+                  <div class="switch secondary-content">
+                    <label>
+                      <input type="text" id="mods" ng-model="<%= userparam || user.username %>.botsettings.mods" data-role="materialtags" />
+                    </label>
+                  </div><br>
+                  <label>(Groß/Kleinschreibung wird nicht beachtet)</label>
+                </div>
+              </div>
+
+              <ul class="collection col s6">
+                <li class="collection-item">
+                  <p>
+                    <input type="checkbox" id="status" ng-init="<%= userparam || user.username %>.botsettings.status = !(<%= userparam || user.username %>.botsettings.status == false)" ng-change="update('<%= userparam || user.username %>.botsettings.status')" ng-model="<%= userparam || user.username %>.botsettings.status" />
+                    <label for="status">!status</label>
+                  </p>
+                </li>
+                <li class="collection-item">
+                  <p>
+                    <input type="checkbox" id="permit" ng-init="<%= userparam || user.username %>.botsettings.permit = !(<%= userparam || user.username %>.botsettings.permit == false)" ng-change="update('<%= userparam || user.username %>.botsettings.permit')" ng-model="<%= userparam || user.username %>.botsettings.permit" />
+                    <label for="permit">!permit</label>
+                  </p>
+                </li>
+                <li class="collection-item">
+                  <p>
+                    <input type="checkbox" id="esea" ng-init="<%= userparam || user.username %>.botsettings.esea = !(<%= userparam || user.username %>.botsettings.esea == false)" ng-change="update('<%= userparam || user.username %>.botsettings.esea')" ng-model="<%= userparam || user.username %>.botsettings.esea" />
+                    <label for="esea">!esea</label>
+                  </p>
+                </li>
+                <li class="collection-item">
+                  <p>
+                    <input type="checkbox" id="lastesea" ng-init="<%= userparam || user.username %>.botsettings.lastesea = !(<%= userparam || user.username %>.botsettings.lastesea == false)" ng-change="update('<%= userparam || user.username %>.botsettings.lastesea')" ng-model="<%= userparam || user.username %>.botsettings.lastesea" />
+                    <label for="lastesea">!lastesea</label>
+                  </p>
+                </li>
+                <li class="collection-item">
+                  <p>
+                    <input type="checkbox" id="market" ng-init="<%= userparam || user.username %>.botsettings.market = !(<%= userparam || user.username %>.botsettings.market == false)" ng-change="update('<%= userparam || user.username %>.botsettings.market')" ng-model="<%= userparam || user.username %>.botsettings.market" />
+                    <label for="market">!market</label>
+                  </p>
+                </li>
+                <li class="collection-item">
+                  <p>
+                    <input type="checkbox" id="knife" ng-init="<%= userparam || user.username %>.botsettings.knife = !(<%= userparam || user.username %>.botsettings.market == false)" ng-change="update('<%= userparam || user.username %>.botsettings.knife')" ng-model="<%= userparam || user.username %>.botsettings.knife" />
+                    <label for="knife">!knife</label>
+                  </p>
+                </li>
+              </ul>
+
+              <ul class="collection s6">
+                <li class="collection-item">
+                  <p>
+                    <input type="checkbox" id="song" ng-init="<%= userparam || user.username %>.botsettings.song = !(<%= userparam || user.username %>.botsettings.song == false)" ng-change="update('<%= userparam || user.username %>.botsettings.song')" ng-model="<%= userparam || user.username %>.botsettings.song" />
+                    <label for="song">!song</label>
+                  </p>
+                </li>
+                <li class="collection-item">
+                  <p>
+                    <input type="checkbox" id="mm" ng-init="<%= userparam || user.username %>.botsettings.mm = !(<%= userparam || user.username %>.botsettings.mm == false)" ng-change="update('<%= userparam || user.username %>.botsettings.mm')" ng-model="<%= userparam || user.username %>.botsettings.mm" />
+                    <label for="mm">!mm</label>
+                  </p>
+                </li>
+                <li class="collection-item">
+                  <p>
+                    <input type="checkbox" id="uptime" ng-init="<%= userparam || user.username %>.botsettings.uptime = !(<%= userparam || user.username %>.botsettings.uptime == false)" ng-change="update('<%= userparam || user.username %>.botsettings.uptime')" ng-model="<%= userparam || user.username %>.botsettings.uptime" />
+                    <label for="uptime">!uptime</label>
+                  </p>
+                </li>
+                <li class="collection-item">
+                  <p>
+                    <input type="checkbox" id="title" ng-init="<%= userparam || user.username %>.botsettings.title = !(<%= userparam || user.username %>.botsettings.title == false)" ng-change="update('<%= userparam || user.username %>.botsettings.title')" ng-model="<%= userparam || user.username %>.botsettings.title" />
+                    <label for="title">!title</label>
+                  </p>
+                </li>
+                <li class="collection-item">
+                  <p>
+                    <input type="checkbox" id="game" ng-init="<%= userparam || user.username %>.botsettings.game = !(<%= userparam || user.username %>.botsettings.game == false)" ng-change="update('<%= userparam || user.username %>.botsettings.game')" ng-model="<%= userparam || user.username %>.botsettings.game" />
+                    <label for="game">!game</label>
+                  </p>
+                </li>
+              </ul><br>
+
+          </div>
+        </div>
+      </div>
+<%#<!-- Card 2 End -->%>
+
+<%#<!-- Card 3 -->%>
+      <div id="alerts" class="col s12 m6">
+        <div class="card hoverable">
+          <div class="card-image waves-effect waves-block waves-light">
+            <img src="https://snap-photos.s3.amazonaws.com/img-thumbs/960w/AE5D5ECFEF.jpg">
+          </div>
+          <div class="card-content">
+            <span class="card-title">Alerts</span>
+            <p>Der Zeit gibt es nur die Magischemiesmuschel als Alert
+              mehr ist geplant wenn das zu 100% läuft.</p>
+
+              <br>
+              <%#<!-- Dropdown Trigger -->%>
+              <p>
+                <input type="checkbox" id="modsonly" ng-change="update('<%= userparam || user.username %>.botsettings.alerts.magicconchshell.modsonly')" ng-model="<%= userparam || user.username %>.botsettings.alerts.magicconchshell.modsonly" />
+                <label for="modsonly" class="black-text">Nur Mods können die Muschel benutzen.</label>
+              </p>
+              <p>
+                <input type="checkbox" id="username" ng-change="update('<%= userparam || user.username %>.botsettings.alerts.magicconchshell.username')" ng-model="<%= userparam || user.username %>.botsettings.alerts.magicconchshell.username" />
+                <label for="username" class="black-text">Soll der Viewername angezeigt werden?</label>
+              </p>
+              <p>
+                <input type="checkbox" id="autodetectlanguage" ng-change="update('<%= userparam || user.username %>.botsettings.alerts.magicconchshell.autodetectlanguage')" ng-model="<%= userparam || user.username %>.botsettings.alerts.magicconchshell.autodetectlanguage" />
+                <label for="autodetectlanguage" class="black-text">Soll die Chat-Sprache erkannt werden?</label>
+              </p>
+
+              <br>
+              <a class='dropdown-button btn' href='#' data-activates='dropdown1'>Voice Language</a>
+              <br><br>
+
+              <p class="range-field">
+                <label for="voicevolume" class="black-text">Sprach Lautstärke</label>
+                <div id="voicevolume" name="voicevolume"></div><br>
+              </p>
+
+              <p class="range-field">
+                <label for="voicepitch" class="black-text">Stimmhöhe</label>
+                <div id="voicepitch"></div><br>
+              </p>
+
+              <p class="range-field">
+                <label for="voicerate" class="black-text">Sprach Geschwindigkeit</label>
+                <div id="voicerate"></div>
+              </p>
+
+              <%#<!-- Dropdown Structure -->%>
+              <ul id='dropdown1' class='dropdown-content'>
+                <li ng-repeat="voice in voices"><a ng-click="update('<%= userparam || user.username %>.botsettings.alerts.magicconchshell.voicelanguage',voice)">{{voice}}</a></li>
+              </ul>
+
+          </div>
+          <div class="card-content">
+            <span class="card-title">Spam unterbindung (nur für die Magischemiesmuschel)</span>
+            <p>Ich benutze dafür das <a href="https://github.com/ebergstedt/AntiKappa">AntiKappa Skript</a>. <a href="https://www.youtube.com/watch?v=vvhQLBq2o_Y">(Video demonstration)</a></p>
+            <br>
+            <form action="#">
+              <p>
+                <input type="checkbox" ng-change="update('<%= userparam || user.username %>.botsettings.alerts.magicconchshell.r9kModeBool')" ng-model="<%= userparam || user.username %>.botsettings.alerts.magicconchshell.r9kModeBool" id="r9kModeBool" />
+                <label for="r9kModeBool" class="black-text">personal r9k</label>
+              </p>
+              <p>
+                <input type="checkbox" ng-change="update('<%= userparam || user.username %>.botsettings.alerts.magicconchshell.blockExclusiveUpperCaseBool')" ng-model="<%= userparam || user.username %>.botsettings.alerts.magicconchshell.blockExclusiveUpperCaseBool" id="blockExclusiveUpperCaseBool" />
+                <label for="blockExclusiveUpperCaseBool" class="black-text">removes exclusive caps lock</label>
+              </p>
+              <p>
+                <input type="checkbox" ng-change="update('<%= userparam || user.username %>.botsettings.alerts.magicconchshell.blockMostlyUpperCaseBool')" ng-model="<%= userparam || user.username %>.botsettings.alerts.magicconchshell.blockMostlyUpperCaseBool" id="blockMostlyUpperCaseBool" />
+                <label for="blockMostlyUpperCaseBool" class="black-text">blocks messages with mostly caps lock</label>
+              </p>
+              <p>
+                <input type="checkbox" ng-change="update('<%= userparam || user.username %>.botsettings.alerts.magicconchshell.blockVeryLongMessagesBool')" ng-model="<%= userparam || user.username %>.botsettings.alerts.magicconchshell.blockVeryLongMessagesBool" id="blockVeryLongMessagesBool" />
+                <label for="blockVeryLongMessagesBool" class="black-text">removes long messages which usually contains repetitive copy pastes</label>
+              </p>
+              <p>
+                <input type="checkbox" ng-change="update('<%= userparam || user.username %>.botsettings.alerts.magicconchshell.blockRepeatedWordInSentenceBool')" ng-model="<%= userparam || user.username %>.botsettings.alerts.magicconchshell.blockRepeatedWordInSentenceBool" id="blockRepeatedWordInSentenceBool" />
+                <label for="blockRepeatedWordInSentenceBool" class="black-text">removes repeated words, like "Kappa Kappa Kappa"</label>
+              </p>
+              <p>
+                <input type="checkbox" ng-change="update('<%= userparam || user.username %>.botsettings.alerts.magicconchshell.blockTypicalSpamBool')" ng-model="<%= userparam || user.username %>.botsettings.alerts.magicconchshell.blockTypicalSpamBool" id="blockTypicalSpamBool" />
+                <label for="blockTypicalSpamBool" class="black-text">removes suspected random spam</label>
+              </p>
+              <p>
+                <input type="checkbox" ng-change="update('<%= userparam || user.username %>.botsettings.alerts.magicconchshell.blockNonEnglishCharactersBool')" ng-model="<%= userparam || user.username %>.botsettings.alerts.magicconchshell.blockNonEnglishCharactersBool" id="blockNonEnglishCharactersBool" />
+                <label for="blockNonEnglishCharactersBool" class="black-text">blocks everything that isn't the standard ASCII character set (NonEnglishCharacter)</label>
+              </p>
+            </form>
+          </div>
+
+          <div class="card-action">
+            <a href="/magicconchshell/<%= userparam || user.username %>">Magische Miesmuschel</a>
+            <%#<a href="#">Test Alert</a>%>
+          </div>
+        </div>
+      </div>
+<%#<!-- Card 3 End -->%>
+
+<%#<!-- Card 4 -->%>
+      <div class="col s12 m6">
+        <div class="card hoverable">
+          <div class="card-content">
+            <span class="card-title">Giveaway</span>
+            <p>Zum starten im TwichChat/SteamBot !giveaway schreiben
+            Hier wird festgelegt wer am Giveaway teilnehmen darf.
+            Zum Teilnehmen reicht es am Chat teilzunehmen.</p>
+            <br>
+
+            <div class="card-action">
+              <div class="collection-item">Aktivieren ?
+                <div class="switch secondary-content">
+                  <label>
+                    <input type="checkbox" ng-change="update('<%= userparam || user.username %>.botsettings.giveawaytoggle')" ng-model="<%= userparam || user.username %>.botsettings.giveawaytoggle">
+                    <span class="lever"></span>
+                  </label>
+                </div><br>
+                <label>im Chat !giveaway schreiben und auf der Giveaway Seite kann die Verlosung gestartet werden.<!--,<br>das gleiche funktioniert auch mit einem KeyWord "!giveaway keyword"--></label>
+              </div>
+            </div>
+
+            <div class="card-action">
+              <div class="collection-item">Twitch User die nicht am Giveaway teilnehmen
+                <div class="switch secondary-content">
+                  <label>
+                    <input type="text" id="giveawaysuspend" ng-model="<%= userparam || user.username %>.botsettings.giveawaysuspend" data-role="materialtags" />
+                  </label>
+                </div><br>
+                <label>im Normalfall Bots</label>
+              </div>
+            </div>
+
+            <div class="card-action">
+              <div class="collection-item">Wenn du immer dasselbe KeyWord verwenden willst fülle dieses Feld aus
+                <div class="input-field col s12">
+                  <input id="KeyWord" type="text" ng-change="update('<%= userparam || user.username %>.botsettings.giveaway.keyword')" ng-model="<%= userparam || user.username %>.botsettings.giveaway.keyword">
+                  <label for="KeyWord">KeyWord</label>
+                </div>
+                <br>
+                <label>Dann reicht es das Giveaway im TwitchChat oder auf der Giveaway Seite zu starten und das KeyWord wird automatisch benutzt.</label>
+              </div>
+            </div>
+
+            <form action="#">
+              <p>
+                <input type="checkbox" ng-change="update('<%= userparam || user.username %>.botsettings.giveaway.host')" ng-model="<%= userparam || user.username %>.botsettings.giveaway.host" id="gahost" />
+                <label for="gahost" class="black-text">host</label>
+              </p>
+              <p>
+                <input type="checkbox" ng-change="update('<%= userparam || user.username %>.botsettings.giveaway.mod')" ng-model="<%= userparam || user.username %>.botsettings.giveaway.mod" id="gamod" />
+                <label for="gamod" class="black-text">mod</label>
+              </p>
+              <p>
+                <input type="checkbox" ng-change="update('<%= userparam || user.username %>.botsettings.giveaway.subcriber')" ng-model="<%= userparam || user.username %>.botsettings.giveaway.subcriber" id="gasubcriber" />
+                <label for="gasubcriber" class="black-text">subcriber</label>
+              </p>
+              <p>
+                <input type="checkbox" ng-change="update('<%= userparam || user.username %>.botsettings.giveaway.turbo')" ng-model="<%= userparam || user.username %>.botsettings.giveaway.turbo" id="gaturbo" />
+                <label for="gaturbo" class="black-text">turbo</label>
+              </p>
+              <p>
+                <input type="checkbox" ng-change="update('<%= userparam || user.username %>.botsettings.giveaway.viewer')" ng-model="<%= userparam || user.username %>.botsettings.giveaway.viewer" id="gaviewer" />
+                <label for="gaviewer" class="black-text">viewer</label>
+              </p>
+            </form>
+
+          </div>
+          <div class="card-action">
+            <a href="/giveaway">GoTo Giveaway</a>
+            <%#<a href="#">Start Giveaway</a>%>
+          </div>
+        </div>
+      </div>
+<%#<!-- Card 4 End -->%>
+
+<%#<!-- Card 5 -->%>
+      <div id="infomationen" class="col s12 m6">
+        <div class="card hoverable">
+          <div class="card-content">
+            <span class="card-title">Infomationen</span>
+            <p>Manche Befehle brauchen eine ID oder einen Loginnamen damit sie funktionieren.</p>
+            <br>
+            <div class="row">
+              <div class="input-field col s12 m6">
+                <input placeholder="Steam64 ID" ng-change="update('<%= userparam || user.username %>.botsettings.steamid')" ng-model="<%= userparam || user.username %>.botsettings.steamid" id="SteamID" type="text">
+                <label class="active" for="SteamID">SteamID</label>
+              </div>
+              <div class="input-field col s12 m6">
+                <input placeholder="ESEA ID" ng-change="update('<%= userparam || user.username %>.botsettings.eseaid')" ng-model="<%= userparam || user.username %>.botsettings.eseaid" id="ESEAID" type="text">
+                <label class="active" for="ESEAID">ESEA ID</label>
+              </div>
+              <div class="input-field col s12 m6">
+                <input placeholder="LastFM Account Name" ng-change="update('<%= userparam || user.username %>.botsettings.lastfmname')" ng-model="<%= userparam || user.username %>.botsettings.lastfmname" id="LastFM" type="text">
+                <label class="active" for="LastFM">LastFM</label>
+              </div>
+              <div class="input-field col s12 m6">
+                <input placeholder="Twitter ScreenName" ng-change="update('<%= userparam || user.username %>.botsettings.twittername')" ng-model="<%= userparam || user.username %>.botsettings.twittername" id="Twitter ScreenName" type="text">
+                <label class="active" for="Twitter ScreenName">Twitter ScreenName</label>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+<%#<!-- Card 5 End -->%>
+
+<%#<!-- Card 6 -->%>
+      <div id="Steam" class="col s12 m6">
+        <div class="card hoverable">
+          <div class="card-content">
+            <span class="card-title">Steam</span>
+            <p>Hier gibt es Einstellungsmöglichkeiten für den <a href="http://steamcommunity.com/id/bot_spddl">SteamBot</a></p>
+            <br>
+            <div class="row">
+              <div class="card-action">
+                <div class="collection-item">Steam64 ID
+                  <div class="switch secondary-content">
+                    <label>
+                      <input type="text" id="steamaccount" ng-model="<%= userparam || user.username %>.botsettings.steam.account" data-role="materialtags" />
+                    </label>
+                  </div><br>
+                  <label>Accounts die Adminzugriff haben über Steam (Mods,Manager,...)</label>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="card-action">
+                <div class="collection-item">Steam Gruppen IDs
+                  <div class="switch secondary-content">
+                    <label>
+                      <input type="text" id="steamgroup" ng-model="<%= userparam || user.username %>.botsettings.steam.steamgroup" data-role="materialtags" />
+                    </label>
+                  </div><br>
+                  <label>Hier wird der Bot im GruppenChat antworten und die Ankündigung schreiben</label>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="card-action">
+            <div class="collection-item">Automatisch eine Steam Ankündigung posten
+              <div class="switch secondary-content">
+                <label>
+                  <input type="checkbox" ng-change="update('<%= userparam || user.username %>.botsettings.automaticannouncements')" ng-model="<%= userparam || user.username %>.botsettings.automaticannouncements">
+                  <span class="lever"></span>
+                </label>
+              </div><br>
+              <label>Der Bot muss im Gruppenchat sein und die nötigen Berechtigungen haben.<br>Es ist möglich das die Twitch API spinnt und daher mehr diese Funktion nicht zu 100% funktioniert</label>
+            </div>
+          </div>
+
+          <div class="card-action">
+            <a ng-click="steam_start('<%= userparam || user.username %>')" class="pointer">Steam Ank&uuml;ndigung</a>
+          </div>
+        </div>
+      </div>
+<%#<!-- Card 6 End -->%>
+
+
+
+<%#<!-- Card 7 Kirby -->%>
+<% if(userparam == 'kirby' || user.username == 'kirby' || user.username == 'spddl') { %>
+<!-- TODO: Subs - discord -->
+
+      <div id="Kirby" class="col s12 m12">
+        <div class="card hoverable">
+          <div class="card-content">
+            <span class="card-title">Kirby Beta Section</span>
+            <p>Hi Kirby es kommt ja nun schon öfter vor das du "Neue" Funktionen bekommst und natürlich kannst du hier eine Variabeln verändern wie es dir passt :> wenn diese Funktionen für alle verfügbar sind fliegen sie aus dieser Card raus :P</a></p>
+            <br>
+            <h5>Discord Events</h5>
+            <div class="row">
+              <div class="input-field col s12 m6">
+                <input placeholder="Twitter Announcement" ng-change="update('<%= userparam || user.username %>.botsettings.discord.twitternews')" ng-model="<%= userparam || user.username %>.botsettings.discord.twitternews" id="twitterannouncement" type="text">
+                <label class="active" for="twitterannouncement">Twitter Stream "Channel ID"</label>
+              </div>
+
+              <div class="input-field col s12 m6">
+                <input placeholder="Discord Announcement" ng-change="update('<%= userparam || user.username %>.botsettings.discord.onlinemsg')" ng-model="<%= userparam || user.username %>.botsettings.discord.onlinemsg" id="discordannouncement" type="text">
+                <label class="active" for="discordannouncement">Discord Announcement "Channel ID"</label>
+              </div>
+
+              <div class="input-field col s12 m6">
+                <input placeholder="Discord Online" ng-change="update('<%= userparam || user.username %>.botsettings.discord.online')" ng-model="<%= userparam || user.username %>.botsettings.discord.online" id="discordonline" type="text">
+                <label class="active" for="discordonline">Wird in Discord gepostet wenn der Channel Online geht</label>
+              </div>
+
+              <div class="input-field col s12 m6">
+                <input placeholder="Discord Offline" ng-change="update('<%= userparam || user.username %>.botsettings.discord.offline')" ng-model="<%= userparam || user.username %>.botsettings.discord.offline" id="discordoffline" type="text">
+                <label class="active" for="discordoffline">Discord Offline</label>
+              </div>
+            </div>
+
+            <h5>Subs Events</h5>
+            <div class="row">
+              <div class="input-field col s12 m6">
+                <input placeholder="Subscriber #1" ng-change="update('<%= userparam || user.username %>.botsettings.alerts.subscription.sub1')" ng-model="<%= userparam || user.username %>.botsettings.alerts.subscription.sub1" id="sub1" type="text">
+                <label class="active" for="sub1">Subscriber #1 (kommt sofort)</label>
+              </div>
+              <div class="input-field col s12 m6">
+                <input placeholder="Subscriber #2" ng-change="update('<%= userparam || user.username %>.botsettings.alerts.subscription.sub2')" ng-model="<%= userparam || user.username %>.botsettings.alerts.subscription.sub2" id="sub2" type="text">
+                <label class="active" for="sub2">Subscriber #2 (nach 2 Sek)</label>
+              </div>
+
+              <div class="input-field col s12 m6">
+                <input placeholder="ReSub" ng-change="update('<%= userparam || user.username %>.botsettings.alerts.subscription.resub')" ng-model="<%= userparam || user.username %>.botsettings.alerts.subscription.resub" id="ReSub" type="text">
+                <label class="active" for="sub2">ReSub</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-action">
+            <div class="collection-item">!subs
+              <div class="switch secondary-content">
+                <label>
+                  <input type="checkbox" ng-change="update('<%= userparam || user.username %>.botsettings.subs')" ng-model="<%= userparam || user.username %>.botsettings.subs">
+                  <span class="lever"></span>
+                </label>
+              </div><br>
+              <label>"We are currently having OVER 9000 subscribers"</label>
+            </div>
+            <div class="row">
+              <div class="input-field col s12 m6">
+                <input placeholder="We are currently having OVER {SUBCOUNTER} subscribers" ng-change="update('<%= userparam || user.username %>.botsettings.alerts.subscription.subtext')" ng-model="<%= userparam || user.username %>.botsettings.alerts.subscription.subtext" id="subtext" type="text">
+                <!-- <label class="active" for="discordoffline"></label> -->
+              </div>
+            </div>
+          </div>
+
+          <div class="card-action">
+            <div class="collection-item">!subage
+              <div class="switch secondary-content">
+                <label>
+                  <input type="checkbox" ng-change="update('<%= userparam || user.username %>.botsettings.subage')" ng-model="<%= userparam || user.username %>.botsettings.subage">
+                  <span class="lever"></span>
+                </label>
+              </div><br>
+              <label>"@username is Sub since: xxx"</label>
+            </div>
+          </div>
+
+        </div>
+      </div>
+<% } %>
+<%#<!-- Card 7 Kirby End -->%>
+
+<%#<!-- Card 8 last Annyang -->%>
+      <div id="commands" class="col s12">
+        <div class="card">
+          <div class="card-image waves-effect waves-block waves-light">
+            <img class="activator" src="/lib/VoiceToBot.jpg">
+          </div>
+          <div class="card-content">
+            <span class="card-title activator grey-text text-darken-4">Sprachsteuerung<i class="material-icons right">more_vert</i></span>
+            <p>Falls du <a href="https://support.google.com/chrome/answer/2693767?hl=de">Chrome</a> oder einen anderen Browser nutzt der Zugriff auf euer Mikrofon bekommt und ihr das auch erlaubt, kann euch der Bot nun auch verstehen,
+            klingt kompliziert ist es aber nicht.<br>
+            Solange ihr diese Webseite offen habt könnt ihr in euer Mikrofon sprechen und die Webseite wird es an den spddl_bot weitergeben dabei ist es egal ob die Webseite im Hintergrund läuft (minimiert) oder nicht.</p>
+            <br>
+            <b>Zum Testen sagt "Hallo" wenn alles funktioniert bekommt ihr oben rechts im Browser ein "hallo" Toast.</b>
+            <!-- <br>
+            <p>Eigentlich soll dies hier nur als Übersicht dienen und nicht die möglichkeit bieten etwas völlig neues zu erstellen da es nötig wäre auch den Bot dafür anzupassen damit das auch verstanden wird.</p> -->
+            <br><br>
+            <p>Links steht das gesprochene - Rechts dazu die Funktion die der Bot verstehen muss<br>
+            <i>Weitere funktionen seht ihr wenn ihr auf den (mühsamen-mit-voller-Liebe-erstellten) Banner klickt</i>
+            <br>
+            <div class="row"><json child="<%= userparam || user.username %>.annyang" default-collapsed="false" type="object"></json></div>
+          </div>
+          <div class="card-reveal">
+            <span class="card-title grey-text text-darken-4">Mögliche Funktionen:<i class="material-icons right">close</i></span>
+
+          <p><u>Auf der Linken Seite steht das was du in dein Mikrofon sprichst</u><br>
+          dabei können Wörter in Klammern geschrieben werden nicht gesagt werden müssen aber die Verständlichkeit dem Programm erleichtert,<br>
+          zudem kannst du "Parameter" benutzen wenn du im Chat bist und z.b. "!weather Berlin" tipps kannst du das auch
+
+          sagen brauchst du auf der Linken Seite
+          <blockquote>
+          Wetter *stadt
+          </blockquote>
+          und auf der Rechten Seite
+          <blockquote>
+          "function(stadt) { socket.emit('annyang',{ event: 'weather',parameter:stadt }) }"
+          </blockquote>
+          wichtig hierbei ist das in der Funktion und hinter "parameter" Stadt steht.. das Wort ist egal es muss nur gleich sein<br>
+
+          Orginale Quelle: <a href="https://github.com/TalAter/annyang/blob/master/docs/README.md#examples-7">Annyang auf Github</a>
+          <br></p>
+          <br>
+          Derzeit könnt ihr alles "Auslösen" auf das mein Bot reagiert im Twitch Chat d.h.
+          <br>
+          Ihr könnt in den Twitch Chat schreiben !uptime<br>
+          Oder ihr baut eine function dafür und redet mit dem Bot:
+          <table>
+            <tbody>
+              <tr>
+                <th>Links (das gesprochen wird)</th>
+                <th>Rechts (der Command/Funktion)</th>
+              </tr>
+              <tr>
+                <td><span class="orange lighten-1">Online</span></td>
+                <td>function() { socket.emit('annyang',{ event: '<span class="orange lighten-1">uptime</span>' }) }</td>
+              </tr>
+            </tbody>
+          </table>
+          Alles was Orange hinterlegt ist kann geändert werden<br>
+          nun kannst du "<span class="orange lighten-1">Online</span>" sagen und der Bot wird <span class="orange lighten-1">!uptime</span> ausführen<br>
+          Im moment ist die Deutsche Sprache eingestellt daher wird das am besten verstanden.
+          <h5>Hier noch ein paar Beispiele:</h5>
+          </p>
+            <table>
+              <thead>
+                <tr>
+                  <th data-field="id">Sprache</th>
+                  <th data-field="name">Funktion</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>(oh) wow</td>
+                  <td>function() { socket.emit('annyang',{ event: 'wow' }) }</td>
+                </tr>
+                <tr>
+                  <td>hallo</td>
+                  <td>function() { socket.emit('annyang',{ event: 'hallo' }) }</td>
+                </tr>
+                <tr>
+                  <td>(twitch) status</td>
+                  <td>function() { socket.emit('annyang',{ event: 'status' }) }</td>
+                </tr>
+                <tr>
+                  <td>uptime</td>
+                  <td>function() { socket.emit('annyang',{ event: 'uptime' }) }</td>
+                </tr>
+                <tr>
+                  <td>mm</td>
+                  <td>function() { socket.emit('annyang',{ event: 'mm' }) }</td>
+                </tr>
+                <tr>
+                  <td>weather *stadt</td>
+                  <td>function(stadt) { socket.emit('annyang',{ event: 'weather',parameter:stadt }) }</td>
+                </tr>
+                <tr>
+                  <td>last follower</td>
+                  <td>function() { socket.emit('annyang',{ event: 'lastfollower' }) }</td>
+                </tr>
+                <tr>
+                  <td>song</td>
+                  <td>function() { socket.emit('annyang',{ event: 'song' }) }</td>
+                </tr>
+                <tr>
+                  <td>(Magische) Miesmuschel *ask</td>
+                  <td>function(ask) { socket.emit('annyang',{ event: 'muschel',parameter:ask }) }</td>
+                </tr>
+              </tbody>
+            </table>
+
+          </div>
+        </div>
+      </div>
+<%#<!-- Card 8 End -->%>
+
+<%#<!-- Card last -->%>
+      <div id="commands" class="col s12">
+        <div class="card hoverable">
+          <div class="card-content">
+            <span class="card-title">Commands</span>
+            <p>Das sind die channel bezogenen Commands für dein Channel</p>
+            <br>
+            <div class="row"><json child="<%= userparam || user.username %>.cmd" default-collapsed="false" type="object"></json></div>
+          </div>
+        </div>
+      </div>
+<%#<!-- Card last End -->%>
+</div>
+</div>
+<% } %>
+  <footer class="page-footer grey darken-4">
+    <div class="container"></div>
+    </div>
+    <div class="footer-copyright"></div>
+  </footer>
+
+  <%#<!-- Scripts -->%>
+  <script src="//code.jquery.com/jquery-2.2.1.min.js"></script> <%# async %>
+  <%#<script src="//cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script>%> <%# async %>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script>
+
+  <script>
+  $(function() {
+    //console.log('jQ ready');
+
+    $('select').material_select();
+
+    <% if (blocked) { %>
+      //$('#modalblocked').openModal();
+      $('#modalblocked').modal('open');
+    <% } %>
+
+    function ajax(streamer, onStart){
+      if (onStart) {
+        $('#select1').val(streamer)
+        $('#select1').material_select();
+      }
+
+      $("#records_table > tbody").html('');
+      $.ajax({
+        <% if(local) { %>
+        url: 'http://192.168.178.20/commands/'+streamer+'?',
+        <% } else { %>
+        url: 'https://bot.spddl.de/commands/'+streamer+'?',
+        <% } %>
+        dataType: "jsonp",
+
+        <%#// Work with the response %>
+        success: function (response){
+            var trHTML = '';
+            $.each(response.cmd, function (i, item) {
+              trHTML += '<tr><td>' + i + '</td><td>' + item + '</td></tr>';
+            });
+            $('#records_table').append(trHTML);
+            $('#records_table').show();
+        }
+      });
+    }
+
+    var streamer = '<%= userlist %>'.split(",").map(function (s){
+      return s.substr(1);
+    }).sort()
+
+    var option = '';
+    for (var i=0;i<streamer.length;i++){
+       option += '<option value="'+ streamer[i] + '">' + streamer[i] + '</option>';
+    }$('#select1').append(option);
+
+    $('#select1').material_select();
+    $('#select1').on('change', function(){
+        ajax($(this).val())
+    });
+
+  <% if(userparam){ %>
+    ajax('<%- userparam %>',true)
+  <% } %>
+  })
+</script>
+
+<% if(rights){ %>
+<script src="js/materialize-tags.min.js"></script>
+<script src="js/nouislider.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular.min.js"></script>
+<script src="https://cdn.jsdelivr.net/angular.ui-sortable/0.13.4/sortable.min.js"></script><%# wg. JSONedit %>
+<script src="js/directives.js"></script><%# wg. JSONedit %>
+<script src="/socket.io/socket.io.js"></script>
+<%# <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script> %>
+<%# <script src="js/jquery.favicons.js"></script> %>
+
+<script>
+<% if (local) { %>var socket = io.connect("/<%= userparam || user.username %>", {<% } else {%>var socket = io.connect("https://bot.spddl.de/<%= userparam || user.username %>", {<% } %>
+    'connect timeout': 5000, // 5 seconds should be enough
+    'try multiple transports': true,
+    'reconnect': true,
+    'reconnection delay': 500,
+    'reconnection limit': 5000,
+    'max reconnection attempts': 3,
+    'sync disconnect on unload': false,
+    'auto connect': true, <%# //'flash policy port': 10843, %>
+    'force new connection': true //IMP: to be able to re-connect using our own logic
+  });
+
+  $(function() {
+    Materialize.toast('login', 4000)
+
+    $('input#text').characterCounter();
+    //$('.modal-trigger').leanModal();
+    //$('.modal-trigger').modal();
+    $('.modal').modal();
+    $('.button-collapse').sideNav(); <%#// ausklapbares Menu für Smartphones%>
+
+    var Slider = {'voicevolume':{'min': 0,'max': 1,'step': 0.05,'start':<%= commands.botsettings.alerts.magicconchshell.voicevolume %>,'decimals':2},'voicepitch':{'min': 0,'max': 2,'step': 0.1,'start':<%= commands.botsettings.alerts.magicconchshell.voicepitch %>,'decimals':1},'voicerate':{'min': 0,'max': 1.5,'step': 0.05,'start':<%= commands.botsettings.alerts.magicconchshell.voicerate %>,'decimals':2},'uppercasepercent':{'min': 0,'max': 100,'step': 1,'start':<%= commands.botsettings.uppercasepercent %>,'decimals':0},'symbolspercent':{'min': 0,'max': 100,'step': 1,'start':<%= commands.botsettings.symbolspercent %>,'decimals':0}}
+    for (prop in Slider) {
+      noUiSlider.create(document.getElementById(prop), {
+       start: Slider[prop].start,
+       connect: 'lower',
+       step: Slider[prop].step,
+       range: {
+         'min': Slider[prop].min,
+         'max': Slider[prop].max
+       },
+       format: wNumb({
+         decimals: Slider[prop].decimals
+       })
+     });
+    }
+
+    document.getElementById('voicevolume').noUiSlider.on('change', function(value){ // TODO: Socket.io & in die For schleife
+      <% if (local) { %> console.log('voicevolume change: '+value); <% } %>
+      socket.emit('client', { 'model': '<%= userparam || user.username %>.botsettings.alerts.magicconchshell.voicevolume','value': value })
+      Materialize.toast('gespeichert.', 4000)
+    });
+    document.getElementById('voicepitch').noUiSlider.on('change', function(value){
+      <% if (local) { %> console.log('voicepitch change: '+value); <% } %>
+      socket.emit('client', { 'model': '<%= userparam || user.username %>.botsettings.alerts.magicconchshell.voicepitch','value': value })
+      Materialize.toast('gespeichert.', 4000)
+    });
+    document.getElementById('voicerate').noUiSlider.on('change', function(value){
+      <% if (local) { %> console.log('voicerate change: '+value); <% } %>
+      socket.emit('client', { 'model': '<%= userparam || user.username %>.botsettings.alerts.magicconchshell.voicerate','value': value })
+      Materialize.toast('gespeichert.', 4000)
+    });
+    document.getElementById('uppercasepercent').noUiSlider.on('change', function(value){
+      <% if (local) { %> console.log('uppercasepercent change: '+value); <% } %>
+      socket.emit('client', { 'model': '<%= userparam || user.username %>.botsettings.uppercasepercent','value': value })
+      Materialize.toast('gespeichert.', 4000)
+    });
+    document.getElementById('symbolspercent').noUiSlider.on('change', function(value){
+      <% if (local) { %> console.log('symbolspercent change: '+value); <% } %>
+      socket.emit('client', { 'model': '<%= userparam || user.username %>.botsettings.symbolspercent','value': value })
+      Materialize.toast('gespeichert.', 4000)
+    });
+
+    $('.dropdown-button').dropdown();
+
+    $('#alloweddomains').materialtags('add', ('<%= commands.botsettings.alloweddomains %>').split(",").join());
+    $('input#towords').materialtags('add', ('<%= commands.botsettings.towords %>').split(",").join());
+    $('#banwords').materialtags('add', ('<%= commands.botsettings.banwords %>').split(",").join());
+    $('#ignorecmd').materialtags('add', ('<%= commands.botsettings.ignorecmd %>').split(",").join());
+    $('#mods').materialtags('add', ('<%= commands.botsettings.mods %>').split(",").join());
+    $('#steamaccount').materialtags('add', ('<%= commands.botsettings.steam.account %>').split(",").join());
+    $('#steamgroup').materialtags('add', ('<%= commands.botsettings.steam.steamgroup %>').split(",").join());
+    $('#giveawaysuspend').materialtags('add', ('<%= commands.botsettings.giveawaysuspend %>').split(",").join()); // TODO: geht?
+
+    $("span#twitch").html("<img src='/lib/twitch-16.png' alt='twitch' class='img'>");
+    $("span#steam").html("<img src='/lib/steam-16.png' alt='steam' class='img'>");
+  });
+
+// AngularJS //
+'use strict';
+var app = angular.module('App', ['JSONedit']);
+
+function ViewCtrl($timeout, $scope, $filter, $parse) {
+
+  $scope['<%= userparam || user.username %>'] = <%- JSON.stringify(commands) %>
+<% if (annyang) { %>
+  $scope['<%= userparam || user.username %>'].annyang = <%- JSON.stringify(annyang) %>
+<% } else { %>
+  $scope['<%= userparam || user.username %>'].annyang = {hallo: "function() { socket.emit('annyang',{ event: 'hallo' }) }"}
+<% } %>
+
+  //console.log($scope['<%= userparam || user.username %>']);
+  /* setInterval(function(){
+    console.log($scope['<%= userparam || user.username %>']);
+  }, 3000); */
+
+  $timeout(function(){
+      <% if (local) { %> console.log('AngularJS ready'); <% } %>
+      $scope.$watch('<%= userparam || user.username %>.botsettings.alloweddomains', function(newVal, oldVal){
+        if (newVal === oldVal) { return; }
+        if (typeof $scope['<%= userparam || user.username %>'].botsettings.alloweddomains == 'undefined') { return } <%# Error handle %>
+          socket.emit('client', { 'model': '<%= userparam || user.username %>','name': 'alloweddomains','value': $scope['<%= userparam || user.username %>'].botsettings.alloweddomains.length == 0 ? [] : $scope['<%= userparam || user.username %>'].botsettings.alloweddomains.split(','),'type': 'array' })
+          Materialize.toast('gespeichert.', 4000)
+      });
+      $scope.$watch('<%= userparam || user.username %>.botsettings.towords', function(newVal, oldVal){
+        if (newVal === oldVal) { return; }
+        if (typeof $scope['<%= userparam || user.username %>'].botsettings.towords == 'undefined') { return } <%# Error handle %>
+          socket.emit('client', { 'model': '<%= userparam || user.username %>','name':'towords','value': $scope['<%= userparam || user.username %>'].botsettings.towords.length == 0 ? [] : $scope['<%= userparam || user.username %>'].botsettings.towords.split(','),'type': 'array' })
+          Materialize.toast('gespeichert.', 4000)
+      });
+      $scope.$watch('<%= userparam || user.username %>.botsettings.banwords', function(newVal, oldVal){
+        if (newVal === oldVal) { return; }
+        if (typeof $scope['<%= userparam || user.username %>'].botsettings.banwords == 'undefined') { return } <%# Error handle %>
+          socket.emit('client', { 'model': '<%= userparam || user.username %>','name':'banwords','value': $scope['<%= userparam || user.username %>'].botsettings.banwords.length == 0 ? [] : $scope['<%= userparam || user.username %>'].botsettings.banwords.split(','),'type': 'array' })
+          Materialize.toast('gespeichert.', 4000)
+      });
+      $scope.$watch('<%= userparam || user.username %>.botsettings.ignorecmd', function(newVal, oldVal){
+        if (newVal === oldVal) { return; }
+        if (typeof $scope['<%= userparam || user.username %>'].botsettings.ignorecmd == 'undefined') { return } <%# Error handle %>
+          socket.emit('client', { 'model': '<%= userparam || user.username %>','name':'ignorecmd','value': $scope['<%= userparam || user.username %>'].botsettings.ignorecmd.length == 0 ? [] : $scope['<%= userparam || user.username %>'].botsettings.ignorecmd.split(','),'type': 'array'})
+          Materialize.toast('gespeichert.', 4000)
+      });
+      $scope.$watch('<%= userparam || user.username %>.botsettings.mods', function(newVal, oldVal){
+        if (newVal === oldVal) { return; }
+        if (typeof $scope['<%= userparam || user.username %>'].botsettings.mods == 'undefined') { return } <%# Error handle %>
+          socket.emit('client', { 'model': '<%= userparam || user.username %>','name':'mods','value': $scope['<%= userparam || user.username %>'].botsettings.mods.length == 0 ? [] : $scope['<%= userparam || user.username %>'].botsettings.mods.split(','),'type': 'array'})
+          Materialize.toast('gespeichert.', 4000)
+      });
+      $scope.$watch('<%= userparam || user.username %>.botsettings.steam.account', function(newVal, oldVal){
+        if (newVal === oldVal) { return; }
+        if (typeof $scope['<%= userparam || user.username %>'].botsettings.steam.account == 'undefined') { return } <%# Error handle %>
+          socket.emit('client', { 'model': '<%= userparam || user.username %>','value': $scope['<%= userparam || user.username %>'].botsettings.steam.account.length == 0 ? [] : $scope['<%= userparam || user.username %>'].botsettings.steam.account.split(','),'type': 'steamaccount'})
+          Materialize.toast('gespeichert.', 4000)
+      });
+      $scope.$watch('<%= userparam || user.username %>.botsettings.steam.steamgroup', function(newVal, oldVal){
+        if (newVal === oldVal) { return; }
+        if (typeof $scope['<%= userparam || user.username %>'].botsettings.steam.steamgroup == 'undefined') { return } <%# Error handle %>
+          socket.emit('client', { 'model': '<%= userparam || user.username %>','value': $scope['<%= userparam || user.username %>'].botsettings.steam.steamgroup.length == 0 ? [] : $scope['<%= userparam || user.username %>'].botsettings.steam.steamgroup.split(','),'type': 'steamgroup'})
+          Materialize.toast('gespeichert.', 4000)
+      });
+
+      $scope.$watch('<%= userparam || user.username %>.botsettings.giveawaysuspend', function(newVal, oldVal){
+        if (newVal === oldVal) { return; }
+        if (typeof $scope['<%= userparam || user.username %>'].botsettings.giveawaysuspend == 'undefined') { return } <%# Error handle %>
+          socket.emit('client', { 'model': '<%= userparam || user.username %>','value': $scope['<%= userparam || user.username %>'].botsettings.giveawaysuspend.length == 0 ? [] : $scope['<%= userparam || user.username %>'].botsettings.giveawaysuspend.split(','),'type': 'giveawaysuspend' })
+          Materialize.toast('gespeichert.', 4000)
+      });
+
+      $scope.$watch('<%= userparam || user.username %>.botsettings.uppercase', function(newVal, oldVal){
+        if (newVal === oldVal) { return; }
+        socket.emit('client', { 'model': '<%= userparam || user.username %>','name':'uppercase','value': newVal,'type': 'array' })
+        Materialize.toast('gespeichert.', 4000)
+      });
+
+      $scope.$watch('<%= userparam || user.username %>.botsettings.symbols', function(newVal, oldVal){
+        if (newVal === oldVal) { return; }
+        socket.emit('client', { 'model': '<%= userparam || user.username %>','name':'symbols','value': newVal,'type': 'array' })
+        Materialize.toast('gespeichert.', 4000)
+      });
+
+      $scope.$watch('<%= userparam || user.username %>.botsettings.postingdomains', function(newVal, oldVal){
+        if (newVal === oldVal) { return; }
+        socket.emit('client', { 'model': '<%= userparam || user.username %>','name':'postingdomains','value': newVal,'type': 'array' })
+        Materialize.toast('gespeichert.', 4000)
+      });
+
+      socket.on('client', function(data) {
+        <% if (local) { %> console.log('%j',data) <% } %>
+        Materialize.toast(data.msg, 4000)
+      });
+
+      setTimeout(function(){
+        $('select').material_select();
+      }, 10);
+  });
+
+
+
+
+  $scope.update = function(model,value) {
+    <%# console.log(model); console.log(value);console.log($parse(model)($scope)); %>
+    if (value) { // <%= userparam || user.username %>
+        socket.emit('client', { 'model': model,'value': '"'+value+'"' })
+    }else{
+      if (typeof $parse(model)($scope) === 'boolean') {
+        socket.emit('client', { 'model': model,'value': $parse(model)($scope) })
+      } else {
+        socket.emit('client', { 'model': model,'value': '"'+$parse(model)($scope)+'"' })
+      }
+    }
+
+    clearTimeout(window.command_save); // Kill the timer
+    window.command_save = setTimeout(function(){
+      Materialize.toast('gespeichert.', 4000)
+      delete window.command_save
+    }, 1500); // speichert nur alle 1.5 sek
+  }
+
+
+
+
+  $scope.selectupdate = function(model,value) {
+    <% if (local) { %> console.log(model); <% } %>
+    <% if (local) { %> console.log($parse(model)($scope)); <% } %>
+    socket.emit('client', { 'model': model,'value': $parse(model)($scope) })
+
+    clearTimeout(window.command_save); // Kill the timer
+    window.command_save = setTimeout(function(){
+      Materialize.toast('gespeichert.', 4000)
+      delete window.command_save
+    }, 1500); // speichert nur alle 1.5 sek
+    /*
+    <%# console.log(model); console.log(value);console.log($parse(model)($scope)); %>
+
+    if (value) { // <%= userparam || user.username %>
+        socket.emit('client', { 'model': model,'value': '"'+value+'"' })
+    }else{
+      if (typeof $parse(model)($scope) === 'boolean') {
+        socket.emit('client', { 'model': model,'value': $parse(model)($scope) })
+      } else {
+        socket.emit('client', { 'model': model,'value': '"'+$parse(model)($scope)+'"' })
+      }
+    }
+    Materialize.toast('gespeichert.', 4000) */
+  }
+
+  $scope.steam_start = function(chan) {
+    <% if (local) { %> console.log('steam_start: '+chan) <% } %>
+    socket.emit('client', { 'type': 'steam','chan': chan })
+    Materialize.toast('Steam Ank&uuml;ndigung versendet.', 4000)
+  }
+
+  $scope.$watch('<%= userparam || user.username %>.annyang', function(json,oldjson) {
+    if (json === oldjson) { return; }
+
+    if (!window.command_save) {
+      $scope.annyangjsonString = $filter('json')(json);
+      socket.emit('client', { 'model': '<%= userparam || user.username %>','value': json,'type':'annyang' })
+      Materialize.toast('Einmal F5 damit das auch übernommen wird.', 4000)
+    }
+
+    clearTimeout(window.command_save); // Kill the timer
+    window.command_save = setTimeout(function(){
+      //annyang.removeCommands(); <%# TODO wäre schön wenn man die Commands gleich übernehmen könnte %>
+      //annyang.addCommands(json);
+      $scope.annyangjsonString = $filter('json')(json);
+      socket.emit('client', { 'model': '<%= userparam || user.username %>','value': json,'type':'annyang' })
+      Materialize.toast('Einmal F5 damit das auch übernommen wird.', 4000)
+    }, 2000); // speichert nur alle 3 sek
+
+  }, true);
+
+  $scope.$watch('annyangjsonString', function(json) {
+    try {
+      $scope['<%= userparam || user.username %>'].annyang = JSON.parse(json);
+      $scope.wellFormed = true;
+    } catch(e) {
+      $scope.wellFormed = false;
+    }
+  }, true);
+
+  $scope.$watch('<%= userparam || user.username %>.cmd', function(json,oldjson) {
+    if (json === oldjson) { return; }
+
+    if (!window.command_save) {
+      $scope.jsonString = $filter('json')(json); // [object Object]
+      socket.emit('client', { 'model': '<%= userparam || user.username %>','value': json,'type':'cmd' })
+      Materialize.toast('gespeichert.', 4000)
+    }
+
+    clearTimeout(window.command_save); // Kill the timer
+    window.command_save = setTimeout(function(){
+      $scope.jsonString = $filter('json')(json); // [object Object]
+      socket.emit('client', { 'model': '<%= userparam || user.username %>','value': json,'type':'cmd' })
+      Materialize.toast('gespeichert.', 4000)
+      delete window.command_save
+    }, 2000); // speichert nur alle 3 sek
+  }, true);
+
+  $scope.$watch('jsonString', function(json) {
+    try {
+      //$scope.jsonData = JSON.parse(json);
+      //console.log(JSON.parse(json));
+      $scope['<%= userparam || user.username %>'].cmd = JSON.parse(json);
+      $scope.wellFormed = true;
+    } catch(e) {
+      $scope.wellFormed = false;
+    }
+  }, true);
+
+$scope.voices = ["UK English Female","UK English Male","US English Female","Arabic Male","Armenian Male","Australian Female","Brazilian Portuguese Female","Chinese Female","Czech Female","Danish Female","Deutsch Female","Dutch Female","Finnish Female","French Female","Greek Female","Hatian Creole Female","Hindi Female","Hungarian Female","Indonesian Female","Italian Female","Japanese Female","Korean Female","Latin Female","Norwegian Female","Polish Female","Portuguese Female","Romanian Male","Russian Female","Slovak Female","Spanish Female","Spanish Latin American Female","Swedish Female","Tamil Male","Thai Female","Turkish Female","Afrikaans Male","Albanian Male","Bosnian Male","Catalan Male","Croatian Male","Czech Male","Danish Male","Esperanto Male","Finnish Male","Greek Male","Hungarian Male","Icelandic Male","Latin Male","Latvian Male","Macedonian Male","Moldavian Male","Montenegrin Male","Norwegian Male","Serbian Male","Serbo-Croatian Male","Slovak Male","Swahili Male","Swedish Male","Vietnamese Male","Welsh Male","US English Male","Fallback UK Female"]
+}
+</script>
+
+<% } %>
+<% if (rights === null) { %><script>Materialize.toast('Access Denied.', 4000)</script><% } %>
+<% if (annyang && rights) { %>
+              <script src="//cdnjs.cloudflare.com/ajax/libs/annyang/2.4.0/annyang.min.js"></script>
+              <script src='//code.responsivevoice.org/responsivevoice.js'></script>
+              <script>
+              if (annyang) {
+                // Let's define a command.
+                commands = <%- JSON.stringify(annyang) %>
+
+                for (i in commands) {
+                  commands[i] = eval('('+commands[i]+')' )
+                }
+
+                // Add our commands to annyang
+              <% if (user.username == 'spddl') { %>
+                annyang.debug()
+              <% } %>
+                annyang.addCommands(commands);
+                annyang.setLanguage('de-DE');
+                annyang.start(); // Start listening.
+              }
+
+              // schalte alles aus was das Mic benutzt
+              navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+              if (navigator.getUserMedia) {
+                 navigator.getUserMedia({ audio: true },
+                    function(stream) {
+                       console.log("[Mic] Accessed the Microphone");
+                    },
+                    function(err) {
+                       console.log("[Mic] The following error occured: " + err.name);
+                    }
+                  );
+              } else {
+                 console.log("[Mic] getUserMedia not supported"); // Browser alt
+              }
+              </script>
+              <% } %>
+
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<% if (!local) { %>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-10984886-7', 'auto');
+  ga('send', 'pageview');
+</script>
+<% } %>
+</body>
+</html>

@@ -1,0 +1,27 @@
+{
+    "fr3ddytv": {
+        "(oh) wow": "function() { socket.emit('annyang',{ event: 'wow' }) }",
+        "fack": "function() { socket.emit('annyang',{ event: 'fack' }) }",
+        "hallo": "function() { socket.emit('annyang',{ event: 'hallo' }) }",
+        "test alarm": "function() { socket.emit('annyang',{ event: 'test alert' }) }",
+        "(Magische) Miesmuschel *ask": "function(ask) { socket.emit('annyang',{ event: 'muschel',frage:ask }) }"
+    },
+    "spddl": {
+        "(oh) wow": "function() { socket.emit('annyang',{ event: 'wow' }) }",
+        "fack": "function() { socket.emit('annyang',{ event: 'fack' }) }",
+        "hallo": "function() { socket.emit('annyang',{ event: 'hallo' }) }",
+        "test alarm": "function() { socket.emit('annyang',{ event: 'test alert' }) }",
+        "(twitch) status": "function() { socket.emit('annyang',{ event: 'status' }) }",
+        "uptime": "function() { socket.emit('annyang',{ event: 'uptime' }) }",
+        "mm": "function() { socket.emit('annyang',{ event: 'mm' }) }",
+        "weather *stadt": "function(stadt) { socket.emit('annyang',{ event: 'weather',parameter:stadt }) }",
+        "last follower": "function() { socket.emit('annyang',{ event: 'lastfollower' }) }",
+        "song": "function() { socket.emit('annyang',{ event: 'song' }) }",
+        "musik": "function() { socket.emit('annyang',{ event: 'song' }) }",
+        "(Magische) Miesmuschel *ask": "function(ask) { socket.emit('annyang',{ event: 'muschel',parameter:ask }) }"
+    },
+    "ladydeaths": {
+        "hallo": "function() { socket.emit('annyang',{ event: 'hallo' }) }",
+        "follow": "function() { socket.emit('annyang',{ event: 'follower' }) }"
+    }
+}

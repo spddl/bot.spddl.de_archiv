@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="SwitchApp">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+  <meta name="theme-color" content="#000">
+  <title>bot.spddl.de</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/css/materialize.min.css">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+  <style>.pointer { cursor: pointer; } .material-icons { font-size: auto; }</style>
+</head>
+<body ng-controller="ViewCtrl">
+  <nav class="blue-grey darken-4" role="navigation">
+    <div class="nav-wrapper container"><a id="logo-container" href="" class="brand-logo hide-on-small-only grey-text text-lighten-4">bot.spddl.de</a>
+
+      <a href="#" class="brand-logo center hide-on-med-and-up">hi <%= user.login %></a>
+      <ul class="right hide-on-med-and-down">
+        <li><span class="white-text">hi <%= user.login %></span></li>
+        <li><a href="/logout" class="waves-effect waves-light btn">Logout</a></li>
+      </ul>
+
+      <ul class="right hide-on-large-only">
+        <li><a href="/logout" class="waves-effect waves-light btn">Logout</a></li>
+      </ul>
+
+    </div>
+  </nav>
+
+  <div class="container">
+    <h3>Du hast Admin Rechte für mehrere Channels</h3>
+
+      <h4 ng-hide="caster | isEmpty">Caster</h4>
+
+      <div class="row" ng-repeat="m in caster" ng-click="join(m.display_name)">
+        <div class="col s12">
+          <div class="card horizontal hoverable waves-effect ">
+            <div class="card-image">
+              <img ng-src="{{m.profile_image_url}}">
+              <span class="card-title">{{m.display_name}}</span>
+            </div>
+            <div class="card-stacked">
+              <div class="card-content">
+                <p class="flow-text"><b>{{m.display_name}}</b><br><br>
+                  followers: {{m.followers}}<br>
+                  views: {{m.views}}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h4 ng-hide="mod | isEmpty">Mod</h4>
+      <div class="row" ng-repeat="m in mod" ng-click="join(m.display_name)">
+        <div class="col s12">
+          <div class="card horizontal hoverable waves-effect ">
+            <div class="card-image">
+              <img ng-src="{{m.profile_image_url || 'https://static-cdn.jtvnw.net/jtv_user_pictures/xarth/404_user_300x300.png'}}"> <!-- <img ng-src="{{m.logo || 'https://static-cdn.jtvnw.net/jtv_user_pictures/xarth/404_user_300x300.png'}}"> -->
+              <span class="card-title">{{m.display_name}}</span>
+            </div>
+            <div class="card-stacked">
+              <div class="card-content">
+                <p class="flow-text"><b>{{m.display_name}}</b><br><br>
+                  followers: {{m.followers}}<br>
+                  views: {{m.views}}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+</div>
+
+<script src="//code.jquery.com/jquery-2.2.1.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.9/angular.min.js"></script>
+
+<script type="text/javascript">
+// AngularJS
+'use strict'
+var app = angular.module('SwitchApp', [])
+app.filter('isEmpty', function () {
+  let bar
+  return function (obj) {
+      for (bar in obj) {
+          if (obj.hasOwnProperty(bar)) {
+              return false
+          }
+      }
+      return true
+  }
+})
+function ViewCtrl($timeout, $scope, $window, $http) {
+
+  function grabpic (name, type) {
+    $http({
+      method: 'GET',
+      url: 'https://bot.spddl.de/helix/users/' + name,
+    }).
+    success(function(data, status, headers, config) {
+      $scope[type][name] = data
+    }).
+    error(function(data, status, headers, config) {
+      console.error({ data, status, headers, config })
+      // if (status === 429) {
+      // }
+    })
+  }
+
+  $scope.join = function(name) {
+    <% if (local) { %>
+    $window.location.href = "http://" + $window.location.host + "/" + name
+    <% } else { %>
+    $window.location.href = "https://" + $window.location.host + "/" + name
+    <% } %>
+  }
+
+  $timeout(function () {
+      $scope.swwitch = {}
+      $scope.swwitch = <%- JSON.stringify(swwitch) %>
+      $scope.mod = {}
+      angular.forEach($scope.swwitch.mod, function(v, key) {
+        grabpic(v.substr(1), 'mod')
+      })
+      $scope.caster = {}
+      angular.forEach($scope.swwitch.caster, function(v, key) {
+        grabpic(v.substr(1), 'caster')
+      })
+    }, 10)
+}
+</script>
+</body>
+</html>

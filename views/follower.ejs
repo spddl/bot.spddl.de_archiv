@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1, minimal-ui">
+  <link rel="shortcut icon" href="/lib/favicon.ico">
+  <link rel="stylesheet" href="/lib/follower/css">
+  <link rel="stylesheet" href="/lib/follower/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.1/animate.min.css">
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/async/1.5.0/async.min.js'></script>
+  <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+  <script>
+  <% if (local) { %> var socket = io.connect("/follower/<%= user %>")<% } else { %> var socket = io.connect("https://bot.spddl.de/follower/<%= user %>")<% } %>
+  </script>
+</head>
+<body>
+<header class="site__header island promo">
+  <div class="wrap">
+    <h1 id="message"><span id="animationText" style="display: block" class="site__title mega"></span></h1>
+    <h2><span id="answer" class="beta subhead"></span></h2>
+  </div>
+</header>
+
+<audio id="notification" preload="auto">
+  <source volume="0.1" src="/lib/follower/notification/sound1.mp3">
+</audio>
+
+<script src='https://code.responsivevoice.org/responsivevoice.js'></script>
+<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+<script>
+try {
+
+  function shuffle(array) {
+    var currentIndex = array.length, temporaryValue, randomIndex;
+
+    // While there remain elements to shuffle...
+    while (0 !== currentIndex) {
+
+      // Pick a remaining element...
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex -= 1;
+
+      // And swap it with the current element.
+      temporaryValue = array[currentIndex];
+      array[currentIndex] = array[randomIndex];
+      array[randomIndex] = temporaryValue;
+    }
+    return array;
+  }
+
+  function testAnim(id, ani) {
+    $(id).removeClass().addClass(ani + ' animated').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function() {
+      $(this).removeClass();
+    });
+  };
+
+  function testAnimend(id, ani) {
+    $(id).removeClass().addClass(ani + ' animated').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function() {});
+  };
+  var Attention = ["bounce", "flash", "pulse", "rubberBand", "shake", "swing", "tada", "wobble", "jello"];
+
+  function voice(data, callback) {
+    responsiveVoice.speak(data.text, data.lang, {
+      volume: data.volume,
+      pitch: data.pitch,
+      rate: data.rate,
+      onstart: function() {},
+      onend: function() {
+        callback();
+      }
+    });
+  }
+
+  var q = async.queue(function(data, callback) {
+
+      //voice(data, function() {
+      var arr = [2, 11, 37, 42];
+      shuffle(arr);
+
+      $('#animationText').html(data.text);
+      testAnim('#message', shuffle(["fadeIn","fadeInDown","fadeInDownBig","fadeInLeft","fadeInLeftBig","fadeInRight","fadeInRightBig","fadeInUp","fadeInUpBig",])[0])
+
+        $('#answer').text('thanks for following');
+        testAnim('#answer', shuffle(["bounceIn","bounceInDown","bounceInLeft","bounceInRight","bounceInUp","fadeIn","fadeInDown","fadeInDownBig","fadeInLeft","fadeInLeftBig","fadeInRight","fadeInRightBig","fadeInUp","fadeInUpBig","flipInX","flipInY","lightSpeedIn","rotateIn","rotateInDownLeft","rotateInDownRight","rotateInUpLeft","rotateInUpRight","slideInUp","slideInDown","slideInLeft","slideInRight","zoomIn","zoomInDown","zoomInLeft","zoomInRight","zoomInUp"])[0])
+
+          //shuffle(["bounceIn","bounceInDown","bounceInLeft","bounceInRight","bounceInUp","fadeIn","fadeInDown","fadeInDownBig","fadeInLeft","fadeInLeftBig","fadeInRight","fadeInRightBig","fadeInUp","fadeInUpBig","flipInX","flipInY","lightSpeedIn","rotateIn","rotateInDownLeft","rotateInDownRight","rotateInUpLeft","rotateInUpRight","slideInUp","slideInDown","slideInLeft","slideInRight","zoomIn","zoomInDown","zoomInLeft","zoomInRight","zoomInUp"])[0])
+
+
+        //$('#' + antwort).one("ended", function() {
+          setTimeout(function() {
+            testAnimend('#answer', 'fadeOut')
+            setTimeout(function() {
+              callback()
+            }, 1500);
+          }, 2500);
+
+          setTimeout(function() {
+            testAnimend('#message', 'zoomOut')
+            //testAnimend('#animationText', 'zoomOut')
+          }, 2000);
+        //});
+      //})
+
+  }, 1);
+
+  $(document).ready(function() {
+    console.log('ready');
+    if (!responsiveVoice.voiceSupport()){console.log('kein voiceSupport')}
+
+    <% if (titel) { %>
+      $('#animationText').text("<%= titel %>");
+    <% } else {%>
+      $('#animationText').text('hello <%= user %>');
+      $('#answer').text('hello <%= user %>');
+    <% } %>
+
+    testAnim('#message', shuffle(["fadeIn","fadeInDown","fadeInDownBig","fadeInLeft","fadeInLeftBig","fadeInRight","fadeInRightBig","fadeInUp","fadeInUpBig",])[0])
+    //testAnim('#animationText', 'zoomIn')
+    testAnim('#answer', shuffle(["fadeIn","fadeInDown","fadeInDownBig","fadeInLeft","fadeInLeftBig","fadeInRight","fadeInRightBig","fadeInUp","fadeInUpBig",])[0]) //////////////
+    setTimeout(function() {
+      testAnimend('#message', 'zoomOut')
+      //testAnimend('#animationText', 'zoomOut')
+      testAnimend('#answer', 'fadeOut')
+    }, 1500);
+
+    socket.on('incomingmsg', function(data) {
+      console.log(data);
+      q.push(data, function(err) {
+        if (err) console.log('err ' + err);
+      });
+    });
+    socket.on('error', function() {
+      data = JSON.parse('{"text": "error","emotes": "", "lang": "UK English Male","volume": 1}');
+      q.push(data, function(err) {
+        if (err) console.log('err ' + err);
+      });
+    });
+    socket.on('disconnected', function() {
+      data = JSON.parse('{"text": "disconnected","emotes": "", "lang": "UK English Male","volume": 1}');
+      q.push(data, function(err) {
+        if (err) console.log('err ' + err);
+      });
+    });
+
+  });
+
+} catch(err) {
+  socket.emit('clienterror', { err: err })
+  location.reload(true)
+} // Error handle
+</script>
+</body></html>

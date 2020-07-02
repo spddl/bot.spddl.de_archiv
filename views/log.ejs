@@ -1,0 +1,293 @@
+<!doctype html><html><head>
+<meta charset="utf-8">
+<title>Log - <%= user.username %></title>
+<link rel="shortcut icon" href="/lib/favicon.ico">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css">
+<script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0-rc.2/angular.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0-rc.2/angular-sanitize.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0-rc.2/angular-animate.js"></script>
+<script>
+<% if (local) { %>
+	var socketfollower=io.connect("/follower/<%= user.username %>")
+	var socketsubscriber=io.connect("/subscriber/<%= user.username %>")
+	var socketinfo=io.connect("/info/<%= user.username %>")
+	var socketmagicconchshell=io.connect("/magicconchshell/<%= user.username %>")
+	var socketsubmit=io.connect("/submit/<%= user.username %>")
+<% } else { %>
+	var socketfollower=io.connect("https://bot.spddl.de/follower/<%= user.username %>")
+	var socketsubscriber=io.connect("https://bot.spddl.de/subscriber/<%= user.username %>")
+	var socketinfo=io.connect("https://bot.spddl.de/info/<%= user.username %>")
+	var socketmagicconchshell=io.connect("https://bot.spddl.de/magicconchshell/<%= user.username %>")
+	var socketsubmit=io.connect("https://bot.spddl.de/submit/<%= user.username %>")
+<% } %>
+</script>
+<style>
+	blockquote{ border-left: 5px solid #263238; }
+	img { vertical-align: middle; }
+
+	.Subscriber.ng-enter {
+	  -webkit-transition: 4s;transition:4s ease-out all;
+		color: #31b0d5;
+	}
+	.Subscriber.ng-enter-active {
+		color: #000;
+	}
+
+	.Follow.ng-enter {
+	  -webkit-transition: 4s;transition:4s ease-out all;
+		color: #00ff00;
+	}
+	.Follow.ng-enter-active {
+		color: #000;
+	}
+
+	.Donation.ng-enter {
+	  -webkit-transition: 4s;transition:4s ease-out all;
+		color: #f0ad4e;
+	}
+	.Donation.ng-enter-active {
+		color: #000;
+	}
+
+	.Magicconchshell.ng-enter {
+	  -webkit-transition: 4s;transition:4s ease-out all;
+		color: #ccc;
+	}
+	.Magicconchshell.ng-enter-active {
+		color: #000;
+	}
+
+	.Submit.ng-enter {
+	  -webkit-transition: 4s;transition:4s ease-out all;
+		color: #d9534f;
+	}
+	.Submit.ng-enter-active {
+		color: #FF0000;
+	}
+</style>
+</head>
+<body ng-app="App">
+
+<nav class="blue-grey darken-4" role="navigation">
+	<div class="nav-wrapper container"><a id="logo-container" href="" class="brand-logo hide-on-med-and-down grey-text text-lighten-4">Log <small>(<%= user.username %>)</small></a>
+		<ul class="right">
+			<li data-typ="stay"><a href="#"><i class="material-icons" onclick="typ('Subscriber')">star</i></a></li>
+			<li data-typ="stay"><a href="#"><i class="material-icons" onclick="typ('Follow')">people</i></a></li>
+			<!--<li data-typ="stay"><a href="#"><i class="material-icons" onclick="typ('Donation')">local_atm</i></a></li> -->
+			<li data-typ="stay"><a href="#"><i class="material-icons" onclick="typ('Magicconchshell')">sentiment_very_satisfied</i></a></li>
+			<li data-typ="stay"><a href="#"><i class="material-icons" onclick="typ('Submit')">plus_one</i></a></li>
+			<li data-typ="stay"><a href="#"><i class="material-icons" onclick="showAll()">clear</i></a></li>
+		</ul>
+	</div>
+</nav>
+
+<div ng-controller="Ctrl">
+	<ul class="collapsible" data-collapsible="expandable" id="chat">
+		<li ng-repeat="row in rows" data-typ="{{row.typ}}" ng-animate="animate" class="{{row.typ}}">
+			<div class="collapsible-header" ng-bind-html="renderHtml('<i class=material-icons>'+row.icon+'</i> <small>'+row.time+'</small> | '+row.msg)"></div>
+			<div class="collapsible-body" ng-bind-html="renderHtml('<blockquote><div class=flow-text><strong>'+row.typ+'</strong>: '+row.msg+'</div><strong>vllt</strong> gibs später noch mehr Infos :P</blockquote>')"></div>
+		</li>
+	</ul>
+</div>
+<p id="b"></p>
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js"></script>
+<script>
+function htmlEntities(html){
+  function it() {
+    return html.map(function(n, i, arr) {
+        if(n.length == 1) {
+          return n.replace(/[\u00A0-\u9999<>\&]/gim, function(i) {
+               return '&#'+i.charCodeAt(0)+';';
+            });
+        }
+        return n;
+      });
+  }
+  var isArray = Array.isArray(html);
+  if(!isArray) {
+    html = html.split('');
+  }
+  html = it(html);
+  if(!isArray) html = html.join('');
+  return html;
+}
+
+function formatEmotes(text, emotes){
+  var splitText = text.split('');
+  for(var i in emotes) {
+    var e = emotes[i];
+    for(var j in e) {
+      var mote = e[j];
+      if(typeof mote == 'string'){
+        mote = mote.split('-');
+        mote = [parseInt(mote[0]), parseInt(mote[1])];
+        var length =  mote[1] - mote[0],
+          	empty = Array.apply(null, new Array(length + 1)).map(function() { return '' });
+        splitText = splitText.slice(0, mote[0]).concat(empty).concat(splitText.slice(mote[1] + 1, splitText.length));
+        splitText.splice(mote[0], 1, '<img class="emoticon" src="https://static-cdn.jtvnw.net/emoticons/v1/' + i + '/1.0">');
+      }
+    }
+  }
+  return htmlEntities(splitText).join('')
+}
+
+var App = angular.module('App',['ngSanitize','ngAnimate']).controller('Ctrl', ['$scope', '$sce', '$location', '$anchorScroll', function ($scope, $sce, $location, $anchorScroll) {
+
+	$scope.rows = [
+		{'time': timeStamp(),'msg':'Hallo <%= user.username %>','css': 'list-group-item','typ': 'Hallo','icon': 'favorite'}, /*
+		{'time': timeStamp(),'msg':'Bbvl0rd subscribed for 2 months in a row!','css': 'list-group-item','typ': 'Subscriber','icon': 'star'},
+		{'time': timeStamp(),'msg':'robbiehehee just subscribed!','css': 'list-group-item','typ': 'Subscriber','icon': 'star'},
+		{'time': timeStamp(),'msg':'NAME new Follower','css': 'list-group-item','typ': 'Follow','icon': 'people'},
+		{'time': timeStamp(),'msg':'Donation 10€','css': 'list-group-item','typ': 'Donation','icon': 'local_atm'},
+		{'time': timeStamp(),'msg':'#Kann ich was zu essen haben?','css': 'list-group-item','typ': 'Magicconchshell','user': 'Spongebob','icon': 'sentiment_very_satisfied'},
+		{'time': timeStamp(),'msg':'Submit 0000-0000-0000-0000','css': 'list-group-item','typ': 'Submit','icon': 'plus_one'} */
+	];
+
+	$scope.gotoBottom = function() {
+	  $location.hash('b');$anchorScroll();
+	};
+/*
+	setTimeout(function(){
+		$scope.rows.push({'time': timeStamp(),'msg':'Bbvl0rd subscribed for 2 months in a row!','css': 'list-group-item','typ': 'Subscriber','icon': 'star'});
+		$scope.$apply();$scope.gotoBottom();
+	}, 1e3);
+	setTimeout(function(){
+		$scope.rows.push({'time': timeStamp(),'msg':'robbiehehee just subscribed!','css': 'list-group-item','typ': 'Subscriber','icon': 'star'});
+		$scope.$apply();$scope.gotoBottom();
+	}, 2e3);
+	setTimeout(function(){
+		$scope.rows.push({'time': timeStamp(),'msg':'NAME new Follower','css': 'list-group-item','typ': 'Follow','icon': 'people'});
+		$scope.$apply();$scope.gotoBottom();
+	}, 3e3);
+*/
+
+	$scope.renderHtml = function(html_code){return $sce.trustAsHtml(html_code)};
+
+		socketfollower.on('incomingmsg', function(data) {
+			//data = data.reverse()
+				console.log(data)
+				if(angular.isArray(data)){
+
+					data.reverse()
+					angular.forEach(data, function(v) {
+						$scope.rows.push({
+							'time': timeStamp(),
+							'msg': 'Follower - '+v.name+' ('+v.created_at+' UTC)',
+							'typ': 'Follow',
+							'icon': 'people'
+						})
+					})
+
+				} else {
+
+					$scope.rows.push({
+						'time': timeStamp(),
+						'msg': 'Follower - '+data,
+						// 'msg': 'Follower - '+data+' ('+data.created_at+' UTC)', TODO
+						'typ': 'Follow',
+						'icon': 'people'
+					});
+
+				}
+
+
+			$scope.$apply()
+			$scope.gotoBottom();
+		})
+
+		socketsubscriber.on('incomingmsg', function(data) {
+			$scope.rows.push({
+				'time': timeStamp(),
+				'msg': 'Subscriber - '+data.user+' '+(data.months+' in a row' || 'NEW'),
+				'typ': 'Subscriber',
+				'icon': 'star'
+			});
+			$scope.$apply()
+			$scope.gotoBottom();
+		})
+
+		socketinfo.on('incomingmsg', function(data){
+			console.log(data)
+			$scope.rows.push({
+				'time': timeStamp(),
+				'msg': 'info - '+data.msg,
+				'typ': 'Subscriber',
+				'icon': 'info_outline'
+			});
+			$scope.$apply()
+			$scope.gotoBottom();
+		})
+
+		socketmagicconchshell.on('incomingmsg', function(data){
+			console.log(data);
+ 			(data.type == 'discord' ? "<img src='/lib/discord-32.png' width='24' alt='discord'>" : "<img src='/lib/twitch-32.png' width='24' alt='twitch'>")
+			if (data.rejected) {
+				$scope.rows.push({
+					'time': timeStamp(),
+					'msg': "MagicConchShell ("+data.debug+') '+data.message,
+					'typ': 'Magicconchshell',
+					'icon': 'sentiment_very_satisfied'
+				})
+			} else {
+				 // (data.username ? "yes" : "no");
+				$scope.rows.push({
+					'time': timeStamp(),
+					'msg': "MagicConchShell "+(data.type == 'discord' ? '<img src="/lib/discord-32.png" width="24" alt="discord">' : '<img src="/lib/twitch-32.png" width="24" alt="twitch">')+' - '+ data.user+': '+formatEmotes(' '+data.text, data.emotes),
+					'typ': 'Magicconchshell',
+					'icon': 'sentiment_very_satisfied'
+				})
+			}
+
+			$scope.$apply()
+			$scope.gotoBottom()
+		})
+
+		socketsubmit.on('incomingmsg', function(data){
+			$scope.rows.push({
+				'time': timeStamp(),
+				'msg': 'Submit - '+data.user+': '+formatEmotes(' '+data.text, data.emotes),
+				'typ': 'Submit',
+				'icon': 'plus_one'
+			});
+			$scope.$apply()
+			$scope.gotoBottom();
+		})
+}]);
+
+function typ(filter) {
+  var discs = document.getElementsByTagName('li');
+  for (var i=0;i<discs.length;i++) {
+    if (discs[i].dataset['typ'] == filter || discs[i].dataset['typ'] == 'stay') {
+      discs[i].style.display = '';
+    } else {
+      discs[i].style.display = "none";
+    }
+  }
+}
+
+function showAll() {
+  var discs = document.getElementsByTagName('li');
+  for (var i=0;i<discs.length;i++) {
+    discs[i].style.display = "";
+  }
+}
+
+function timeStamp() {
+  var now = new Date();
+  var date = [ now.getDate(), now.getMonth() + 1 ];
+  date[0] = date[0] < 10 ? "0" + date[0] : date[0];
+  date[1] = date[1] < 10 ? "0" + date[1] : date[1];
+  var time = [ now.getHours(), now.getMinutes(), now.getSeconds() ];
+  for ( var i = 1; i < 3; i++ ) {
+    if ( time[i] < 10 ) {
+      time[i] = "0" + time[i];
+    }
+  }
+  return date.join(".") + " - " + time.join(":");
+}
+</script></body></html>

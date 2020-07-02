@@ -1,0 +1,414 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Log - <%= user.username %></title>
+<link rel="shortcut icon" href="/lib/favicon.ico">
+<link href='https://fonts.googleapis.com/css?family=Roboto:400,700,300' rel='stylesheet' type='text/css'>
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+<script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.28/angular.min.js"></script> -->
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0-rc.0/angular.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0-rc.0/angular-sanitize.js"></script>
+
+<script>
+if (location.host === 'bot.spddl.de'){
+	var socketfollower=io.connect("https://bot.spddl.de/follower/<%= user.username %>")
+	var socketsubscriber=io.connect("https://bot.spddl.de/subcriber/<%= user.username %>")
+	var socketmagicconchshell=io.connect("https://bot.spddl.de/magicconchshell/<%= user.username %>")
+	var socketsubmit=io.connect("https://bot.spddl.de/submit/<%= user.username %>")
+}else{
+	var socketfollower=io.connect("/follower/<%= user.username %>")
+	var socketsubscriber=io.connect("/subcriber/<%= user.username %>")
+	var socketmagicconchshell=io.connect("/magicconchshell/<%= user.username %>")
+	var socketsubmit=io.connect("/submit/<%= user.username %>")
+}
+</script>
+<style>
+html,body {
+	font-family: 'Roboto', sans-serif;
+	/* background-color: hsla(0, 0%, 12%, 1);
+	color: hsla(0, 0%, 100%, .95); */
+  color: rgba(0, 0, 0, 0.95);
+	font-size: 24px;
+	overflow: auto;
+	margin: 0;
+}
+
+#chat {
+	/*position: absolute;
+	 bottom: 0px; */
+	left: 0;
+	right: 0;
+	/* padding: .5em; */
+	margin: 0;
+}
+.chat-line {
+	-webkit-transition: all 1s ease-in;
+	-moz-transition: all 1s ease-in;
+	-ms-transition: all 1s ease-in;
+	-o-transition: all 1s ease-in;
+	transition: all 1s ease-in;
+}
+.chat-line[data-faded] {
+	opacity: .8;
+}
+.chat-line.chat-action {
+}
+.chat-line.chat-notice {
+	opacity: .7;
+	font-weight: 300;
+}
+.chat-line.chat-notice[data-level] {
+}
+.chat-line.chat-notice[data-level="-4"] {
+	color: hsla(250, 80%, 65%, 1);
+	font-style: italic;
+}
+.chat-line.chat-notice[data-level="-3"] {
+	color: hsla(200, 80%, 50%, 1);
+	font-style: italic;
+}
+.chat-line.chat-notice[data-level="-2"] {
+	color: hsla(160, 80%, 50%, 1);
+	font-style: italic;
+}
+.chat-line.chat-notice[data-level="-1"] {
+	color: hsla(100, 80%, 50%, 1);
+	font-style: italic;
+}
+.chat-line.chat-notice[data-level="1"] {
+	color: hsla(55, 100%, 50%, 1);
+}
+.chat-line.chat-notice[data-level="2"] {
+	color: hsla(30, 100%, 50%, 1);
+	font-weight: 400;
+}
+.chat-line.chat-notice[data-level="3"] {
+	color: hsla(0, 100%, 50%, 1);
+	font-weight: 400;
+}
+.chat-line.chat-notice[data-level="4"] {
+	color: hsla(0, 100%, 50%, 1);
+	font-weight: 700;
+}
+.chat-line.chat-notice[data-faded] {
+	opacity: .3;
+}
+.chat-line.chat-timedout {
+	opacity: .2;
+	font-size: .75em;
+	-webkit-transition: all 100ms ease-in;
+	-moz-transition: all 100ms ease-in;
+	-ms-transition: all 100ms ease-in;
+	-o-transition: all 100ms ease-in;
+	transition: all 100ms ease-in;
+}
+.chat-line.chat-cleared {
+	opacity: .2;
+	font-size: .33em;
+	-webkit-transition: all 100ms ease-in;
+	-moz-transition: all 100ms ease-in;
+	-ms-transition: all 100ms ease-in;
+	-o-transition: all 100ms ease-in;
+	transition: all 100ms ease-in;
+}
+.chat-channel {
+	margin-right: .375em;
+	opacity: .6;
+	font-weight: 300;
+}
+.chat-name {
+	font-weight: 700;
+}
+.chat-colon {
+	margin-right: .375em;
+	opacity: .85;
+}
+.chat-line:not(.chat-action) .chat-colon:after {
+	content: ':';
+}
+.chat-message {
+	font-weight: 400;
+}
+.chat-line:not(.chat-action) .chat-message {
+	color: inherit !important;
+}
+
+.emoticon {
+	background-position: center center;
+	background-repeat: no-repeat;
+	margin: -5px 0;
+	display: inline-block;
+	vertical-align: middle !important;
+	height: 1.5em;
+}
+
+.chat-badges {
+	margin-right: .125em;
+}
+.chat-badges > div {
+	margin-bottom: 1px;
+	border-radius: 2px;
+	height: 1em;
+	min-width: 1em;
+	display: inline-block;
+	vertical-align: middle;
+	background-size: contain;
+	background-repeat: no-repeat;
+	margin-right: .3em;
+}
+
+.chat-badge-mod {
+	background-color: hsl(105, 89%, 36%);
+	background-image: url(http://www.twitch.tv/images/xarth/badge_mod.svg);
+}
+.chat-badge-turbo {
+	background-color: hsl(261, 43%, 45%);
+	background-image: url(http://www.twitch.tv/images/xarth/badge_turbo.svg);
+}
+.chat-badge-broadcaster {
+	background-color: hsl(0, 81%, 50%);
+	background-image: url(http://www.twitch.tv/images/xarth/badge_broadcaster.svg);
+}
+.chat-badge-admin {
+	background-color: hsl(40, 96%, 54%);
+	background-image: url(http://www.twitch.tv/images/xarth/badge_admin.svg);
+}
+.chat-badge-staff {
+	background-color: hsl(268, 55%, 13%);
+	background-image: url(http://www.twitch.tv/images/xarth/badge_staff.svg);
+}
+.chat-badge-subscriber {
+}
+.chat-badge-bot {
+	background-image: url(https://cdn.betterttv.net/tags/bot.png);
+}
+
+[class*="chat-delete"] {
+}
+.chat-delete-timeout {
+}
+.chat-delete-clear {
+}
+
+[class*="chat-hosting"] {
+}
+.chat-hosting-yes {
+}
+.chat-hosting-no {
+}
+
+[class*="chat-connection"] {
+}
+[class*="chat-connection-good"] {
+}
+[class*="chat-connection-bad"] {
+}
+.chat-connection-good-connecting {
+}
+.chat-connection-good-logon {
+}
+.chat-connection-good-connected {
+}
+.chat-connection-good-reconnect {
+}
+.chat-connection-bad-fail {
+}
+.chat-connection-bad-disconnected {
+}
+
+[class*="chat-room"] {
+	font-size: .5em;
+}
+.chat-room-join {
+}
+.chat-room-part {
+}
+
+.chat-crash {
+}
+.special {
+  color: cyan;
+}
+</style>
+</head>
+<body ng-app="App">
+  <nav class="navbar navbar-default navbar-fixed-top">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <!-- <a class="navbar-brand" href="#">Log</a> -->
+			<p class="navbar-text">Log   <small>(<%= user.username %>)</small></p>
+    </div>
+
+		<div class="nav navbar-nav navbar-brand navbar-right">
+			<button type="button" class="btn btn-default" onclick="showAll()">All</button>
+			<button type="button" class="btn btn-success" onclick="typ('follower')">Follower</button>
+			<button type="button" class="btn btn-info" onclick="typ('subscriber')">Subscriber</button>
+			<button type="button" class="btn btn-warning" onclick="typ('donation')">Donation</button>
+			<button type="button" class="btn btn-danger" onclick="typ('submit')">Submit</button>
+			<button type="button" class="btn btn-default" onclick="typ('magicconchshell')">magicconchshell</button>
+		</div>
+  </div>
+</nav>
+<br><br>
+<div ng-controller="Ctrl">
+	<ul class="list-group" id="chat" ng-repeat="row in rows" >
+		<li ng-class="row.css" data-typ={{row.typ}} ng-bind-html="renderHtml('<small>'+row.time+'</small> | '+row.msg)"></li>
+	</ul>
+</div><div id="bottom"></div>
+
+<script>
+function htmlEntities(html){
+  function it() {
+    return html.map(function(n, i, arr) {
+        if(n.length == 1) {
+          return n.replace(/[\u00A0-\u9999<>\&]/gim, function(i) {
+               return '&#'+i.charCodeAt(0)+';';
+            });
+        }
+        return n;
+      });
+  }
+  var isArray = Array.isArray(html);
+  if(!isArray) {
+    html = html.split('');
+  }
+  html = it(html);
+  if(!isArray) html = html.join('');
+  return html;
+}
+
+function formatEmotes(text, emotes){
+  var splitText = text.split('');
+	console.log('length splitText '+ splitText.length);
+  for(var i in emotes) {
+    var e = emotes[i];
+    for(var j in e) {
+      var mote = e[j];
+      if(typeof mote == 'string'){
+        mote = mote.split('-');
+        mote = [parseInt(mote[0]), parseInt(mote[1])];
+        var length =  mote[1] - mote[0],
+          	empty = Array.apply(null, new Array(length + 1)).map(function() { return '' });
+        splitText = splitText.slice(0, mote[0]).concat(empty).concat(splitText.slice(mote[1] + 1, splitText.length));
+        splitText.splice(mote[0], 1, '<img class="emoticon" src="https://static-cdn.jtvnw.net/emoticons/v1/' + i + '/3.0">');
+      }
+    }
+  }
+  return htmlEntities(splitText).join('')
+}
+
+var App = angular.module('App',['ngSanitize']).controller('Ctrl', ['$scope', '$sce', '$location', '$anchorScroll', function ($scope, $sce, $location, $anchorScroll) {
+	$scope.rows = [{'time': new Date().toISOString().replace(/z|t/gi,' ').trim(),'msg':'Hallo <%= user.username %>','css': 'list-group-item','typ': 'hello'}];
+
+	// "emotes":"62835:59-69/25:7-11/62834:71-76/70433:78-86"
+  // "emote":{"25":["7-11"],"62834":["71-76"],"62835":["59-69"],"70433":["78-86"]}
+
+	$scope.renderHtml = function(html_code)
+	{return $sce.trustAsHtml(html_code)};
+
+		socketfollower.on('incomingmsg', function(data){
+			data = data.reverse()
+			angular.forEach(data, function(v) {
+				$scope.rows.push({
+					'time': new Date().toISOString().replace(/z|t/gi,' ').trim(),
+				  'msg': 'Follower - '+v.name+' ('+v.created_at+')',
+					'css': 'list-group-item list-group-item-success',
+					'typ': 'follower'
+				});
+			});
+			/*$scope.rows.push({
+				'time': new Date().toISOString().replace(/z|t/gi,' ').trim(),
+			  'msg': 'Follower - '+data.text,
+				'css': 'list-group-item list-group-item-success',
+				'typ': 'follower'
+			});*/
+			$scope.$apply()
+			$location.hash('bottom')
+			$anchorScroll();
+		})
+
+		socketsubscriber.on('incomingmsg', function(data){
+			console.log(data);
+
+			$scope.rows.push({
+				'time': new Date().toISOString().replace(/z|t/gi,' ').trim(),
+				'msg': 'Subscriber - '+data.user+' '+(months || 1),
+				'css': 'list-group-item list-group-item-info',
+				'typ': 'subscriber'
+			});
+			$scope.$apply()
+			$location.hash('bottom')
+			$anchorScroll();
+		})
+
+		socketmagicconchshell.on('incomingmsg', function(data){
+
+		console.log('data '+formatEmotes(' '+data.text, data.emotes));
+
+ 		(data.type == 'discord' ? "<img src='/lib/discord-32.png' width='32' alt='discord'>" : "<img src='/lib/twitch-32.png' width='32' alt='twitch'>")
+
+			if (data.rejected) {
+				$scope.rows.push({
+					'time': new Date().toISOString().replace(/z|t/gi,' ').trim(),
+					'msg': "MagicConchShell ("+data.debug+') '+data.message,
+					'css': 'list-group-item list-group-item',
+					'typ': 'magicconchshell'
+				});
+			} else {
+				$scope.rows.push({
+					'time': new Date().toISOString().replace(/z|t/gi,' ').trim(),
+					'msg': "MagicConchShell "+(data.type == 'discord' ? '<img src="/lib/discord-32.png" width="32" alt="discord">' : '<img src="/lib/twitch-32.png" width="32" alt="twitch">')+' - '+data.user+' '+formatEmotes(' '+data.text, data.emotes),
+					'css': 'list-group-item list-group-item',
+					'typ': 'magicconchshell'
+				});
+			}
+
+			$scope.$apply()
+			$location.hash('bottom')
+			$anchorScroll();
+		})
+
+		socketsubmit.on('incomingmsg', function(data){
+			$scope.rows.push({
+				'time': new Date().toISOString().replace(/z|t/gi,' ').trim(),
+				'msg': 'Submit - '+data.user+': '+formatEmotes(' '+data.text, data.emotes),
+				'css': 'list-group-item list-group-item-danger',
+				'typ': 'submit'
+			});
+			$scope.$apply()
+			$location.hash('bottom')
+			$anchorScroll();
+		})
+}]);
+</script>
+<script>
+		function typ(filter) {
+			// get all albums
+			var discs = document.getElementsByTagName('li');
+
+			// loop through albums
+			for (var i=0;i<discs.length;i++) {
+
+				// check against the attribute data-release-year
+				if (discs[i].dataset['typ'] == filter || discs[i].dataset['typ'] == 'stick') {
+					discs[i].style.display = '';
+				} else {
+					discs[i].style.display = "none";
+				}
+			}
+		}
+
+		function showAll() {
+			var discs = document.getElementsByTagName('li');
+			for (var i=0;i<discs.length;i++) {
+					discs[i].style.display = "";
+			}
+		}
+</script>
+</body>
+</html>

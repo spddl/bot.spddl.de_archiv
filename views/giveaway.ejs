@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+<!-- saved from url=(0025)http://cases.goaggro.com/ -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta charset="utf-8">
+		<meta name="theme-color" content="#000">
+		<link rel="shortcut icon" href="/lib/favicon.ico">
+		<title>Case Simulator</title>
+		<script src="https://code.jquery.com/jquery-1.12.2.min.js"></script>
+		<script src="https://code.angularjs.org/1.3.16/angular.min.js"></script>
+		<script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+		<script>
+			/*
+				Mil-spec (Blue) Drops: 78.8% (287)
+				Restricted (Purple) Drops: 16.2% (59)
+				Classified (Pink) Drops: 2.5% (9)
+				Covert (Orange) Drops: 1.6% (6)
+			*/
+				if (location.host === 'bot.spddl.de'){
+		      var socket=io.connect("https://bot.spddl.de/giveaway/<%= user.username %>", {
+		                'connect timeout': 5000, // 5 seconds should be enough
+		                'try multiple transports': true,
+		                'reconnect': true,
+		                'reconnection delay': 500,
+		                'reconnection limit': 5000,
+		                'max reconnection attempts': 3,
+		                'sync disconnect on unload': false,
+		                'auto connect': true,
+		                'flash policy port': 10843,
+		                'force new connection': true //IMP: to be able to re-connect using our own logic
+		            });
+		    }else{
+		      var socket=io.connect("/giveaway/<%= user.username %>", {
+		                'connect timeout': 5000, // 5 seconds should be enough
+		                'try multiple transports': true,
+		                'reconnect': true,
+		                'reconnection delay': 500,
+		                'reconnection limit': 5000,
+		                'max reconnection attempts': 3,
+		                'sync disconnect on unload': false,
+		                'auto connect': true,
+		                'flash policy port': 10843,
+		                'force new connection': true //IMP: to be able to re-connect using our own logic
+		            });
+		    }
+				//console.dir('give <%- JSON.stringify(giveaway) %>');
+				//console.dir('user <%- JSON.stringify(user) %>');
+		</script>
+		<style type="text/css">
+		.hidden {
+			display: none;
+		}
+		</style>
+		</head>
+	<body onload="init()" id="body" ng-app="App" ng-controller="Ctrl">
+		<div style="border:0;margin:8px auto;padding:4px;height:90px;width:728px"></div>
+		<div id="mainContainer">
+			<div id="headContainer">
+					<div id="TwitchContainer">
+						<% if (user._json && user._json.logo) { %>
+							<img id='logo' src='<%= user._json.logo %>' height="60" />
+						<% }else{ %>
+							<img id='logo' src='/lib/giveaway/404_user.png' height="60" />
+						<% } %>
+					</div>
+			</div>
+
+			<div id="topContainer">
+				<%#<!-- <div id="buttonOpen" onclick="caseOpen()" ng-click="startGiveaway()" class="authenticated hidden" style="visibility: visible;"> -->%>
+				<% if (user) { %>
+				<div id="buttonOpen" onclick="caseOpen()" ng-click="startGiveaway()" class="authenticated">
+					Giveaway
+				</div>
+				<% } %>
+				<div id="scrollerContainer">
+					<canvas id="aCanvas" width="372px" height="144px"></canvas>
+				</div>
+				<div id="GAuser">Giveaway Teilnehmer: {{users.length}}</div><br>
+				<%#<!-- <div id="buttonTwitch">
+					<img src="connect_dark.png" class="twitch-connect authenticate hidden" href="#" />
+				</div> -->%>
+			</div>
+			<div id="caseContainer">
+					<div>
+							<br><br><br>
+								<table width='740'>
+								    <thead>
+								        <th>
+								            Name
+								        </th>
+								        <th>
+								            Message
+								        </th>
+								    </thead>
+								    <tbody ng-repeat="user in users">
+								        <tr>
+								            <td>
+															{{user.username}}
+								            </td>
+								            <td>
+															{{user.msg}}
+								            </td>
+								        </tr>
+								    </tbody>
+								</table>
+					</div>
+
+			</div>
+		</div>
+		<br>
+		<script>
+		'use strict';
+		angular.module("App", ['services']).controller("Ctrl", function($scope, socket){
+			$scope.myfunction = function (){
+				return $scope.users
+			};
+
+			$scope.users = <%- JSON.stringify(giveaway) %>
+			 socket.on('giveaway_start', function(go){
+				 //console.log('Socket.on: giveaway_start '+go)
+				 //console.dir('Socket.on: giveaway_start  '+JSON.stringify(go, undefined, 2));
+
+				 io('/giveaway/spddl_bot').emit('incomingmsg', {'text': Math.random().toString(36).replace(/[^a-z]+/g, ''), 'lang': Math.random().toString(36).replace(/[^a-z]+/g, '')});
+			 })
+
+			 socket.on('giveaway_array', function(data) {
+				 $scope.users = data;
+			 });
+
+			 socket.on('incomingmsg', function(data) {
+						if ($scope.users.length == 0) {
+							$scope.users = new Array();
+							$scope.users.push(data);
+						}else{
+							$scope.users.unshift(data);
+						}
+				 console.log('incomingmsg '+data.username+' > '+data.logo);
+			 });
+
+			$scope.startGiveaway = function(){
+				//console.log(socket.users);
+				//socket.emit('startGiveaway', '<%= user.username %>')
+			};
+/*
+			$scope.endGiveaway = function(){
+					socket.emit('endGiveaway')
+			};
+*/
+		/*
+			setInterval(function(){
+				io('/giveaway/spddl_bot').emit('incomingmsg', {'text': Math.random().toString(36).replace(/[^a-z]+/g, ''), 'lang': Math.random().toString(36).replace(/[^a-z]+/g, '')});
+			},1000); // 10sek
+		*/
+
+		});
+		angular.module('services', []).
+			factory('socket', function($rootScope){
+				setTimeout(function(){
+					console.log('socket check ', socket.connected+' '+socket.nsp);
+				}, 1000);
+						return {
+							on: function(eventName, callback){
+									socket.on(eventName, function(){
+											var args = arguments;
+											$rootScope.$apply(function(){
+													callback.apply(socket, args);
+											});
+									});
+							},
+							emit: function(eventName, data, callback){
+									if(typeof data == 'function'){
+											callback = data;
+											data = {};
+									}
+									socket.emit(eventName, data, function(){
+											var args = arguments;
+											$rootScope.$apply(function(){
+													if(callback) {
+															callback.apply(socket, args);
+													}
+											});
+									});
+							},
+							emitAndListen: function(eventName, data, callback){
+									this.emit(eventName, data, callback);
+									this.on(eventName, callback);
+							}
+					};
+			});
+
+//////////////////////////
+//
+//
+//////////////////////////
+			var cCount;
+			var iCount;
+
+			var destination;
+			var kVar;
+
+			var contentsArray;
+
+			var curCase = 0;
+
+			var gameState = 0;
+			var itemArray = [];
+
+			var rarityArray = [];
+
+			var rarities = ["milspec", "restricted", "classified", "covert", "rare"];
+			var rarities2 = ["high", "remarkable", "exotic"];
+
+			var openButton = document.getElementById("buttonOpen");
+			var scrollerDiv = document.getElementById("scrollerContainer");
+
+			var canvas = document.getElementById("aCanvas");
+			var ctx = canvas.getContext("2d");
+
+			var canvasOver;
+			var canvasHighest;
+
+			var curCaseImg = new Image();
+
+			var x;
+			var xVel;
+			var xAcc = 0.10;
+
+			var prevTime;
+
+			var itemReveal;
+			var itemOpen;
+			var itemScroll;
+
+			var itemSet;
+
+			var caseContainer = document.getElementById('caseContainer');
+			function init() {
+				//console.log('init()')
+				cCount = 0;
+				iCount = caseURLs.length + rarities.length + 1 + 1;
+				//curCaseImg.src = "http://cdn.steamcommunity.com/economy/image/" + caseURLs[curCase] + "100fx100f";
+
+				<% if (user._json && user._json.logo) { %>
+					curCaseImg.src = '<%= user._json.logo %>';
+				<% }else{ %>
+					curCaseImg.src = '/lib/giveaway/404_user.png';
+				<% } %>
+
+				/*for(var i = 0; i < caseURLs.length; i++) {
+					var img = document.createElement('img');
+					img.height = "100";
+					img.width = "100";
+					img.src = "http://cdn.steamcommunity.com/economy/image/" + caseURLs[i] + "100fx100f";
+					img.data = i;
+					img.onload = function() { */
+						cCount++;
+					/*	if(cCount == iCount) {
+							loadImages(curCase);
+						}
+					}
+					img.onclick = function() {
+						selectCase(this.data);
+					}
+				//	caseContainer.appendChild(img);
+
+			} */
+				for(var i = 0; i < rarities.length; i++) {
+					rarityArray[i] = new Image();
+					rarityArray[i].src = "/lib/giveaway/"+rarities[i]+".png";
+					rarityArray[i].onload = function() {
+						cCount++;
+						if(cCount == iCount) {
+							gameState = 2;
+							openButton.style.visibility = "visible";
+							//caseReady();
+						}
+					}
+				}
+				canvasOver = new Image();
+				canvasOver.src = "/lib/giveaway/canvasOver.png";
+				canvasOver.onload = function() {
+					cCount++;
+					if(cCount == iCount) {
+						//console.log('loadImages(curCase);')
+						gameState = 2;
+						openButton.style.visibility = "visible";
+						//caseReady();
+//						loadImages(curCase);
+					}
+				}
+
+				canvasHighest = new Image();
+				canvasHighest.src = "/lib/giveaway/canvasHighest.png";
+				canvasHighest.onload = function() {
+					cCount++;
+					//if Giveaway gestartet wird || wenn jmd bei betritt
+					if(cCount == iCount) {
+						//console.log('loadImages(curCase);')
+						gameState = 2;
+						openButton.style.visibility = "visible";
+						//caseReady();
+						//loadImages(curCase);
+					}
+
+				}
+
+				itemReveal = new Audio();
+				itemReveal.src = "/lib/giveaway/item_reveal.wav";
+
+				itemReveal.volume = 0.2;
+
+				itemOpen = new Audio();
+				itemOpen.src = "/lib/giveaway/crate_open.wav";
+
+				itemOpen.volume = 0.2;
+
+
+				itemScroll = new Audio();
+				itemScroll.src = "/lib/giveaway/crate_scroll.wav";
+
+				itemScroll.volume = 0.2;
+
+				setInterval(draw, 15);
+			}
+
+			function loadImages_reload(){
+					var itemSet =	angular.element(document.getElementById('body')).scope().myfunction()
+					//console.log(itemSet);
+					xVel = 0.0;
+					itemArray = [];
+
+					cCount = 0;
+					iCount = itemSet.length;
+
+					if(iCount !== 0) {
+
+						console.log('itemSet.length '+ itemSet.length); // 14
+
+						for(var i = 0; i < itemSet.length; i++) {
+
+							itemArray[i] = Array();
+							itemArray[i][0] = new Image();
+
+							//console.log('itemSet['+i+'].logo '+itemSet[i].logo);
+
+							//if(itemSet[i].logo.indexOf('http://bot.spddl.de/giveaway/404_user.png') !== -1){
+							if(itemSet[i].logo == null){
+								//itemArray[i][0].src = "http://bot.spddl.de/lib/giveaway/404_user.png";
+								itemArray[i][0].src = "/lib/giveaway/404_user.png";
+								//itemArray[i][0].src = "http://static-cdn.jtvnw.net/jtv_user_pictures/"+itemSet[0].logo;
+							} else {
+								//console.log('NICHT NULL '+itemSet[i].logo);
+								//itemArray[i][0].src = "/lib/giveaway/404_user.png";
+								itemArray[i][0].src = "https://static-cdn.jtvnw.net/jtv_user_pictures/"+itemSet[i].logo;
+
+							}
+
+							itemSet[i][2] = getRarity()
+
+							if(rarities2.indexOf(itemSet[i][2]) != -1) {
+								itemSet[i][2] = rarities[rarities2.indexOf(itemSet[i][2])];
+							}
+
+							itemArray[i][1] = rarityArray[rarities.indexOf(itemSet[i][2])]; // Wert milspec
+							itemArray[i][2] = itemSet[i][2];
+							//itemArray[i][3] = '0';
+							itemArray[i][3] = i;
+							itemArray[i][4] = itemSet[i].username;
+
+							//console.log(itemSet[0].logo+' '+itemArray[i][4]);
+						/*	console.log('itemArray[i][1] '+itemArray[i][1]) // [object HTMLImageElement]
+								console.log('itemArray[i][2] '+itemArray[i][2]) // milspec // getItemOfRarity
+								console.log('itemArray[i][3] '+itemArray[i][3]) //.index 1 (aufsteigend)
+								console.log('itemArray[i][4] '+itemArray[i][4]) */ //.name Murky (name)
+						}
+				} else {
+					console.log('noch hat niemand teilgenommen')
+
+
+
+					return; // break!
+					caseReady();
+					return // break!
+				}
+				//console.log('datadatadata123  '+itemSet.length)
+			}
+
+			function caseReady() {
+				//console.log('caseReady')
+				gameState = 2;
+				openButton.style.visibility = "visible";
+				caseOpen();
+			}
+			function draw() {
+				var curSec = (new Date).getSeconds();
+				var curTime = (new Date).getTime();
+
+				var timeDiff = (curTime - prevTime) / 30;
+				var xPrev = x;
+				x -= xVel * timeDiff;
+				xVel -= xAcc * timeDiff;
+
+				if(Math.abs(x) % 125 < Math.abs(xPrev) % 125) {
+					itemScroll.pause();
+					itemScroll.currentTime = 0;
+					itemScroll.play();
+				}
+
+				if(xVel < 0) {
+					xVel = 0;
+				}
+				if(gameState == 3 && xVel == 0) {
+					gameState = 4;
+					itemReveal.pause();
+					itemReveal.currentTime = 0;
+					itemReveal.play();
+
+					createDisplay();
+				}
+
+				prevTime = curTime;
+
+				ctx.clearRect(0,0,canvas.width, canvas.height);
+
+				ctx.fillStyle = "#090c0f";
+				ctx.fillRect(0,0,canvas.width, canvas.height);
+
+				switch(gameState) {
+					case 0: 		//Startup
+						ctx.save();
+						ctx.textAlign = "center";
+						ctx.textBaseline = "middle";
+						ctx.fillStyle = "white";
+						ctx.fillText("Initializing...", canvas.width / 2, canvas.height / 2);
+						if(curSec % 8 == 0) {
+							ctx.fillText("|", canvas.width / 2, canvas.height / 2 + 22);
+						} else if (curSec % 8 == 1) {
+							ctx.fillText("/", canvas.width / 2, canvas.height / 2 + 22);
+						} else if (curSec % 8 == 2) {
+							ctx.fillText("---", canvas.width / 2, canvas.height / 2 + 22);
+						} else if (curSec % 8 == 3) {
+							ctx.fillText("\\", canvas.width / 2, canvas.height / 2 + 22);
+						} else if (curSec % 8 == 4) {
+							ctx.fillText("|", canvas.width / 2, canvas.height / 2 + 22);
+						} else if (curSec % 8 == 5) {
+							ctx.fillText("/", canvas.width / 2, canvas.height / 2 + 22);
+						} else if (curSec % 8 == 6) {
+							ctx.fillText("---", canvas.width / 2, canvas.height / 2 + 22);
+						} else if (curSec % 8 == 7) {
+							ctx.fillText("\\", canvas.width / 2, canvas.height / 2 + 22);
+						}
+						ctx.fillText(Math.round(parseInt(cCount) / parseInt(iCount) * 100) + "%",canvas.width / 2, canvas.height / 2 + 44);
+						ctx.restore();
+						break;
+					case 1:
+						ctx.save();
+						ctx.textAlign = "center";
+						ctx.textBaseline = "middle";
+						ctx.fillStyle = "white";
+						ctx.fillText("Loading...", canvas.width / 2, canvas.height / 2);
+						ctx.fillText(cases[curCase], canvas.width / 2, canvas.height / 2 + 22);
+						ctx.fillText(Math.round(parseInt(cCount) / parseInt(iCount) * 100) + "%", canvas.width / 2, canvas.height / 2 + 44);
+						ctx.restore();
+						break;
+					case 2:
+						ctx.drawImage(curCaseImg, canvas.width / 2 - curCaseImg.width/5,0,128, 128);
+						//ctx.drawImage(curCaseImg, canvas.width / 2 - curCaseImg.width / 2,  canvas.height / 2 - curCaseImg.height / 2);
+						break;
+					case 3:
+						ctx.save();
+						ctx.fillStyle = "black";
+						for(var i = 0; i < contentsArray.length; i++) {
+							ctx.drawImage(contentsArray[i][1], 372/2 + x + 10 * i + 115 * i, 144/2 - 106/2); // [1]
+							ctx.drawImage(contentsArray[i][0], 372/2 + x + 10 * i + 115 * i + 18, 144/2 - 106/2, 79,79); // [0]
+							if(contentsArray[i][5] == "true") {
+								ctx.fillText("StatTrak™ " + contentsArray[i][4], 372/2 + x + 10 * i + 115 * i+5, (144/2)+79/2-3);// std war 3
+							} else {
+								//console.log('contentsArray[i][4] '+contentsArray[i][4])
+								ctx.fillText(contentsArray[i][4], 372/2 + x + 10 * i + 115 * i+5, (144/2)+79/2-3); // std war 3
+							}
+							//console.log('contentsArray[i][5] '+contentsArray[i][4])
+							ctx.fillText(contentsArray[i][2], 372/2 + x + 10 * i + 115 * i+5, (144/2)+79/2+11-3); // std war 4 [Rarity in der 2ten ZTeile contentsArray[i][2]]
+						}
+						/*
+						ctx.beginPath();
+						ctx.moveTo(372/2, 0);
+						ctx.lineTo(372/2, 144);
+						ctx.stroke();
+						ctx.restore();
+						*/
+						ctx.drawImage(canvasHighest, 0, 0);
+						break;
+					case 4:
+						ctx.save();
+						ctx.fillStyle = "black";
+						for(var i = 0; i < contentsArray.length; i++) {
+							ctx.drawImage(contentsArray[i][1], 372/2 + x + 10 * i + 115 * i, 144/2 - 106/2); // [1]
+							ctx.drawImage(contentsArray[i][0], 372/2 + x + 10 * i + 115 * i + 18, 144/2 - 106/2, 79,79); // [0] Uncaught InvalidStateError: Failed to execute 'drawImage' on 'CanvasRenderingContext2D': The HTMLImageElement provided is in the 'broken' state.
+							if(contentsArray[i][5] == "true") {
+								ctx.fillText("StatTrak™ " + contentsArray[i][3], 372/2 + x + 10 * i + 115 * i+5, (144/2)+79/2-3);
+							} else {
+								ctx.fillText(contentsArray[i][3], 372/2 + x + 10 * i + 115 * i+5, (144/2)+79/2-3);
+							}
+							ctx.fillText(contentsArray[i][4], 372/2 + x + 10 * i + 115 * i+5, (144/2)+79/2+11-3);
+						}
+						/*
+						ctx.beginPath();
+						ctx.moveTo(372/2, 0);
+						ctx.lineTo(372/2, 144);
+						ctx.stroke();
+						ctx.restore();
+						*/
+						ctx.drawImage(canvasHighest, 0, 0);
+						break;
+				}
+
+				ctx.drawImage(canvasOver, 0, 0);
+
+			}
+			/*
+			.milspecItem {
+				color:#4B69FF;
+			}
+			.restrictedItem {
+				color:#8847FF;
+			}
+			.classifiedItem {
+				color:#D32CE6;
+			}
+			.covertItem {
+				color:#EB4B4B;
+			}
+			.rareItem {
+				color:#FFD700;
+			}
+			*/
+			var itemColors = [
+				"75, 105, 255",
+				"136, 71, 255",
+				"211, 44, 230",
+				"235, 75, 75",
+				"255, 215, 0",
+			];
+			function createDisplay() {
+				var rewardBox = document.createElement("div");
+				rewardBox.setAttribute("id", "rewardBox");
+				rewardBox.style.position = "absolute";
+
+				rewardBox.style.textAlign = "center";
+
+				var itemName = document.createElement("div");
+				itemName.style.width = "636px";
+				itemName.style.color = "white";
+				itemName.style.fontSize = "xx-large";
+				itemName.style.marginTop = "8px";
+				//itemName.innerHTML = contentsArray[destination][3] + " | " + contentsArray[destination][4];
+				itemName.innerHTML = contentsArray[destination][4];
+				itemName.style.position = "absolute";
+				console.log('WINNER: '+contentsArray[destination][4])
+				var winner = contentsArray[destination][4]
+				socket.emit('endGiveaway', { winner: winner, chan: "<%= user.username %>"});
+
+				rewardBox.appendChild(itemName);
+
+				var itemImage = contentsArray[destination][0];
+				itemImage.style.marginTop = "68px"
+				itemImage.style.padding = "8px"
+				itemImage.style.backgroundColor = "rgba(0, 0, 0, 0.25)";
+				//console.log('contentsArray[destination][2] '+contentsArray[destination][2]);
+
+				itemImage.style.boxShadow = "0 0 12px rgba("+itemColors[rarities.indexOf(contentsArray[destination][2])]+", 0.5)";
+				itemImage.style.borderRadius = "8px";
+				//itemImage.position = "relative";
+				//itemImage.style.left = (636 / 2 - 384 / 2) + "px";
+				rewardBox.appendChild(itemImage);
+
+				rewardBox.style.top = "36px";
+				//rewardBox.style.margin = "0 Auto";
+				rewardBox.style.left = (window.innerWidth / 2 - 636 / 2) + "px";
+
+				rewardBox.style.width = "636px";
+				rewardBox.style.height = "574px";
+
+				rewardBox.style.backgroundImage = "url('/lib/giveaway/"+ contentsArray[destination][2] + "BG.png')";
+				//console.log('rewardBox.style.backgroundImage '+rewardBox.style.backgroundImage);
+
+				var exitButton = document.createElement("div");
+				exitButton.setAttribute("id", "exitButton");
+				exitButton.innerHTML = "Continue";
+				rewardBox.appendChild(exitButton);
+				exitButton.onclick = function() {
+					var scope = angular.element(document.querySelector('#body')).scope();
+					scope.$apply(function(){
+							scope.users = ''
+					})
+					rewardBox.parentNode.removeChild(rewardBox);
+					init();
+					//caseReady(); ////////////////////////////////////////
+				}
+				var rerollButton = document.createElement("div");
+				rerollButton.setAttribute("id", "rerollButton");
+				rerollButton.innerHTML = "&#8634;";
+				rewardBox.appendChild(rerollButton);
+				rerollButton.onclick = function() {
+					rewardBox.parentNode.removeChild(rewardBox);
+					init();
+					//caseReady(); ////////////////////////////////////////
+				}
+
+				document.body.appendChild(rewardBox);
+			}
+
+			function getKnife(){
+				var illegalKnives = Array(
+					"Huntsman Knife",
+					"Butterfly Knife"
+				);
+				if(cases[curCase] == "Huntsman") {				//Huntsman
+					var randKnife = knives.indexOf("Huntsman Knife");
+					var randSkin = Math.floor(Math.random() * knifeArray[0].length);
+				} else if (cases[curCase] == "Breakout") {		//Breakout / Bfly
+					var randKnife = knives.indexOf("Butterfly Knife");
+					var randSkin = Math.floor(Math.random() * knifeArray[0].length);
+				} else {
+					var randKnife = Math.floor(Math.random() * knives.length);
+					while(illegalKnives.indexOf(knives[randKnife]) != -1) {
+						randKnife = Math.floor(Math.random() * knives.length);
+					}
+					var randSkin = Math.floor(Math.random() * knifeArray[0].length);
+				}
+				var knifeImg = new Image();
+				knifeImg.src = "http://cdn.steamcommunity.com/economy/image/" + knifeArray[randKnife][randSkin] + "/384fx384f"; // [TODO]
+				return [knifeImg, null, "rare", knives[randKnife], skins[randSkin], false];
+			}
+
+			function getRarity(){
+				var randNum = Math.random();
+				//console.log('getRarity '+randNum)
+				if(randNum <= 0.0044) {
+					if(isCapsule()) {
+						item2 = getItemOfRarity("covert");
+					} else {
+						return 'covert'
+						//item2 = getKnife();
+					}
+					item2[1] = rarityArray[4];
+				} else if (randNum <= 0.0143) {
+					return 'covert'
+				} else if (randNum <= 0.0425) {
+					return 'classified'
+				} else if (randNum <= 0.2121) {
+					return 'restricted'
+				} else {
+					return 'milspec'
+				}
+			}
+
+			function caseOpen(){
+				loadImages_reload();
+				console.log('iCount: 123 _ '+iCount);
+				if (iCount == 0) {  // muss das Giveaway starten
+					socket.emit('startChatGiveaway', '<%= user.username %>')
+					return;
+				}
+
+				if(gameState == 2){
+
+					socket.emit('startGiveaway', '<%= user.username %>') // die Verlosung
+
+					openButton.style.visibility = "hidden";
+					destination = kVar = Math.floor(Math.random() * 20) + 10;
+					contentsArray = Array();
+					for(var i = 0; i < destination + 3; i++) {
+						var randNum = Math.random();
+						var item2;
+						var item3 = "";
+						/*
+							Using: http://www.reddit.com/r/GlobalOffensive/comments/228117/new_2000_case_opening_study
+						*/
+
+						//console.log('(randNum <= '+randNum+' '+i+' '+destination)
+						if(randNum <= 0.0044) {
+							if(isCapsule()) {
+								console.log('item2 =  getItemOfRarity("covert");')
+								item2 =  getItemOfRarity("covert");
+							} else {
+								console.log('item2 = getKnife();')
+								item2 = getKnife();
+							}
+							//console.log('rarityArray[4] '+rarityArray[4])
+							item2[1] = rarityArray[4];
+						} else if (randNum <= 0.0143) {
+							item2 = getItemOfRarity("covert");
+						} else if (randNum <= 0.0425) {
+							item2 = getItemOfRarity("classified");
+						} else if (randNum <= 0.2121) {
+							item2 = getItemOfRarity("restricted");
+						} else {
+							item2 = getItemOfRarity("milspec");
+						}
+
+						item2 = getItemOfRarity("milspec");
+
+//console.log(randNum);
+//console.log('1 '+item2)
+//console.log('isCapsule() '+isCapsule());
+
+						if(!isCapsule()) {
+							if(Math.random() <= 0.10) {
+								//console.log('1 '+item2[0]+' '+item2.length)
+								//console.log('1 '+item2.length)
+								//console.log('1 '+item2[0])
+								contentsArray.push(Array(
+									item2[0],
+									item2[1],
+									item2[2],
+									item2[3],
+									item2[4],
+									"true"
+								));
+							} else {
+								//console.log('2 '+item2[0]+' '+item2.length)
+								//console.log('2 '+item2.length)
+								//console.log('2 '+item2[0])
+								contentsArray.push(Array(
+									item2[0],
+									item2[1],
+									item2[2],
+									item2[3],
+									item2[4],
+									"false"
+								));
+							}
+						} else {
+							//console.log('3 '+item2[0]+' '+item2.length)
+							//console.log('3 '+item2.length)
+							//console.log('3 '+item2[0])
+							contentsArray.push(Array(
+								item2[0],
+								item2[1],
+								item2[2],
+								item2[3],
+								item2[4],
+								"false"
+							));
+						}
+					}
+
+					kVar += Math.random()*0.75+0.0675;
+					x = 372 / 2;
+					//x = 0;
+					xVel = Math.sqrt((kVar*124.5+(372/2))*xAcc*2);
+					gameState = 3;
+					prevTime = (new Date).getTime();
+
+					itemOpen.pause();
+					itemOpen.currentTime = 0;
+					itemOpen.play();
+				}
+			}
+			function selectCase(_i){
+				//loadImages(_i);
+				curCase = _i;
+				//curCaseImg.src = "http://cdn.steamcommunity.com/economy/image/" + caseURLs[_i] + "100fx100f";
+				//curCaseImg.src = 'http://bot.spddl.de/giveaway/gobb-case.png';
+				<% if (user._json && user._json.logo) { %>
+					curCaseImg.src = '<%= user._json.logo %>'
+				<% }else{ %>
+					curCaseImg.src = '/lib/giveaway/404_user.png';
+				<% } %>
+			}
+			function isCapsule() {
+				if(cases[curCase].indexOf("Set ") != -1) {
+					return true;
+				}
+				return false;
+			}
+			function getItemOfRarity(_val) {
+
+				if(isCapsule()) {
+					switch(_val) {
+						case "covert":
+							_val = "classified";
+							break;
+						case "classified":
+							_val = "classified";
+							break;
+						case "restricted":
+							_val = "restricted";
+							break;
+						case "milspec":
+							_val = "milspec";
+							break;
+					}
+				}
+
+				var itemSet = Array();
+				for(var i = 0; i < itemArray.length; i++){
+						itemSet.push(itemArray[i]);
+				}
+				return itemSet[Math.floor(Math.random() * itemSet.length)];
+			}
+		</script>
+
+	<style>
+		html {
+			background-image:url('/lib/giveaway/bg_footer.jpg');
+			background-repeat: no-repeat;
+			background-color:#000000;
+			font-family:Helvetica, Arial, Sans-Sarif;
+		}
+		#caseContainer img {
+			cursor:pointer;
+		}
+		canvas {
+			margin-top:42px;
+			box-shadow: -1px -1px 2px #111315, 1px 1px 2px #263340;
+		}
+		#buttonOpen {
+			width:160px;
+			height:32px;
+			background-color:#718d4d;
+			position:absolute;
+			top:270px;
+			left:312px;
+
+			border-radius:8px;
+			line-height:32px;
+			color:white;
+			cursor: pointer;
+
+			box-shadow:0 0 12px black;
+
+			visibility:hidden;
+		}
+		#exitButton {
+			width:160px;
+			height:32px;
+			background-color:#718d4d;
+
+			position:absolute;
+
+			top:520px;
+			left:245px;
+
+			border-radius:8px;
+			line-height:32px;
+			color:white;
+			cursor: pointer;
+
+			box-shadow:0 0 12px black;
+		}
+		#rerollButton {
+			width:40px;
+			height:32px;
+			background-color:#718d4d;
+
+			position:absolute;
+
+			top:520px;
+			left:410px;
+
+			border-radius:8px;
+			line-height:32px;
+			color:white;
+			cursor: pointer;
+
+			box-shadow:0 0 12px black;
+		}
+		#scrollerContainer {
+			height:220px;
+			background-color:#10171e;
+			box-shadow:0 0 12px #000000;
+
+			position: relative;
+		}
+		#headContainer {
+			height:60px;
+			background-color:#0b0f12;
+		}
+		#topContainer {
+			height:350px;
+			background-color:#161e28;
+			box-shadow:0 0 12px #000000;
+			position:relative;
+		}
+		#mainContainer {
+			position:relative;
+			text-align:center;
+			margin:0 auto;
+			width:780px;
+			height:850px;
+			box-shadow:0 0 12px #000000;
+			background-image:url('/lib/giveaway/bg001.png');
+			background-position: bottom;
+		}
+		#caseContainer {
+			text-align:left;
+			padding-left:18px;
+			color:white;
+		}
+		#caseContainer img {
+			margin:6px 12px;
+		}
+		#GAuser {
+			line-height:32px;
+			color:white;
+		}
+		#buttonTwitch {
+			position: absolute;
+			margin-left: auto;
+			margin-right: auto;
+			left: 0;
+			right: 0;
+			cursor: pointer;
+		}
+		#TwitchContainer {
+			position:relative;
+			text-align:right;
+			padding: 4px;
+		}
+	</style>
+	<script>
+	var cases = Array(
+		//Default VALVe Cases
+		"Arms Deal",
+		"Arms Deal 2",
+		"Arms Deal 3",
+		//eSports Cases
+		"eSports 2013",
+		"eSports 2013 Winter",
+		"eSports 2014 Summer",
+		//Operation Cases
+		"Bravo",
+		"Phoenix",
+		"Breakout",
+		"Vanguard",
+		//Community Cases
+		"Winter Offensive",
+		"Huntsman",
+		//Stickers in Order
+		"Set 1",
+		"Set 2",
+		"Set 3",
+		"Set 4",
+		"Set 5",
+		"Set 6",
+		"Set 7"
+	);
+	var knives = Array(
+		"Bayonet",
+		"Flip Knife",
+		"Gut Knife",
+		"Karambit",
+		"M9 Bayonet",
+		"Huntsman Knife",
+		"Butterfly Knife"
+	);
+	var skins = Array(
+		"Blue Steel",
+		"Boreal Forest",
+		"Case Hardened",
+		"Crimson Web",
+		"Fade",
+		"Forest DDPAT",
+		"Night",
+		"Safari Mesh",
+		"Scorched",
+		"Slaughter",
+		"Stained",
+		"Urban Masked"
+	);
+	var caseURLs = Array(
+		"IoCCzrHasVcgweSG31itpprMSH_1qr8X9A83nDu-5QHri7U16Mb3RYAY-Hj5OPEogssTOPy1vxPyBDCOOqjyC-TJsj_-0-pOu1X6ZPFkvzuA2UhqkPPxFucOAcw7_6IHvd72Pq-TsELQAq12pSegbJGBCz_6svMc814_niepqQDrg_RiqY31ToM=/" //,
+	);
+/*
+	var itemArray2 = Array(
+		Array( // CS:GO Weapon Case
+			Array(
+				"1","Murky","milspec",
+				"spddl-profile_image-383ac69764a1ee3a-300x300.jpeg"
+			),
+			Array(
+				"2","Firestarter","milspec",
+				"spddl-profile_image-383ac69764a1ee3a-300x300.jpeg"
+			),
+			Array(
+				"3","Dart","milspec",
+				"spddl-profile_image-383ac69764a1ee3a-300x300.jpeg"
+			),
+			Array(
+				"4","Urban Hazard","milspec",
+				"spddl-profile_image-383ac69764a1ee3a-300x300.jpeg"
+			),
+			Array(
+				"5","Delusion","milspec",
+				"spddl-profile_image-383ac69764a1ee3a-300x300.jpeg"
+			),
+			Array(
+				"6","Grinder","restricted",
+				"spddl-profile_image-383ac69764a1ee3a-300x300.jpeg"
+			),
+			Array(
+				"7","Basilisk","restricted",
+				"spddl-profile_image-383ac69764a1ee3a-300x300.jpeg"
+			),
+			Array(
+				"8","Griffin","restricted",
+				"spddl-profile_image-383ac69764a1ee3a-300x300.jpeg"
+			),
+			Array(
+				"9","Highwayman","restricted",
+				"spddl-profile_image-383ac69764a1ee3a-300x300.jpeg"
+			),
+			Array(
+				"10","Cartel","classified",
+				"spddl-profile_image-383ac69764a1ee3a-300x300.jpeg"
+			),
+			Array(
+				"11","Cardiac","classified",
+				"spddl-profile_image-383ac69764a1ee3a-300x300.jpeg"
+			),
+			Array(
+				"12","Tranquility","classified",
+				"spddl-profile_image-383ac69764a1ee3a-300x300.jpeg"
+			),
+			Array(
+				"13","Wasteland Rebel","covert",
+				"spddl-profile_image-383ac69764a1ee3a-300x300.jpeg"
+			),
+			Array(
+				"14","Fire Elemental","covert",
+				"spddl-profile_image-383ac69764a1ee3a-300x300.jpeg"
+			)
+		)
+	); */
+
+
+/*	var itemArray3 = Array(
+			Array( // CS:GO Weapon Case
+				Array ng-repeat="viewer in viewers" ({{viewer.name}},"Murky","milspec",	{{viewer.logo}}	)
+			)
+		); */
+
+		//var itemArray3 = {{viewer}}
+
+		/* <tbody ng-repeat="user in users">
+					<tr>
+							<td>
+								{{viewer.name}}
+							</td>
+							<td>
+								{{viewer.logo}}
+							</td>
+					</tr>
+			</tbody> */
+
+
+	//console.dir('itemArray2  '+itemArray2)
+	//console.dir('itemArray2  '+JSON.stringify(itemArray2, undefined, 2));
+	//console.dir('itemArray3  '+JSON.stringify(itemArray3, undefined, 2));
+
+
+
+//console.dir('itemArray3  '+JSON.stringify( {{viewer}} , undefined, 2))
+
+	var knifeArray = Array(
+		Array(
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz55Nfq6PjJzTQXTPqJSSfA-ywTlDi8m18tiRtCzue9WcAzqs4HAYLMqZIoYTcmEWv6GYQ6pvhpt0vNdKcbb8ijs2nvsMm0UG028iGLajUE",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz55Nfq6PjJzTQzbPqZRTvAp4DfuBjU36ctcWN6x_685JV2t49fYN-V_Yo4YTcfUWqKBZQ34uRk7iKVeL8aI8S67jCzsaTtZXxXjqG5XzfjH5OX0Xi9HcA",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz55Nfq6PjJzTQXTPq9XUPA-ywTlDi8m18tiRtCzueJUeQTpstfEYrF6Md8aS5HXXfaEMwmv7hhqiaQLK5DYqHvnji3pPW4UG028JI0XXjw",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz55Nfq6PjJzTQzbPrdbXuYF-AHrATMN5MZxU9L4rulSfwzvtdSSO-MkYtgfH8fXDqWEbgr7vxo_gqZcfpHYoCjv2ijpaHBKBUS5Ltb8RQ",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz55Nfq6PjJzTQXDPqZfWPAF-AHrATMN5MZxU9L4oroFfVrrtoDGN7N-NNAeG8eFXvKDZVqu6E4406ZUecHYo3_o1SXsP3BKBUTSRigxhg",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz55Nfq6PjJzTQzbPqRaTPQuywTlDi8m18tiRtCzub1Tel-9sIWSM-V6OIpIHMHRW_CGZgGouUgwiacLJ8bc9Hjo3C-_aGsUG028Ka3V1Ds",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz55Nfq6PjJzTRfNPq5XW_0uywTlDi8m18tiRtCzuepXKw7utYWXZbJ5MI5OG8DRW_eFZgz170xp0qheepWJqSu63inubzoUG0287_AHB1I",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz55Nfq6PjJzTRfSPq1bT_0F4AniNis77893a9u35bwDZ1rv54OUNLF6ZNpNH5LXXqSCZF2vvEwwgqReKpCP9S29jCS4M2deWhb1ujVTazCFA_M",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz55Nfq6PjJzTRfSPqRfTOU28TfgACA6_PhvVcWx8vVTKgrmsoCSNLl-Nt0ZTcLQX_WBYQms4kM_1vAOfsCBqHjs2yy_aThfRVO1rSIOVyau",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz55Nfq6PjJzTQXPPrpbXuc7ywTlDi8m18tiRtCzuelUegjvsobFNbIuMNwZF8eFC_PVMwqr40I_1PJbJpTdqC7riSToPGYUG028JW2utN4",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz55Nfq6PjJzTQXTPqZRTvY_8DfgACA6_PhvVcWx8vVSfwzmvYqVZ7ElNI5FH5bWX6fTNQj9uRhp1fBVKZGN8i7t2S7pbD0KRVO1ra_UukgQ",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz55Nfq6PjJzTRfSPrRfTPAF4RruCCkN5M5kXMOJ-7oULlnxvIOVN-QuYdhKTMKEUqWEYQis6Bk-1PRZfcaNp3zvjn_pbm1cWBG5r3VExrEN3rjaKg",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEgznuShMhtupD_OfDd8Xntsl6p5GliFukBF0Oty3MS5ofAHWT_UPCfE_plG9W3dm7JFnDI7goOlSLQW55tDAO7UqZosfGcDVXqeBbg7jqhVvQ4ABr4U"
+		),
+		Array(
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz5wOuqzNQhhfg3SPqFPY_c24Q3oNis77893a9u35bwDZwjmsdeQYLYlMo4YTMXVW_WFZ1z56kw-iaZcKpfdqSK81CTpOGkICBD1ujVTzVntbj4",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz5wOuqzNQhhfg3SPqhHY_M15g3_HRgw59VmVduJ-7IBIUiA6NOEZOUyZNxEGMjYX_eDZg6s7E8xgqQOfZSIoCrvj3u9azwPXkC6rzkHzeaA6awr3DgaDfI7XQ",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz5wOuqzNQhhfg3SPqFPY_oz-A3oNis77893a9u35bwDZw3rsYrPZ7R6M95KHMPQXv-Gbgv5vEg-1aYLKJCLoSPr2iW8OD1bCUf1ujVTxaDwZJQ",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz5wOuqzNQhhfg3SPqhHY-I_9hvTBS414NNcWNak8L5ILAy959HPZrF4MNhITZaGWqfQZg6suBg7hPBbL5zapizq2SXqPz1fXQ2rpDxTuFR6rw",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz5wOuqzNQhhfg3SPqFfY_M78A3TBS414NNcWNak8L5IcQ3u4oqTO-F6Mo1MH8bXX6WGYg6s4xg51agLL5Hb8n_qjH68Mm1YWg2rpDz-PIrjNA",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz5wOuqzNQhhfg3SPqhHY_E-5An4Nis77893a9u35bwDZwTnttbHMrIsZd8ZGsXYU_CPZwv840s61KdcJ8HYqCq91SXoOmtZWEL1ujVTYfKVD1U",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz5wOuqzNQhhfg3SPrNRY_sz8wD4Nis77893a9u35bwDZ1-7soPFN7YsYo4YScjUUv-PZFz_7x040aVYfsSK8Xju2n_vbmoMCRX1ujVT7gNIytI",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz5wOuqzNQhhfg3SPrNOY_g_5wDTHSY818tqU9-iyLcHO1u6qoHAMuMkNN4dTMeCCaODZwur7Us_h_ULJ8eB8n7p33m4Mm0CDkG--D4a2LjQKGuiy1Y",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz5wOuqzNQhhfg3SPrNOY_E75BjgDBg-4cBrQOi69qkBLBK54NSTZrEtZNlNG8iGUveDbgur7kgw0_dcecHfoS3q2izuaWkLChO-5Ctaz-iUruLD",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz5wOuqzNQhhfg3SPqFTY-8_9hrtNis77893a9u35bwDZwnqsITBZeIqNdxLGpTYWKWCYwuvuUI-galde5SJoXy5iSq8PWgLUhH1ujVTthpPV9Y",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz5wOuqzNQhhfg3SPqFPY_M15gvpDRg-4cBrQOi69qkBLBK6vdPANrcqYdFOF5HRW6DVZQ766xk7gKMLLcePpi_s1Hm7OGdYXhPo5Ctaz043bOns",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz5wOuqzNQhhfg3SPrNOY-E75A3THDUw6clcWN6x_685JV2t49fYYeQtY9hIHMnVD6eGZA2suRkwhqIMfMePoiK9iH6_PWlfD0fvr29RyvjH5OXG2hpQHA",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEgznuShMhtupD_OfDd8Xntsl6p5GliFukBF0Oty-Pj5hdzvEDalOEvA48gu8WXBhvZA6BtXn8ulffQu9t4KXMLItYdhLHcHVDqfTblqovx8mwP8KZWGkNYw"
+		),
+		Array(
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz5wOuqzNQhgZxD9ALFhXvkv8QzTBS414NNcWNak8L5IeVnrtNCUM-UvZYpJS5XTDqOHNAD_70M9g_ReepHc8y3q2HvgaGgPCg2rpDykxIKrxg",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz5wOuqzNQhgZxD9CblhWvoo8Rv4NiU9-sJiWOi6_rwOPWOz5cCRZq5-MtAdG5OGCPeFYlqp4hlthfUMLJzfqCi7jy29bGoKXBbs_W8DkLOPpPI11UFd9GQU",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz5wOuqzNQhgZxD9ALFhU_w28QzTBS414NNcWNak8L5ILw3rtYXFNOYrNN1OGcjYXKKGMg314046iKAIJsSMpy_t2y7oPj0PCA2rpDym7Hrmsw",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz5wOuqzNQhgZxD9CblhS_A45zfgACA6_PhvVcWx8vVUeAu-s4TPZuQsMdtNS5LRDvXXM1_4u0840vJULZLdpC7o3X-7OGxeRVO1rWfLuWid",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz5wOuqzNQhgZxD9AKFhWvQ-8TfgACA6_PhvVcWx8vVQLATm54DFNLAqZYkaTMPUD_GBZwqu6E081vUJeseApC7r2XzgaGgNRVO1rQU2Lej8",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz5wOuqzNQhgZxD9CblhWPEq9RzTBS414NNcWNak8L5IcQnq4oSVYrYuNtBKTMiGWfCDMwz96R87h6gPL5LbpHnr3HzhPGsCCg2rpDwoJTxXSg",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz5wOuqzNQhgZxD9Eq9hUvw9_BzTBS414NNcWNak8L5ILFm8ttCUN7AoYdxPGZLWDvGCMAj0uUw60qlVeZKJoyLvjH_qOztfDg2rpDwy3z-Xlw",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz5wOuqzNQhgZxD9ErBhUfAp_Df4CCkN5M5kXMOJ-7oULlnxsdTDO-QrN98YGMbRXv7UNwn-6xk9iKYLecOI8iq93invPzoICBfv-3VExrFF5IGtRw",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz5wOuqzNQhgZxD9ErBhWPQq5ATpNis77893a9u35bwDZwrqs9OQNbQqZt1IGcDQWv6GNAyu7x4_iaBeLJGIoH-92SrqM2lcDxX1ujVTBDL9tWw",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz5wOuqzNQhgZxD9AK1hRvA45gnTBS414NNcWNak8L5IKg_osNTOZrctZttMH5XUWfOHNA_16hk-gqVbe8SPpC-73nm8a24LDw2rpDxc1kJY2A",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz5wOuqzNQhgZxD9ALFhWvoo9w3oNis77893a9u35bwDZw-5sdDGNrd_N9lMSZPUXvaFMAz5vkgxh6gLK52L9i_u3Hi7PGdeU0H1ujVTh5vzc0A",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz5wOuqzNQhgZxD9ErBhSPQq8Tf5GyUz5vhvXdC-44QKKE644ZzBMuYoONlNF8jYXPaEMgqv7kNug6QIL5aJ8n7s1Hi6aD1bCBS9-GlRhqbZ7bBKOxYJ",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEgznuShMhtupD_OfDd8Xntsl6p5GliFukBF0Oty-Pj5hdzvFFLQQDfFvp1i8XnRqvJ40BNLu8roAewTrsIrFMrIrN99KF8OGDvCFZVj641V43vZFz08Wzw"
+		),
+		Array(
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz5wOuqzNQhscxbDDKJXSMo75TfuBTI37PhvXdC-44QKKE644ZzHN-UlMtAfS5WED_-HNwn4u08_hqRbfcaI8S7o3X69P28PCRq__WgBhqbZ7SjpJGyH",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz5wOuqzNQhscxbDDKJXSMoy7TfqBjU3-9NcVtik8roKFlC249qCXOx9co8ZAciCD_-PNACv70g6h6RZKZbc83u83SS9OmYKWBbiqz0HneSB6bY-im4IAy_nZrgln78",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz5wOuqzNQhscxbDDKJXSMo75TfjACs37PhvXdC-44QKKE644ZzDMeYlMtpFS8LZXPbQYwz47RowiaIMJpza8yzo1HvoO2YLCRfjrmIMhqbZ7XVFxf-F",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz5wOuqzNQhscxbDDKJXSMoy7Tf7DCUh18pmUN6j-oQKKE644ZyVNbMrNIwaHMOCXKDUM1r640g71KVYLZyNqXu51CnuPT8ODxHir2oMhqbZ7YhEMics",
+			"hy71GAP3ufb8R-ppRUkn3z9iP6lHh7e2KIk5c6Gvb3hOJcLjWuv_5Fye9pdjKXtRJ2Vk7k6Yt7Iugj5hoLl4ckFn1ulL7_jtTO_ynWBjaEAjcy_2Cs35qyKDD3nhtX14cCPT_kzj7-hM7_SZUWB7RTJJJ7AawOz1L9RgIey_fi1LKoS5Se26tQmFo5w9MSwYM3B84E2e_Lgu1WImvrkqewE43Os=",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz5wOuqzNQhscxbDDKJXSMoy7TfoDTcz_PhvXdC-44QKKE644ZzCYOUvZNgYGsnXC_eCbgirvE9r1PJUesbaqHnu2izuPmZeXxrp8mgGhqbZ7fQ9-fxZ",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz5wOuqzNQhscxbDDKJXSMop-zfiACA6_PhvXdC-44QKKE644ZzCMbcoONweF8LWUvHUb1yv6E9tg6lcLZDfpX--1HjgMm0CXxS9_GNShqbZ7QXcaW5k",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz5wOuqzNQhscxbDDKJXSMop5DfhDDQ619NiWui6_rwOPWOz5cCRZq59MoxITJOGU_-DYlv070xriKBUfsHcpyi-3H67bz8NCELrrGtVzOfRpPI11aVlXOou",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz5wOuqzNQhscxbDDKJXSMop5DfoCDci5MJcWN6x_685JV2t49fYO7h9ZI5JHpKDUqKDZVyruUtsiPJdK5SIpHi73S69OWYCDhPrrmlWkPjH5OUGS-1aRQ",
+			"6FZQXKBwu39SUSLmAbr98lAamu3kALU_hp_x_OVctVUhXWen-Wz9bfKIPhgn2qF8SB3Bqu0ftTuAlPbu5EqiXy4fc63oaPpk4vk6EiSQsm1MC4qyqUr7IoyVx_alRqdVH1t2uu9k7WHi-TwaFY-lbkoPsfG3SPImzZn9rahMolF1CSf_tj7rPPSXbRIvwvE5WwyI--ob_zTQyqr7_h-iCCUeZ6bp",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz5wOuqzNQhscxbDDKJXSMo75TfqBjUx7cNcWN6x_685JV2t49fYNrQkZtlNScjYCaLXb136vh86iaBYfcGMo37u2njqO2deWRu6_GtRzPjH5OWh0rdYxA",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz5wOuqzNQhscxbDDKJXSMop5Df4CDc319JxVta4yLcPLlSr296Xced5LoxPGZTRCaCOZwH_6RpsgKVbLMSNony53nzhbmdYWkK9rG8NmebWvbF1wjFBWafnDHI",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEgznuShMhtupD_OfDd8Xntsl6p5GliFukBF0Oty-Pj5hdzvJALJfUfcz4Ea0C3NrucU2DIa3o7lfKgu9sYDPO7ArMdxOGpbSCPSPNwr0u0lpgaMLMdXX9w2bEeEd"
+		),
+		Array(
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz5wOuqzNQhqKzvAALlRUvAuywn9NiU-_cJna9u_8LMSFlC-9tWTLeN6MY0dSsWCWqKCZFr9uUk-hfQIKJLY9H68iSzrOmlfCULsq2NVnLSZ-uw8_unZThQ",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz5wOuqzNQhqKzvAALlRUvAuywD1NiE9-sJwQOi0-KkDKFCA6NuRa_RDbIkOSJXOWvGCNw6s401piKZYfpCO9Sy-iSzvb2ZbXRTj-G8BzuSE77U_hmlEEW_w87uLpmm_PQ",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz5wOuqzNQhqKzvAALlRUvAuywn9Nig75MJna9u_8LMSFlC-9tWTLbcpYo4ZTJbYD_-GYQqu6k5q0aNcLZCIqCLmjyW9PmcCUxq982sCnu-Z-uw8NABrhGY",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz5wOuqzNQhqKzvAALlRUvAuywD1NjA36tRcWdKy_q4LFlC-9tWTLeR4ZtsfFsHXDvGCZAn7404_hvNUesSJoSPnjC28OW0PCRO6_D1VnuWZ-uw8Gn75-BI",
+			"6u_ub3aFuNxmL12ncMmlKFKjJN4y9bacsuGOvZQv7Y8j5NmUL5n-zsb2QVlWqfmmSqR_mTvqtpi06omvlTn6hSymzZ4-nfnH1odFU1Xj6rdOsjSBf7_4gbjruLfUNf-PHeSQpDqd9cTMvVZpWufHsFuzNfFks_6Zo6vQ649l_dlx6MqdPs2-npG-FVUM4PmyXrNmzzC4rJTk54W9jT6u3Hq5h4s2mw==",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz5wOuqzNQhqKzvAALlRUvAuywD1NiM2-MZ3a9u_8LMSFlC-9tWTLbF6NdlNSsTWU_6HNw78vhg-h_AIfJeAoC6-iyi6PT8JUke-_2kGnu6Z-uw8FmO3LEw",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz5wOuqzNQhqKzvAALlRUvAuyxvjNik77893a9u_8LMSFlC-9tWTLbV9Y4oeSpPUXqeHZFj-vk5thaJVJpXap3vtiCjhaz9cUxC6r2kMn-eZ-uw8rMzTcjo",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz5wOuqzNQhqKzvAALlRUvAuyxv8Nio3-89cQNa4yLcPLlSr296Xced5LtlMF8nWCfHVZQn_4kw_ifNbKZ2BqC--3y_gb2tYChTs-W0Hn7SBs-F1wjFBDsjagn4",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz5wOuqzNQhqKzvAALlRUvAuyxv8NiMz-NdvUei6_rwOPWOz5cCRZq5-ONlMSZWGXvCCbwD740w-gKcLeZfapyru3iThOmtYDkHs8m9XnbfSpPI11XcQHFlR",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz5wOuqzNQhqKzvAALlRUvAuywnhNj036tVia9qz87ITJGOz5cCRZq4rNotJSpTTXPeFZAD56UpshqULJ8GBoH681Su_ODwMCRft_mhQnLPTpPI11Y9Vd8RM",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz5wOuqzNQhqKzvAALlRUvAuywn9NiE9-sRmUOi6_rwOPWOz5cCRZq55NNhFTcHYXvOEZgr9vEht1vBZLpSOqHjr3iTsP2heXUXr_GxSyeOFpPI11TekLEVH",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz5wOuqzNQhqKzvAALlRUvAuyxv8NjMz-MJcQcW09rU5JVW47Mapb-FuZ41STcnUWqKPMlj8401piagJecSIoHzv1XzhMz0MDxHj_mhWne6DvuQ-1HFWHSboOSh3gQ",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEgznuShMhtupD_OfDd8Xntsl6p5GliFukBF0Oty-Pj5hdzvPWJ9cXew1-g34R3YzvZIyBI6zp7hecQvmttfDZ7UqZYlMG5SDW6CAYQ-o7k9uifUIfJeX4HS4j3Ti6UA"
+		),
+		Array(
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz5wOuqzNQhzcwfWCKNfUMo75TfuBTI37PhvXdC-44QKKE644ZzBYLQvOIpPTMfQU_WFMl39v01qiKFafpCPqSq-2iruaW0KXBrj_mhShqbZ7RsaTLqD",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz5wOuqzNQhzcwfWCKNfUMoy7TfqBjU3-9NcVtik8roKFlC249qCXOx9co8ZAZLWXaKFMgj060tshaZfKpffoi3o2SS4PzsIXBbo_29Vn-KDvedj1mwIAy_nN9esgFk",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz5wOuqzNQhzcwfWCKNfUMo75TfjACs37PhvXdC-44QKKE644ZyUN7N4MYsdGcDTDPTVYAD67E84gKAMKceM9ijriy_hP2hbXUXrq20BhqbZ7fPMncyR",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz5wOuqzNQhzcwfWCKNfUMoy7Tf7DCUh18tqU9-iyLcHO1u6qteQMbQqMYtMHMLYXfHUMA6p7Bk5hqFdfMPYoXnt3C7oPTxZUkDv_Gsa2LjQNuwG48w",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz5wOuqzNQhzcwfWCKNfUMo79TfqCCM318tqU9-iyLcHO1u6qoSQMbEqM4sfSsSGDPeHYAv_7h0wgKhfL5XaqX_m3yW9aDhfWkDi-Doa2LjQL_jvEsc",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz5wOuqzNQhzcwfWCKNfUMoy7TfoDTcz_PhvXdC-44QKKE644ZzHM7kqON9EFsWEXfSBY1yv4ktuhPBaJ8OLoSi6jn-8aGYLCRC5rjhWhqbZ7f3T5ZL3",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz5wOuqzNQhzcwfWCKNfUMop-zfiACA6_PhvXdC-44QKKE644ZyUM-YtMdBPF8DXDKXUZwmu6U4xgqNdL8GMpiO7jn7uM24NWEfq_2oBhqbZ7URH9yo-",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz5wOuqzNQhzcwfWCKNfUMop5DfhDDQ619NiWui6_rwOPWOz5cCRZq4vMdwZTsbVXqXSNFj0uUI5gPBeJ5KLpC7t3ynsbmwIXRu5r28EnLXRpPI11e1OcZKc",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz5wOuqzNQhzcwfWCKNfUMop5DfoCDci5MJcWN6x_685JV2t49fYZbF5MopNG8fYWP-Pbw_-vxls1qgOJ5eL8ny823i_aD9YCBK-qWpXkPjH5OUC1jXlVA",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz5wOuqzNQhzcwfWCKNfUMo7-Tf2DCUg6fhvXdC-44QKKE644ZzHMbkqZN9KS8PUDPfTYw7-4k46hPJVL53foyzq2CXta20CCkK9_DlShqbZ7Wmh-3NS",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz5wOuqzNQhzcwfWCKNfUMo75TfqBjUx7cNcWN6x_685JV2t49fYYeEsYYpOHJOGXfKEZ1_86Us8haUPLMCIqCvpiH_qOW4ICRbj8mwFmvjH5OVejw1iIg",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz5wOuqzNQhzcwfWCKNfUMop5Df4CDc319JxVta4yLcPLlSr296Xced5LopNGMTRC_GOZVv66ko_1KQPeZSAoX-81Hy7MjgJChbv-GwDme6Fs7Z1wjFByr6cIH4",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEgznuShMhtupD_OfDd8Xntsl6p5GliFukBF0Oty-Pj5hdzvWAKNKVfY7-Ea7X3Vj6sViUIDmo-pWLVm9soDPZ7YsZYxFF5WGWPKOMliu70k9g6RbMdXX9_SWOa78"
+		),
+		Array(
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz5wOuqzNQhlZxDWBLJYUOwF9RnTCysn7cNcWN6x_685JV2t49fYOrYlNdlETJXXXPaCZg2p7Uk4iaQMeZ2Mo3zm3Xm_PWsCWUbs8mMNzvjH5OW1t0tIfQ",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz5wOuqzNQhlZxDWBLJYUOwF_BHTDygg7dR3a9W55b4HJWOz7dWed99wYZobSt6GUveBYgH-vkpthaIPKZyAoSO-1XzoO20OUkHr_W5XmuHTsrppiz0XXTHu-mnWF4lQ",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz5wOuqzNQhlZxDWBLJYUOwF9RnTBi4-7cNcWN6x_685JV2t49fYZ7UvZdBMTcfQXKOBMg6ruxgx1KNfe5ePpS_m2Hi4Oz8DXhq-q2wNyvjH5OW_yRgGkg",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz5wOuqzNQhlZxDWBLJYUOwF_BHTHiIw-_huUdO_4rY5JV2t49fYMuJ_NI0aGZHVX_KEMg6rvkswhaQIK8Pc8y3n1H-9PD9fX0Du-20GnPjH5OW7WRyALA",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz5wOuqzNQhlZxDWBLJYUOwF9QnTDyY27fhvXdC-4_UEeF29sdSUMOV4MNBNF8WBWPCAZQr5uE08iKkMLJON8njsiy_rOjgCRVO1rTsntcMn",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz5wOuqzNQhlZxDWBLJYUOwF_BHTDSMi6dNcWN6x_685JV2t49fYNeUkN9wYH5HWDqSDMgj57ENrg_NYfZyA8ynv3n-_PWgCWBTu82hSzfjH5OVLJOs30w",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz5wOuqzNQhlZxDWBLJYUOwF5wfTBy414NNcWN6x_685JV2t49fYOuYuNdxITMPVUvCBNwz56h051KEMKsCNpCy73C29OWtYX0G5-WkEmvjH5OVYj20H8g",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz5wOuqzNQhlZxDWBLJYUOwF5xjTBCIh4Ph3VdmJ-7IBIUiA6NOEZOUyOYtPH5WDD_PUM1v-4kg9hvdZL5PcpXnqi3zsPDsNDRfr_21SmOGCvawr3Dhu_Sv0mA",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz5wOuqzNQhlZxDWBLJYUOwF5xjTDSYi-Mtma9u_8LMSFlC-9tWTLbYtMdgdFsGGUvaPNQD07E0xhvcMJ5LdqSq92ni4MmZfWxDs_T8EzLCZ-uw8sW6sOhQ",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz5wOuqzNQhlZxDWBLJYUOwF9QXTEyIw-sZcWN6x_69IcVrq4IDOZbh-ON5MGJTYWfaDb1r5vh0-gakPLJyA9Si5jCjsOzxYXw2rpDz-mi9RMQ",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz5wOuqzNQhlZxDWBLJYUOwF9RnTDygg68Jna9u_8LMSFlC-9tWTLbF5NdpOGsmGUqTSYFv-uUk8gvIIe8eL9Cq-1Srgb2dcCBLsqGxVmuWZ-uw8pT4tNB0",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEh_nvjlWhNzZCveCDfIBj98xqodQ2CZknz5wOuqzNQhlZxDWBLJYUOwF5xjTHSYi7fh2RtW3-YQKIFu38O2aYvJ7ZcYYTpLUWaCCblup6B5qgvJUKJaN8yPvjyjtMmxcWRHprzpVkePU7-A5nC9IFFK5CPK2",
+			"fWFc82js0fmoRAP-qOIPu5THSWqfSmTELLqcUywGkijVjZYMUrsm1j-9xgEObwgfEgznuShMhtupD_OfDd8Xntsl6p5GliFukBF0Oty-Pj5hdzvAFLRKWec8-BGiXn5muZM0UY_i9u8DcAjtsoDGMeQoNdlIGsnRWqXUNAn97Uwxh_IIKovJ_n31jEWQ1Q"
+		)
+	);
+</script>
+</body>
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-10984886-7', 'auto');
+ga('send', 'pageview');
+</script>
+</html>

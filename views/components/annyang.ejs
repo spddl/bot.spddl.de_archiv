@@ -1,0 +1,35 @@
+<script src="//cdnjs.cloudflare.com/ajax/libs/annyang/2.4.0/annyang.min.js"></script>
+<script src='//code.responsivevoice.org/responsivevoice.js'></script>
+<script>
+  if (annyang) {
+    // Let's define a command.
+    commands = <%- JSON.stringify(annyang) %>
+
+    for (i in commands) {
+      commands[i] = eval('('+commands[i]+')' )
+    }
+
+    // Add our commands to annyang
+  <% if (user.username == 'spddl') { %>
+    annyang.debug()
+  <% } %>
+    annyang.addCommands(commands);
+    annyang.setLanguage('de-DE');
+    annyang.start(); // Start listening.
+  }
+
+  // schalte alles aus was das Mic benutzt
+  navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+  if (navigator.getUserMedia) {
+      navigator.getUserMedia({ audio: true },
+        function(stream) {
+            console.log("[Mic] Accessed the Microphone");
+        },
+        function(err) {
+            console.log("[Mic] The following error occured: " + err.name);
+        }
+      );
+  } else {
+      console.log("[Mic] getUserMedia not supported"); // Browser alt
+  }
+</script>

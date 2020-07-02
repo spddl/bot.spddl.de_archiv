@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="App" ng-controller="Ctrl" ng-style="options.dark && {'background': 'rgb(34, 34, 34)'}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Chat</title>
+  <!-- <link rel="shortcut icon" href="favicon.ico" type="image/x-icon"> -->
+  <!-- <link rel="stylesheet" href="css/uikit.min.css"> -->
+  <!-- UIkit CSS -->
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.2/css/uikit.min.css" />
+
+  <link rel="stylesheet" href="../css/ChatRoomApp.css">
+  <link rel="stylesheet" href="../css/ChatRoomStyle.css">
+  <link href='//fonts.googleapis.com/css?family=Roboto:400,700,300' rel='stylesheet' type='text/css'>
+  <!-- <link href='https://fonts.googleapis.com/css?family=Inconsolata' rel='stylesheet' type='text/css'> -->
+</head>
+<body ng-class="{'uk-light': options.dark, 'uk-dark': !options.dark }">
+  <div class="uk-offcanvas-content">
+    <div uk-sticky="sel-target: .uk-navbar-container; cls-active: uk-navbar-sticky; bottom: #transparent-sticky-navbar" >
+      <nav class="uk-navbar-container uk-navbar-transparent" ng-class="{'uk-background-default': !options.dark, 'uk-background-secondary': options.dark }" uk-navbar style="position: relative; z-index: 980;">
+        <div class="uk-navbar-left">
+          <ul class="uk-navbar-nav">
+            <li>
+              <a class="uk-navbar-toggle" href="#" uk-toggle="target: #sidemenu">
+                <span uk-navbar-toggle-icon></span> <span class="uk-margin-small-left uk-visible@s">Menu</span>
+              </a>
+            </li>
+            <li>
+              <a>
+                <span class="uk-text-lead uk-text-middle ng-cloak">{{ stats.follower || 0 }}</span><span class="uk-visible@s">&nbsp;Follower</span>
+              </a>
+            </li>
+            <li>
+              <a>
+                <span class="uk-text-lead uk-text-middle ng-cloak">{{ stats.subs || 0 }}</span><span class="uk-visible@s">&nbsp;Subs</span>
+              </a>
+            </li>
+            <li>
+              <a>
+                <span class="uk-text-lead uk-text-middle ng-cloak">{{ stats.bits || 0 }}</span><span class="uk-visible@s">&nbsp;Bits</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div class="nav-overlay uk-navbar-right">
+          <ul class="uk-navbar-nav">
+            <li ng-show="latency">
+              <a>
+                <span class="uk-text-lead uk-text-middle ng-cloak uk-text-muted" title="Delay zum Twitch ChatServer">{{ latency || 0 }}</span><span class="uk-visible@s uk-text-muted">&nbsp;ms</span>
+              </a>
+            </li>
+            <li>
+              <a>
+                <span class="uk-text-lead uk-text-middle ng-cloak uk-text-muted">{{ logs.length || 0 }}</span><span class="uk-visible@s uk-text-muted">&nbsp;lines</span>
+              </a>
+            </li>
+            <li>
+              <a class="uk-navbar-toggle" uk-search-icon uk-toggle="target: .nav-overlay; animation: uk-animation-fade" href="#"></a>
+            </li>
+          </ul>
+        </div>
+        <div class="nav-overlay uk-navbar-left uk-flex-1" hidden>
+          <div class="uk-navbar-item uk-width-expand">
+            <form class="uk-search uk-search-navbar uk-width-1-1">
+              <input class="uk-search-input" type="search" placeholder="Search..." ng-model="options.q" ng-model-options="{debounce: 150}" ng-change="query()" ng-trim="false" autofocus>
+            </form>
+          </div>
+          <a class="uk-navbar-toggle" uk-close uk-toggle="target: .nav-overlay; animation: uk-animation-fade" href="#" ng-click="options.q = ''"></a>
+        </div>
+      </nav>
+    </div>
+
+    <div id="sidemenu" uk-offcanvas="mode: push"> <!-- <div id="sidemenu" uk-offcanvas="mode: push; overlay: true; flip: true"> -->
+      <div class="uk-offcanvas-bar ng-cloak scrollbar">
+        <ul class="uk-nav uk-nav-default">
+          <li class="uk-active"><a href="#">Apps</a></li>
+          <li class="uk-parent">
+            <ul class="uk-nav-sub">
+              <li ng-repeat="(name, value) in options.apps track by $index">
+                <label>
+                  <input type="checkbox" ng-model="options.apps[name].status">
+                  <label id="color-picker-wrapper" ng-style="{'background-color': options.apps[name].color}">
+                    <input id="inp" type="color" ng-model="options.apps[name].color">
+                  </label><span class="uk-margin-left" ng-bind="name"></span>
+                </label>
+              </li>
+            </ul>
+          </li>
+          <li class="uk-nav-header">options</li>
+          <li class="uk-parent">
+            <a href="#">Show lines: <span ng-if="options.totalDisplayed === 0">unlimited</span><span ng-if="options.totalDisplayed !== 0">{{ options.totalDisplayed }}</span></a>
+            <ul class="uk-nav-sub">
+              <li>
+                <div class="uk-margin">
+                  <input class="uk-input" type="number" ng-model="options.totalDisplayed" ng-model-options="{debounce: 1500}" placeholder="Show lines: std(250)">
+                </div>
+              </li>
+            </ul>
+          </li>
+          <li class="uk-parent">
+            <a href="#">Max limit: <span ng-if="options.maxcount === 0">unlimited</span><span ng-if="options.maxcount !== 0">{{ options.maxcount }}</span></a>
+            <ul class="uk-nav-sub">
+              <li>
+                <div class="uk-margin">
+                  <input class="uk-input" type="number" ng-model="options.maxcount" ng-model-options="{debounce: 1500}" placeholder="0 = unlimited">
+                </div>
+              </li>
+            </ul>
+          </li>
+
+          <li class="uk-parent">
+            <a href="#">Badges Anzeigen</a>
+            <ul class="uk-nav-sub">
+              <li>
+                <div class="uk-margin">
+                  <input class="uk-checkbox" type="checkbox" ng-model="options.badges" ng-model-options="{ debounce: 1500 }">
+                </div>
+              </li>
+            </ul>
+          </li>
+
+          <li class="uk-parent">
+              <a href="#">Channels</a>
+              <ul class="uk-nav-sub">
+                <li>
+                  <div class="uk-margin">
+                    <!-- <input class="uk-checkbox" type="checkbox" ng-model="options.badges" ng-model-options="{ debounce: 1500 }"> -->
+                    <form name="skillsFrm" ng-submit="addChannel()">
+                      <div class="uk-inline">
+                        <a class="uk-form-icon uk-form-icon-flip" href="" uk-icon="icon: sign-in" ng-disabled="skillsFrm.$invalid" ng-click="addChannel()"></a>
+                        <input class="uk-input" name="newChannel" ng-model="newChannel" required>
+                      </div>
+                    </form>
+                    <div class="uk-alert" uk-alert ng-repeat="channel in channels" removeHash>
+                      <a class="uk-alert-close" uk-close ng-style="options.dark && {'color': 'rgb(34, 34, 34)'}" ng-click="deleteChannel($index)"></a>
+                      <!-- <p>{{ channel }}</p> -->
+                      <p>{{ channel.replace('#', '') }}</p>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </li>
+
+          <!-- ng-if="option.badges"> -->
+          <!-- <form>
+            <select class="uk-select">
+                <option></option>
+                <option></option>
+            </select>
+            <textarea class="uk-textarea"></textarea>
+            <input class="uk-radio" type="radio">
+            <input class="uk-checkbox" type="checkbox">
+            <input class="uk-range" type="range">
+        </form> -->
+
+          <li class="uk-parent">
+            <a href="#">Theme</a>
+            <ul class="uk-nav-sub">
+              <li>
+                <div class="uk-margin uk-grid-small uk-child-width-auto uk-grid">
+                  <label><input class="uk-checkbox" type="checkbox" ng-checked="options.dark" ng-model="options.dark"> Dark</label>
+                </div>
+              </li>
+            </ul>
+          </li>
+          <li class="uk-nav-divider"></li>
+          <li><a ng-click="reset()"><span class="uk-margin-small-right" uk-icon="icon: trash"></span> Delete settings</a></li>
+        </ul>
+      </div>
+    </div>
+
+  <div class="scrollbar" scroll-glue="options.glued">
+    <div class="chat-line ng-cloak" data-faded="" ng-repeat="log in logs | filter: options.q ? { $: options.q } : options.channel ? { channel: options.channel } : options.name ? { name: options.name } : options.type ? { type: options.type } : AppFilter: options.strict | orderBy: 'user.tmi-sent-ts' track by $index"  ng-class="{'chat-action': log.user['message-type'] === 'action'}">    
+      <span>{{ log.user['tmi-sent-ts'] | date:"HH:mm:ss" }}</span><small>{{ log.user['tmi-sent-ts'] | date:":sss" }}</small>
+      <span class="chat-colonn"></span>
+      <span ng-bind="log.channel" class="chat-channel uk-text-capitalize"></span>
+      <span class="chat-badges" ng-if="options.badges">
+        <span ng-if="log.type" ng-bind="log.type" ng-click="TypeFilter(log.type)" class="chat-colonn uk-label danger"></span>
+        <div ng-if="log.user.badges.bits && log.user.badges.bits !== '0'" class="chat-badge-bits" style="line-height: 1;">&nbsp;{{ log.user.badges.bits }} Bits</div>
+        <!-- <div ng-if="log.user.badges.sub-gifter === '1'">sub-gifter</div>
+        <div ng-if="log.user.badges.premium === '1'">&nbsp;â™”</div> -->
+        <!-- <div ng-if="log.user.badges.partner" class="chat-badge-partner">partner</div> -->
+        <div ng-if="log.user.badges.moderator === '1'" class="chat-badge-mod" title="MOD"></div>
+        <div ng-if="log.user.badges.turbo === '1'" class="chat-badge-turbo"></div>
+        <div ng-if="log.user.badges.broadcaster === '1'" class="chat-badge-broadcaster"></div>
+        <div ng-if="log.user.badges.admin === '1'" class="chat-badge-admin"></div>
+        <div ng-if="log.user.badges.staff === '1'" class="chat-badge-staff"></div>
+        <!-- <div ng-if="log.user.badges.subscriber && log.user.badges.subscriber !== '0'" class="chat-badge-subscriber" style="line-height: 1;">&nbsp;{{ log.user.badges.subscriber }} Sub</div> -->
+        <div ng-if="log.user.badges.subscriber && log.user.badges.subscriber !== '0'" class="chat-badge-subscriber" style="line-height: 1;">&nbsp;{{ log.user.badges.subscriber }} ⭐</div> <!-- // TODO:  -->
+        <div ng-if="log.user.badges.bot" class="chat-badge-bot">1bot</div>
+        <div ng-if="log.user.badges.bot === '1'" class="chat-badge-bot">2bot</div>
+      </span>
+      <span ng-bind="log.user.display-name || log.user.username" class="chat-name" ng-style="{'color': log.user.color}" ng-click="Filter(log.user.display-name || log.user.username)"></span>
+      <span ng-if="log.channel" class="chat-colon"></span>
+      <span ng-bind-html="log.message" class="chat-message" ng-style="{ 'color': log.user.color, 'background-color': log.user.attention }"></span>
+    </div>
+
+  </div>
+</div>
+</body>
+
+<script src="https://unpkg.com/twitch-js@1.2.10/dist/twitch-js.min.js"></script>
+
+<!-- UIkit JS  https://cdnjs.com/libraries/uikit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.5/js/uikit.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-rc.5/js/uikit-icons.min.js"></script>
+
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-sanitize.min.js"></script>
+
+<script src="../js/ng-scroll-glue.min.js"></script> <!-- 2.0.10 github.com/FinalDevStudio/ng-scroll-glue -->
+<script src="../js/ngStorage.min.js"></script> <!-- 0.3.11 github.com/gsklee/ngStorage -->
+
+<script src="/socket.io/socket.io.js"></script>
+
+<!-- <script src="js/protobuf.min.js"></script> v6.8.6 github.com/dcodeIO/protobuf.js -->
+
+<script>
+  'use strict'
+
+  const app = angular.module('App', ['ngSanitize', 'ngScrollGlue', 'ngStorage'])
+  const socketfollower = io.connect('/follower/<%= user %>')
+	const socketsubscriber = io.connect('/subscriber/<%= user %>')
+	const socketinfo = io.connect("/info/<%= user %>")
+
+  app.config(['$compileProvider', function ($compileProvider) { // https://docs.angularjs.org/guide/production
+    $compileProvider.debugInfoEnabled(false)
+    $compileProvider.commentDirectivesEnabled(false)
+  }])
+
+  app.filter('htmlToPlaintext', function () {
+    return function (text) {
+      return angular.element(text).text()
+    }
+  })
+
+  app.controller('Ctrl', function controller ($scope, $sce, $timeout, $window, $q, $localStorage, $http) {
+    $scope.optionsDefault = {
+      dark: true,
+      q: '',
+      channel: '',
+      name: '',
+      type: '',
+      orderByField: 'timestamp',
+      reverseSort: false,
+      glued: true,
+      update: true,
+      strict: false,
+      apps: {},
+      maxcount: 0,
+      totalDisplayed: 250,
+      twitchOAuthState: ''
+    }
+    
+    $scope.options = $localStorage.$default($scope.optionsDefault)
+
+    $scope.reset = function () {
+      $localStorage.$reset($scope.optionsDefault)
+      timestampFormat()
+      UIkit.notification("<span uk-icon='icon: trash'></span> Reset settings")
+    }
+
+    $scope.Filter = function AppFilter (item) {
+      if ($scope.options.q.length === 0) {
+        $scope.options.q = item
+      } else {
+        $scope.options.q = ''
+      }
+    }
+
+    $scope.TypeFilter = function(item) {
+      if ($scope.options.type !== item) {
+        $scope.options.type = item
+      } else {
+        $scope.options.type = ''
+      }
+    }
+
+    // shrink Timestamp on Mobile
+    function timestampFormat () {
+      if ($window.innerWidth < 640) {
+        $scope.options.timestampFormat = 'HH:mm:ss.sss'
+      } else {
+        $scope.options.timestampFormat = 'yyyy-MM-dd HH:mm:ss.sss'
+      }
+    }
+
+
+
+    // on startup
+    $scope.options.q = ''
+    $scope.options.channel = ''
+    $scope.options.name = ''
+    $scope.options.type = ''
+    $scope.options.parseLinks = true
+    $scope.options.badges = true
+    $scope.options.glued = true
+    $scope.options.update = true
+    $scope.stats = {
+      follower: 0,
+      subs: 0,
+      bits: 0
+    }
+    timestampFormat()
+
+    $scope.logs = []
+
+    $scope.$watch('options.glued', function watchGlue (newValue, oldValue) {
+      $scope.options.update = newValue
+      if (newValue === oldValue) { return }
+      if ($scope.options.update) {
+        UIkit.notification.closeAll()
+        UIkit.notification("<span uk-icon='icon: refresh'></span> update")
+        $scope.$evalAsync()
+      } else {
+        UIkit.notification.closeAll()
+        UIkit.notification({
+          message: "<span uk-icon='icon: ban'></span> disable update",
+          timeout: 0
+        })
+      }
+    })
+
+    $scope.trustAsHtml = function trustAsHtml (string) {
+      return $sce.trustAsHtml(string)
+    }
+
+    $scope.AppFilter = function AppFilter (item) {
+      if (angular.isUndefined($scope.options.apps[item.app])) {
+        return true
+      } else {
+        if ($scope.options.apps[item.app]) {
+          return $scope.options.apps[item.app].status === true
+        } else {
+          return false
+        }
+      }
+    }
+
+    $scope.query = function () {
+      if ($scope.options.q === '') {
+        $scope.options.strict = true
+      } else {
+        $scope.options.strict = false
+      }
+    }
+
+    $scope.FilterLevel = function FilterLevel (name) {
+      if ($scope.options.lvl === name) {
+        $scope.options.lvl = ''
+        $scope.options.strict = false
+
+        UIkit.notification.closeAll()
+        UIkit.notification('Reset FilterLevel')
+      } else {
+        $scope.options.lvl = name
+        $scope.options.app = ''
+        $scope.options.strict = true
+
+        UIkit.notification.closeAll()
+        UIkit.notification('FilterLevel: ' + angular.element(name).text())
+      }
+      // console.log('FilterLevel', name, $scope.options.strict, $scope.options.lvl)
+    }
+    $scope.FilterApp = function FilterApp (name) {
+      if ($scope.options.app === name) {
+        $scope.options.app = ''
+        $scope.options.strict = false
+
+        UIkit.notification.closeAll()
+        UIkit.notification('Reset FilterApp')
+      } else {
+        $scope.options.app = name
+        $scope.options.lvl = ''
+        $scope.options.strict = true
+
+        UIkit.notification.closeAll()
+        UIkit.notification('FilterApp: ' + name)
+      }
+      // console.log('FilterApp', name, $scope.options.strict, $scope.options.app)
+    }
+
+    function htmlEntities (html) {
+      function it () {
+        return html.map(function (n, i, arr) {
+          if (n.length === 1) {
+            return n.replace(/[\u00A0-\u9999<>&]/gim, function (i) {
+              return '&#' + i.charCodeAt(0) + ';'
+            })
+          }
+          return n
+        })
+      }
+      let isArray = Array.isArray(html)
+      if (!isArray) {
+        html = html.split('')
+      }
+      html = it(html)
+      if (!isArray) html = html.join('')
+      return html
+    }
+
+    function formatEmotes (text, emotes) {
+      if (!text) return
+      if (emotes === null) return text
+      // console.log(text, emotes, typeof emotes)
+      var splitText = text.split('')
+      for (var i in emotes) {
+        var e = emotes[i]
+        for (var j in e) {
+          var mote = e[j]
+          if (typeof mote === 'string') {
+            mote = mote.split('-')
+            mote = [parseInt(mote[0]), parseInt(mote[1])]
+            var length = mote[1] - mote[0]
+            var empty = Array.apply(null, new Array(length + 1)).map(function () { return '' })
+            splitText = splitText.slice(0, mote[0]).concat(empty).concat(splitText.slice(mote[1] + 1, splitText.length))
+            // TODO: text sollte nur das Emote beinhalten und nicht den ganzen Text
+            splitText.splice(mote[0], 1, $sce.trustAsHtml('<img class="emoticon" src="//static-cdn.jtvnw.net/emoticons/v1/' + i + '/3.0" title="' + text + '">'))
+          }
+        }
+      }
+      return htmlEntities(splitText).join('')
+    }
+
+    // const httpRegEx = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])/igm
+    function handleChat (channel, user, message, self) {
+      channel = channel.substr(1) // Ohne #
+
+      if (user.color === null) {
+        user.color = getRandomColor()
+      }
+
+      message = formatEmotes(message, user.emotes)
+
+      // if (message.toLowerCase().indexOf(channel) !== -1) {
+      if (message.toLowerCase().indexOf('@' + channel) !== -1) {
+        user.attention = '#640000'
+      }
+
+      // Add to Array
+      // $scope.logs.push({'channel': channel, 'user': user, 'message': message})
+      $scope.logs.push({channel: channel, user: user, message: message})
+
+      // update view
+      if ($scope.options.update) {
+        $scope.$evalAsync()
+      }
+
+      if ($scope.options.maxcount !== 0) {
+        if ($scope.logs.length > $scope.options.maxcount || false) $scope.logs = $scope.logs.splice(-$scope.options.maxcount)
+      }
+    }
+
+    
+    // $scope.channels = ['ninja', 'lirik', 'dreamhackcs', 'alca', 'twitchplayspokemon', 'europeanspeedsterassembly', 'sc2starleague', 'IAmSp00n', 'cnotbusch', 'Utorak007', 'WolfsGoRawr']
+    $scope.channels = [ '<%- user %>' ]
+    $scope.addChannel = function () {
+      $scope.channels.push($scope.newChannel)
+      client.join('#' + $scope.newChannel)
+      $scope.newChannel = ''
+    }
+
+    $scope.deleteChannel = function (index) {
+      console.log('deleteChannel', $scope.channels[index])
+      client.part($scope.channels[index])
+      $scope.channels.splice(index, 1)
+    }
+
+    // let defaultColors = ['rgb(255, 0, 0)', 'rgb(0, 0, 255)', 'rgb(0, 128, 0)', 'rgb(178, 34, 34)', 'rgb(255, 127, 80)', 'rgb(154, 205, 50)', 'rgb(255, 69, 0)', 'rgb(46, 139, 87)', 'rgb(218, 165, 32)', 'rgb(210, 105, 30)', 'rgb(95, 158, 160)', 'rgb(30, 144, 255)', 'rgb(255, 105, 180)', 'rgb(138, 43, 226)', 'rgb(0, 255, 127)']
+    // let randomColorsChosen = {}
+    let clientOptions = {
+      options: {
+        debug: false
+      },
+      connection: {
+        reconnect: true,
+        secure: true
+      },
+      channels: $scope.channels
+    }
+    const TwitchJS = window.TwitchJS
+    const client = new TwitchJS.client(clientOptions)
+
+    $scope.addevent = function (name) {
+      $scope.logs.push({'user': { 'tmi-sent-ts': +new Date() }, 'message': name})
+      $scope.$evalAsync()
+    }
+
+    client.addListener('message', handleChat)
+    client.addListener('timeout', function (channel, username, desc, duration) {
+      // $scope.logs.push({'channel': channel.substr(1), 'user': { 'tmi-sent-ts': +new Date(), 'username': username }, 'message': 'Timeout: ' + username + ' ' + ('[' + desc + '] ' || ' ') + (duration + 'sec' || 0) })
+      $scope.logs.push({channel: channel.substr(1), user: { 'tmi-sent-ts': +new Date(), username: username }, type: 'Timeout' , message: 'Timeout: ' + username + ' ' + (desc ? '[' + desc + '] ' : ' ') + (duration + 'sec' || 0) })
+      $scope.$evalAsync()
+    })
+
+    client.addListener('ban', function (channel, username, reason) {
+      var userstate = { 'tmi-sent-ts': +new Date(), 'username': username }
+      userstate.attention = '#ff0'
+      $scope.logs.push({channel: channel.substr(1), user: userstate, type: 'Ban', message: 'Ban: ' + username + ' ' + ('[' + reason + ']' || '') })
+      $scope.$evalAsync()
+    })
+
+    client.addListener('cheer', function (channel, userstate, message) {
+      console.log('userstate', userstate)
+      userstate['tmi-sent-ts'] =  +new Date()
+      $scope.logs.push({channel: channel.substr(1), user: userstate, message: 'cheer: ' + userstate.username + ' ' + ('[' + message + ']' || '') })
+      $scope.$evalAsync()
+    })
+    client.addListener('pong', function (latency) {
+      $scope.latency = latency
+    })
+
+    // client.addListener('clearchat', clearChat)
+    // client.addListener('hosting', hosting)
+    // client.addListener('unhost', function (channel, viewers) { hosting(channel, null, viewers, true) })
+
+    client.addListener('connecting', function (address, port) {
+      $scope.addevent('Connecting')
+    })
+    client.addListener('logon', function () {
+      $scope.addevent('Authenticating')
+    })
+    client.addListener('connectfail', function () {
+      $scope.addevent('Connection failed')
+    })
+
+    let joinAccounced = []
+    client.addListener('connected', function (address, port) {
+      $scope.addevent('Connected')
+      joinAccounced = []
+    })
+    client.addListener('disconnected', function (reason) {
+      $scope.addevent('Disconnected: ' + (reason || ''))
+    })
+    client.addListener('reconnect', function () {
+      $scope.addevent('Reconnected')
+    })
+    client.addListener('join', function (channel, username) {
+      if (username === client.getUsername()) {
+        $scope.addevent('Joined ' + channel.substr(1))
+        joinAccounced.push(channel)
+      }
+    })
+    client.addListener('part', function (channel, username) {
+      const index = joinAccounced.indexOf(channel)
+      if (index > -1) {
+        $scope.addevent('Parted ' + channel.substr(1))
+        joinAccounced.splice(joinAccounced.indexOf(channel), 1)
+      }
+    })
+    client.addListener('crash', function () {
+      $scope.addevent('Crashed')
+    })
+
+    // https://github.com/twitch-apis/twitch-js/blob/master/docs/Chat/Events.md
+    client.addListener('subscribers', (channel, enabled) => {
+      $scope.addevent('subscribers', enabled)
+    })
+    client.addListener('subgift', function (channel, username, recipient, method, userstate) {
+      $scope.addevent('subgift', channel, username, recipient, method, userstate)
+    })
+    client.addListener('subscription', function (channel, username, method, message, userstate) {
+      // console.log('subscription', channel, username, method, message, userstate)
+      channel = channel.substr(1) // Ohne #
+      if (userstate.color === null) {
+        userstate.color = getRandomColor()
+      }
+      message = formatEmotes(message, userstate.emotes)
+      // console.log('userstate', userstate)
+      userstate.username = username
+
+      userstate.attention = '#200f33' // hsl(268, 55%, 13%);
+
+      $scope.logs.push({'channel': channel, 'user': userstate, 'message': 'New Subscription ' + method.plan + ' [' + username + '] ' + (message || '')})
+      $scope.$evalAsync()
+    })
+    // client.on('cheer', function (channel, userstate, message) {
+    //   $scope.addevent('subscribers', channel + message)
+    // })
+
+    client.connect()
+
+    const socketfollowerFunc = function (data) {
+      $scope.stats.follower++
+      $scope.addevent('Neuer Follower - ' + data.name + ' (' + data.created_at + ' UTC)')
+      UIkit.notification("<span uk-icon='icon: star'></span> Neuer Follower - " + data.name)
+    }
+    socketfollower.on('incomingmsg', function(data) {
+      if(angular.isArray(data)) {
+        data.reverse() // TODO
+        angular.forEach(data, function(v) {
+          socketfollowerFunc(v)
+        })
+      } else {
+        socketfollowerFunc(data)
+      }
+    })
+
+    const socketsubscriberFunc = function (data) {
+      $scope.stats.subs++
+      $scope.addevent('Neuer Subscriber - ' + data.name + ' ' + (data.months + ' in a row' || 'NEW'))
+      UIkit.notification("<span uk-icon='icon: heart'></span> Neuer Subscriber - " + data.name + ' ' + (data.months + ' in a row' || 'NEW'))
+    }
+    socketsubscriber.on('incomingmsg', function(data) {
+      if(angular.isArray(data)) {
+        data.reverse() // TODO
+        angular.forEach(data, function(v) {
+          socketsubscriberFunc(v)
+        })
+      } else {
+        socketsubscriberFunc(data)
+      }
+    })
+
+    const socketinfoFunc = function (data) {
+      $scope.addevent(data.name)
+      UIkit.notification(data.name)
+    }
+    socketinfo.on('incomingmsg', function(data) {
+      if(angular.isArray(data)) {
+        data.reverse() // TODO
+        angular.forEach(data, function(v) {
+          socketinfoFunc(v)
+        })
+      } else {
+        socketinfoFunc(data)
+      }
+    })
+  })
+
+  // app.directive('animateOnChange', function ($timeout) { // https://stackoverflow.com/a/30037095
+  //   return function (scope, element, attr) {
+  //     scope.$watch(attr.animateOnChange, function (nv, ov) {
+  //       if (nv !== ov) {
+  //         if (nv < ov) {
+  //           element.addClass('changedBigger')
+  //           $timeout(function () {
+  //             element.removeClass('changedBigger')
+  //           }, 1000)
+  //         } else {
+  //           element.addClass('changedSmaller')
+  //           $timeout(function () {
+  //             element.removeClass('changedSmaller')
+  //           }, 1000)
+  //         }
+  //       }
+  //     })
+  //   }
+  // })
+
+  let randomcolor = ['#fc5c65', '#fd9644', '#fed330', '#26de81', '#2bcbba', '#eb3b5a', '#fa8231', '#f7b731', '#20bf6b', '#0fb9b1', '#45aaf2', '#4b7bec', '#a55eea', '#d1d8e0', '#778ca3', '#2d98da', '#3867d6', '#8854d0', '#a5b1c2', '#4b6584'] // https://flatuicolors.com/
+  function getRandomColor () {
+    const index = Math.floor(Math.random() * randomcolor.length)
+    const color = randomcolor[index]
+    randomcolor.splice(index, 1)
+    if (!randomcolor.length) {
+      randomcolor = ['#fc5c65', '#fd9644', '#fed330', '#26de81', '#2bcbba', '#eb3b5a', '#fa8231', '#f7b731', '#20bf6b', '#0fb9b1', '#45aaf2', '#4b7bec', '#a55eea', '#d1d8e0', '#778ca3', '#2d98da', '#3867d6', '#8854d0', '#a5b1c2', '#4b6584']
+    }
+    return color
+  }
+</script>
+
+
+
+</html>

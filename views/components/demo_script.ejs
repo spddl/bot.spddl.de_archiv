@@ -1,0 +1,221 @@
+
+<script src="js/materialize-tags.min.js"></script>
+<script src="js/nouislider.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.11/angular.min.js"></script>
+<script src="https://cdn.jsdelivr.net/angular.ui-sortable/0.13.4/sortable.min.js"></script>
+<script src="js/directives.js"></script><%# wg. JSONedit %>
+<script src='js/angular-cron-jobs.js'></script>
+<script>
+
+$(function() {
+  Materialize.toast('login', 4000)
+
+  $('input#text').characterCounter();
+  $('.modal').modal();
+  $('.button-collapse').sideNav(); <%#// ausklapbares Menu für Smartphones%>
+
+  var Slider = {'voicevolume':{'min': 0,'max': 1,'step': 0.05,'start':<%= commands.botsettings.alerts.magicconchshell.voicevolume %>,'decimals':2},'voicepitch':{'min': 0,'max': 2,'step': 0.1,'start':<%= commands.botsettings.alerts.magicconchshell.voicepitch %>,'decimals':1},'voicerate':{'min': 0,'max': 1.5,'step': 0.05,'start':<%= commands.botsettings.alerts.magicconchshell.voicerate %>,'decimals':2},'uppercasepercent':{'min': 0,'max': 100,'step': 1,'start':<%= commands.botsettings.uppercasepercent %>,'decimals':0},'symbolspercent':{'min': 0,'max': 100,'step': 1,'start':<%= commands.botsettings.symbolspercent %>,'decimals':0}}
+  for (prop in Slider) {
+    noUiSlider.create(document.getElementById(prop), {
+     start: Slider[prop].start,
+     connect: 'lower',
+     step: Slider[prop].step,
+     range: {
+       'min': Slider[prop].min,
+       'max': Slider[prop].max
+     },
+     format: wNumb({
+       decimals: Slider[prop].decimals
+     })
+   });
+  }
+
+  document.getElementById('voicevolume').noUiSlider.on('change', function(value){
+    <% if (local) { %> console.log('voicevolume change: '+value); <% } %>
+    Materialize.toast('gespeichert.', 4000)
+  });
+  document.getElementById('voicepitch').noUiSlider.on('change', function(value){
+    <% if (local) { %> console.log('voicepitch change: '+value); <% } %>
+    Materialize.toast('gespeichert.', 4000)
+  });
+  document.getElementById('voicerate').noUiSlider.on('change', function(value){
+    <% if (local) { %> console.log('voicerate change: '+value); <% } %>
+    Materialize.toast('gespeichert.', 4000)
+  });
+  document.getElementById('uppercasepercent').noUiSlider.on('change', function(value){
+    <% if (local) { %> console.log('uppercasepercent change: '+value); <% } %>
+    Materialize.toast('gespeichert.', 4000)
+  });
+  document.getElementById('symbolspercent').noUiSlider.on('change', function(value){
+    <% if (local) { %> console.log('symbolspercent change: '+value); <% } %>
+    Materialize.toast('gespeichert.', 4000)
+  });
+
+  $('.dropdown-button').dropdown();
+
+  $('#alloweddomains').materialtags('add', ('<%= commands.botsettings.alloweddomains %>').split(",").join());
+  $('input#towords').materialtags('add', ('<%= commands.botsettings.towords %>').split(",").join());
+  $('#banwords').materialtags('add', ('<%= commands.botsettings.banwords %>').split(",").join());
+  $('#ignorecmd').materialtags('add', ('<%= commands.botsettings.ignorecmd %>').split(",").join());
+  $('#mods').materialtags('add', ('<%= commands.botsettings.mods %>').split(",").join());
+  $('#steamaccount').materialtags('add', ('<%= commands.botsettings.steam.account %>').split(",").join());
+  $('#steamgroup').materialtags('add', ('<%= commands.botsettings.steam.steamgroup %>').split(",").join());
+  $('#giveawaysuspend').materialtags('add', ('<%= commands.botsettings.giveawaysuspend %>').split(",").join());
+
+  $("span#twitch").html("<img src='/lib/twitch-16.png' alt='twitch' class='img'>");
+  $("span#steam").html("<img src='/lib/steam-16.png' alt='steam' class='img'>");
+
+});
+
+// AngularJS //
+'use strict';
+
+var myApp = angular.module('myApp',['JSONedit', 'angular-cron-jobs']);
+myApp.controller('Ctrl', ['$timeout','$scope','$filter','$parse', function($timeout, $scope, $filter, $parse) {
+
+$scope.cronconfig = { // DEMO
+  allowMultiple: true,
+  options : {
+    allowMinute : false,
+    allowMonat : false,
+    allowJahr : false
+  }
+}
+$scope.newcron = {}
+
+setTimeout(function(){
+  $('select').material_select();
+}, 0);
+$scope.<%= userparam || user.username %> = {}
+$scope.<%= userparam || user.username %> = <%- JSON.stringify(commands) %>
+$scope.<%= userparam || user.username %>.annyang = {hallo: "function() { socket.emit('annyang',{ event: 'hallo' }) }"}
+
+$timeout(function(){
+    $scope.$watch('<%= userparam || user.username %>.botsettings.alloweddomains', function(newVal, oldVal){
+      if (newVal === oldVal) { return; }
+      if (typeof $scope['<%= userparam || user.username %>'].botsettings.alloweddomains == 'undefined') { return } <%# Error handle %>
+        Materialize.toast('gespeichert.', 4000)
+    });
+    $scope.$watch('<%= userparam || user.username %>.botsettings.towords', function(newVal, oldVal){
+      if (newVal === oldVal) { return; }
+      if (typeof $scope['<%= userparam || user.username %>'].botsettings.towords == 'undefined') { return } <%# Error handle %>
+        Materialize.toast('gespeichert.', 4000)
+    });
+    $scope.$watch('<%= userparam || user.username %>.botsettings.banwords', function(newVal, oldVal){
+      if (newVal === oldVal) { return; }
+      if (typeof $scope['<%= userparam || user.username %>'].botsettings.banwords == 'undefined') { return } <%# Error handle %>
+        Materialize.toast('gespeichert.', 4000)
+    });
+    $scope.$watch('<%= userparam || user.username %>.botsettings.ignorecmd', function(newVal, oldVal){
+      if (newVal === oldVal) { return; }
+      if (typeof $scope['<%= userparam || user.username %>'].botsettings.ignorecmd == 'undefined') { return } <%# Error handle %>
+        Materialize.toast('gespeichert.', 4000)
+    });
+    $scope.$watch('<%= userparam || user.username %>.botsettings.mods', function(newVal, oldVal){
+      if (newVal === oldVal) { return; }
+      if (typeof $scope['<%= userparam || user.username %>'].botsettings.mods == 'undefined') { return } <%# Error handle %>
+        Materialize.toast('gespeichert.', 4000)
+    });
+    $scope.$watch('<%= userparam || user.username %>.botsettings.steam.account', function(newVal, oldVal){
+      if (newVal === oldVal) { return; }
+      if (typeof $scope['<%= userparam || user.username %>'].botsettings.steam.account == 'undefined') { return } <%# Error handle %>
+        Materialize.toast('gespeichert.', 4000)
+    });
+    $scope.$watch('<%= userparam || user.username %>.botsettings.steam.steamgroup', function(newVal, oldVal){
+      if (newVal === oldVal) { return; }
+      if (typeof $scope['<%= userparam || user.username %>'].botsettings.steam.steamgroup == 'undefined') { return } <%# Error handle %>
+        Materialize.toast('gespeichert.', 4000)
+    });
+    $scope.$watch('<%= userparam || user.username %>.botsettings.giveawaysuspend', function(newVal, oldVal){
+      if (newVal === oldVal) { return; }
+      if (typeof $scope['<%= userparam || user.username %>'].botsettings.giveawaysuspend == 'undefined') { return } <%# Error handle %>
+        Materialize.toast('gespeichert.', 4000)
+    });
+    $scope.$watch('<%= userparam || user.username %>.botsettings.uppercase', function(newVal, oldVal){
+      if (newVal === oldVal) { return; }
+      Materialize.toast('gespeichert.', 4000)
+    });
+    $scope.$watch('<%= userparam || user.username %>.botsettings.symbols', function(newVal, oldVal){
+      if (newVal === oldVal) { return; }
+      Materialize.toast('gespeichert.', 4000)
+    });
+    $scope.$watch('<%= userparam || user.username %>.botsettings.postingdomains', function(newVal, oldVal){
+      if (newVal === oldVal) { return; }
+      Materialize.toast('gespeichert.', 4000)
+    });
+
+    setTimeout(function(){
+      $('select').material_select();
+    }, 0);
+});
+
+$scope.update = function(model,value) {
+  clearTimeout(window.command_save); // Kill the timer
+  window.command_save = setTimeout(function(){
+    Materialize.toast('gespeichert.', 4000)
+    delete window.command_save
+  }, 1500); // speichert nur alle 1.5 sek
+}
+
+$scope.selectupdate = function(model,value) {
+  clearTimeout(window.command_save); // Kill the timer
+  window.command_save = setTimeout(function(){
+    Materialize.toast('gespeichert.', 4000)
+    delete window.command_save
+  }, 1500);
+}
+
+$scope.steam_start = function(chan) {
+  Materialize.toast('Steam Ank&uuml;ndigung versendet.', 4000)
+}
+
+$scope.$watch('<%= userparam || user.username %>.annyang', function(json,oldjson) {
+  if (json === oldjson) { return; }
+
+  $scope.annyangjsonString = $filter('json')(json);
+  Materialize.toast('Einmal F5 damit das auch übernommen wird.', 4000)
+
+  clearTimeout(window.command_save); // Kill the timer
+  window.command_save = setTimeout(function(){
+    $scope.annyangjsonString = $filter('json')(json);
+    Materialize.toast('Einmal F5 damit das auch übernommen wird.', 4000)
+  }, 2000); // speichert nur alle 3 sek
+
+}, true);
+
+$scope.$watch('annyangjsonString', function(json) {
+  try {
+    $scope['<%= userparam || user.username %>'].annyang = JSON.parse(json);
+    $scope.wellFormed = true;
+  } catch(e) {
+    $scope.wellFormed = false;
+  }
+}, true);
+
+$scope.$watch('<%= userparam || user.username %>.cmd', function(json,oldjson) {
+  if (json === oldjson) { return; }
+
+  $scope.jsonString = $filter('json')(json);
+  Materialize.toast('gespeichert.', 4000)
+
+  clearTimeout(window.command_save);
+  window.command_save = setTimeout(function(){
+    $scope.jsonString = $filter('json')(json);
+    Materialize.toast('gespeichert.', 4000)
+    delete window.command_save
+  }, 2000);
+}, true);
+
+$scope.$watch('jsonString', function(json) {
+  try {
+    $scope['<%= userparam || user.username %>'].cmd = JSON.parse(json);
+    $scope.wellFormed = true;
+  } catch(e) {
+    $scope.wellFormed = false;
+  }
+}, true);
+
+$scope.voices = ["UK English Female","UK English Male","US English Female","Arabic Male","Armenian Male","Australian Female","Brazilian Portuguese Female","Chinese Female","Czech Female","Danish Female","Deutsch Female","Dutch Female","Finnish Female","French Female","Greek Female","Hatian Creole Female","Hindi Female","Hungarian Female","Indonesian Female","Italian Female","Japanese Female","Korean Female","Latin Female","Norwegian Female","Polish Female","Portuguese Female","Romanian Male","Russian Female","Slovak Female","Spanish Female","Spanish Latin American Female","Swedish Female","Tamil Male","Thai Female","Turkish Female","Afrikaans Male","Albanian Male","Bosnian Male","Catalan Male","Croatian Male","Czech Male","Danish Male","Esperanto Male","Finnish Male","Greek Male","Hungarian Male","Icelandic Male","Latin Male","Latvian Male","Macedonian Male","Moldavian Male","Montenegrin Male","Norwegian Male","Serbian Male","Serbo-Croatian Male","Slovak Male","Swahili Male","Swedish Male","Vietnamese Male","Welsh Male","US English Male","Fallback UK Female"]
+
+}])
+</script>
